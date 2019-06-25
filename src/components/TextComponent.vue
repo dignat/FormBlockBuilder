@@ -46,7 +46,7 @@
             addField() {
                Object.assign({}, {title: '', name: '', limit: '', hidden: '', default: '', required: '', enabled: ''});
                this.textfields.type = 'inputtext';
-               this.textfields.name =  this.textfields.name.length === 0 ? this.textfields.title.replace(/[\s,&\-/_?]/g,"").toLowerCase() : this.textfields.name;
+               this.textfields.name =  this.textfields.name === undefined ? this.textfields.title.replace(/[\s,&\-/_?]/g,"").toLowerCase() : this.textfields.name;
                  return this.textfields;
             },
             editField (fields) {
