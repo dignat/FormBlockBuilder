@@ -1,8 +1,8 @@
 {
-  "name": "waterfall",
+  "name": "re-flow-form-builder",
   "version": "1.0.0",
   "description": "A Vue.js project",
-  "author": "Jonathan Pittock <jon.pittock@re-flow.co.uk>",
+  "author": "",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
