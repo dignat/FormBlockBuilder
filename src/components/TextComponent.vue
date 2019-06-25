@@ -18,6 +18,30 @@
                <input class="input" type="text" :listFields="listFields.limit" v-model="textfields.limit">
            </div>
        </div>
+        <div class="field">
+            <div class="control">
+                <label class="label">Hidden ?</label>
+                <input class="checkbox" type="checkbox" name="hidden" :listFields="listFields.hidden" v-model="textfields.hidden" checked>
+            </div>
+        </div>
+        <div class="field">
+            <div class="control">
+                <label class="label">Required ?</label>
+                <input class="checkbox" type="checkbox" name="required" :listFields="listFields.required" v-model="textfields.required" checked>
+            </div>
+        </div>
+        <div class="field">
+            <div class="control">
+                <label class="label">Enabled ?</label>
+                <input class="checkbox" type="checkbox" name="enabled" :listFields="listFields.enabled" v-model="textfields.enabled" checked>
+            </div>
+        </div>
+        <div class="field">
+            <div class="control">
+                <label class="label">Default ?</label>
+                <input class="input" type="text" name="default" :listFields="listFields.default" v-model="textfields.default">
+            </div>
+        </div>
 
     </div>
 </template>
@@ -35,16 +59,16 @@
                     name: '',
                     title: '',
                     limit: '',
-                    hidden: '',
+                    hidden: '0',
                     default: '',
-                    required: '',
-                    enabled: ''
+                    required: '0',
+                    enabled: '0'
                 }
             }
         },
         methods: {
             addField() {
-               Object.assign({}, {title: '', name: '', limit: '', hidden: '', default: '', required: '', enabled: ''});
+               Object.assign({}, {title: '', name: '', limit: '', hidden: '0', default: '', required: '0', enabled: '0'});
                this.textfields.type = 'inputtext';
                this.textfields.name =  this.textfields.name === undefined ? this.textfields.title.replace(/[\s,&\-/_?]/g,"").toLowerCase() : this.textfields.name;
                  return this.textfields;
