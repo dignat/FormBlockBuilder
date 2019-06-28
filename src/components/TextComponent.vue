@@ -21,24 +21,24 @@
         <div class="field">
             <div class="control">
                 <label class="label">Hidden ?</label>
-                <input class="checkbox" type="checkbox" name="hidden" :listFields="listFields.hidden" v-model="textfields.hidden" checked>
+                <input class="checkbox" type="checkbox" name="hidden" :listFields="listFields.hidden" v-model="textfields.hidden" :value="textfields.hidden">
             </div>
         </div>
         <div class="field">
             <div class="control">
                 <label class="label">Required ?</label>
-                <input class="checkbox" type="checkbox" name="required" :listFields="listFields.required" v-model="textfields.required" checked>
+                <input class="checkbox" type="checkbox" name="required" :listFields="listFields.required" v-model="textfields.required">
             </div>
         </div>
         <div class="field">
             <div class="control">
                 <label class="label">Enabled ?</label>
-                <input class="checkbox" type="checkbox" name="enabled" :listFields="listFields.enabled" v-model="textfields.enabled" checked>
+                <input class="checkbox" type="checkbox" name="enabled" :listFields="listFields.enabled" v-model="textfields.enabled">
             </div>
         </div>
         <div class="field">
             <div class="control">
-                <label class="label">Default ?</label>
+                <label class="label">Default</label>
                 <input class="input" type="text" name="default" :listFields="listFields.default" v-model="textfields.default">
             </div>
         </div>
@@ -59,23 +59,25 @@
                     name: '',
                     title: '',
                     limit: '',
-                    hidden: '0',
+                    hidden: "0",
                     default: '',
-                    required: '0',
-                    enabled: '0'
+                    required: 0,
+                    enabled: 0
                 }
             }
         },
         methods: {
             addField() {
-               Object.assign({}, {title: '', name: '', limit: '', hidden: '0', default: '', required: '0', enabled: '0'});
+                console.log(this.textfields.hidden);
                this.textfields.type = 'inputtext';
                this.textfields.name =  this.textfields.name === undefined ? this.textfields.title.replace(/[\s,&\-/_?]/g,"").toLowerCase() : this.textfields.name;
-                 return this.textfields;
+               //this.textfields.hidden = (this.textfields.hidden) ? 1 : 0;
+               return this.textfields;
             },
             editField (fields) {
+                this.textfields.name =  this.textfields.name === undefined ? this.textfields.title.replace(/[\s,&\-/_?]/g,"").toLowerCase() : this.textfields.name;
                 this.textfields = fields;
-                return this.textfields
+                return this.textfields;
             }
         },
         beforeMount() {

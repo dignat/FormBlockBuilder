@@ -74,42 +74,52 @@
                     case 'inputlookup':
                         this.currentFieldType = Lookup;
                         this.currentType = type;
+                        this.currentRepeaterFields = {};
                         break;
                     case 'inputtext':
                         this.currentFieldType = TextComponent;
                         this.currentType = type;
+                        this.currentRepeaterFields = {};
                         break;
                     case 'inputnumber':
                         this.currentFieldType = Number;
                         this.currentType = type;
+                        this.currentRepeaterFields = {};
                         break;
                     case 'alias':
                         this.currentFieldType = Alias;
                         this.currentType = type;
+                        this.currentRepeaterFields = {};
                         break;
                     case 'inputselect':
                         this.currentFieldType = Select;
                         this.currentType = type;
+                        this.currentRepeaterFields = {};
                         break;
                     case 'inputradio':
                         this.currentFieldType = RadioForm;
                         this.currentType = type;
+                        this.currentRepeaterFields = {};
                         break;
                     case 'inputcheckbox':
                         this.currentFieldType = Checkbox;
                         this.currentType = type;
+                        this.currentRepeaterFields = {};
                         break;
                     case 'inputimage':
                         this.currentFieldType = Photo;
                         this.currentType = type;
+                        this.currentRepeaterFields = {};
                         break;
                     case 'inputsignature':
                         this.currentFieldType = Signature;
                         this.currentType = type;
+                        this.currentRepeaterFields = {};
                         break;
                     case 'inputformula':
                         this.currentFieldType = Formula;
                         this.currentType = type;
+                        this.currentRepeaterFields = {};
                         break;
 
                 }

@@ -121,26 +121,31 @@
                         this.currentFieldType = Lookup;
                         this.currentType = type;
                         this.changedRules = true;
+                        this.currentProps = {};
                         break;
                     case 'inputtext':
                         this.currentFieldType = TextComponent;
                         this.currentType = type;
                         this.changedRules = true;
+                        this.currentProps = {};
                         break;
                     case 'inputrepeat':
                         this.currentFieldType = MainRepeater;
                         this.currentType = type;
                         this.changedRules = true;
+                        this.currentProps = {};
                         break;
                     case 'inputlookupalias':
                         this.currentFieldType = Alias;
                         this.currentType = type;
                         this.changedRules = true;
+                        this.currentProps = {};
                         break;
                     case 'inputnumber':
                         this.currentFieldType = NumberComponent;
                         this.currentType = type;
                         this.changedRules = true;
+                        this.currentProps = {};
                         break;
                     case 'inputradio':
                         this.currentFieldType = RadioForm;
@@ -151,26 +156,31 @@
                         this.currentFieldType = SelectComponent;
                         this.currentType = type;
                         this.changedRules = true;
+                        this.currentProps = {};
                         break;
                     case 'inputlist':
                         this.currentFieldType = MainListComponent;
                         this.currentType = type;
                         this.changedRules = true;
+                        this.currentProps = {};
                         break;
                     case 'inputcheckbox':
                         this.currentFieldType = Checkbox;
                         this.currentType = type;
                         this.changedRules = true;
+                        this.currentProps = {};
                         break;
                     case 'inputimage':
                         this.currentFieldType = Photo;
                         this.currentType = type;
                         this.changedRules = true;
+                        this.currentProps = {};
                         break;
                     case 'inputsignature':
                         this.currentFieldType = Signature;
                         this.currentType = type;
                         this.changedRules = true;
+                        this.currentProps = {};
                         break;
                     case 'inputformula':
                         this.currentFieldType = Formula;
@@ -181,16 +191,19 @@
                         this.currentFieldType = DateComponent;
                         this.currentType = type;
                         this.changedRules = true;
+                        this.currentProps = {};
                         break;
                     case 'inputlocation':
                         this.currentFieldType = Location;
                         this.currentType = type;
                         this.changedRules = true;
+                        this.currentProps = {};
                         break;
                     case 'text':
                         this.currentFieldType = HeaderComponent;
                         this.currentType = type;
                         this.changedRules = true;
+                        this.currentProps = {};
                         break;
 
                 }

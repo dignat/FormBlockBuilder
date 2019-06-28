@@ -54,6 +54,11 @@
                 this.fields.uri = '/reflow/data/sync/lookup/' + this.fields.uri;
                 return this.fields;
             },
+            editField(fields) {
+                fields.uri = '/reflow/data/sync/lookup/' + fields.uri;
+                this.fields = fields;
+                return this.fields;
+            }
         },
         beforeMount() {
             this.fields = this.listFields;

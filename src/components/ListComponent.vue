@@ -107,50 +107,62 @@
                     case 'inputlookup':
                         this.currentFieldType = Lookup;
                         this.currentType = type;
+                        this.currentListFields = {};
                         break;
                     case 'inputtext':
                         this.currentFieldType = TextComponent;
                         this.currentType = type;
+                        this.currentListFields = {};
                         break;
                     case 'inputnumber':
                         this.currentFieldType = Number;
                         this.currentType = type;
+                        this.currentListFields = {};
                         break;
                     case 'inputlookupalias':
                         this.currentFieldType = Alias;
                         this.currentType = type;
+                        this.currentListFields = {};
                         break;
                     case 'inputselect':
                         this.currentFieldType = Select;
                         this.currentType = type;
+                        this.currentListFields = {};
                         break;
                     case 'inputradio':
                         this.currentFieldType = RadioForm;
                         this.currentType = type;
+                        this.currentListFields = {};
                         break;
                     case 'inputcheckbox':
                         this.currentFieldType = Checkbox;
                         this.currentType = type;
+                        this.currentListFields = {};
                         break;
                     case 'inputimage':
                         this.currentFieldType = Photo;
                         this.currentType = type;
+                        this.currentListFields = {};
                         break;
                     case 'inputsignature':
                         this.currentFieldType = Signature;
                         this.currentType = type;
+                        this.currentListFields = {};
                         break;
                     case 'inputformula':
                         this.currentFieldType = Formula;
                         this.currentType = type;
+                        this.currentListFields = {};
                         break;
                     case 'inputlist':
                         this.currentFieldType = MainListComponent;
                         this.currentType = type;
+                        this.currentListFields = {};
                         break;
                     case 'inputdate':
                         this.currentFieldType = DateComponent;
                         this.currentType = type;
+                        this.currentListFields = {};
                         break;
 
                 }
