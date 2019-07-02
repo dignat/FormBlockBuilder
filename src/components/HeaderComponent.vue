@@ -30,7 +30,7 @@
         },
         data () {
             return {
-                textfields: {
+                fields: {
                     type: 'text',
                     name: '',
                     body: '',
@@ -41,17 +41,17 @@
         methods: {
             addField() {
                 Object.assign({}, {body: '', name: '', hidden: ''});
-                this.textfields.type = 'text';
-                return this.textfields;
+                this.fields.type = 'text';
+                return this.fields;
             },
             editField (fields) {
                 this.textfields = fields;
-                return this.textfields
+                return this.fields
             }
         },
         beforeMount() {
             this.textfields = this.listFields;
-            this.textfields.type = 'text'
+            this.fields.type = 'text'
         }
     }
 </script>

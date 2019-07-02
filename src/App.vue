@@ -14,7 +14,8 @@
         <div class="field" v-if="!transform">
           <Forms ref="form" v-for="(field, index) in buildFields" :id="index"
                   :transformList="transform" :list="formFields"
-                 :key="index" :type="field.type" @addFields="sync" @editFields="edit"></Forms>
+                 :key="index" :type="field.type" @addFields="sync" @editFields="edit">
+          </Forms>
         </div>
         <div class="field" v-if="transform">
           <Forms :fieldsType="changingRules? currentFieldType: fieldTypes[index]" ref="form"
@@ -104,6 +105,7 @@
         this.formFields.items.push(value)
       },
       edit (value) {
+        console.log(value, 'in the app');
         this.formFields.items.pop();
         this.formFields.items.push(value)
       },
@@ -190,8 +192,7 @@
           }
         }
       }
-    },
-
+    }
   }
 </script>
 

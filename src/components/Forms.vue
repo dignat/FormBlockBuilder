@@ -6,7 +6,8 @@
        <div class="field" v-if="!transform">
            <div class="control">
                <component ref="form" :is="currentFieldType" :fieldsType="fieldsType"
-                          :list="list" :transformList="transformList" :listFields="currentProps"></component>
+                          :list="list" :transformList="transformList" :listFields="currentProps">
+               </component>
            </div>
        </div>
         <div class="field" v-if="transform">
@@ -15,12 +16,13 @@
                            :fieldsType="fieldsType" :list="list" :listFieldType="listFieldType" :repeaterTypes="repeaterTypes" :repeaterType="repeaterType"
                            :transformList="transformList" :translatedList="translatedList" :changeRules="changeRules" :listFieldTypes="listFieldTypes"
                            :dependantListTypes="dependantListTypes" :hasList="hasList"
-                           :listFields="changedRules ? currentProps: translatedList"></component>
+                           :listFields="changedRules ? currentProps: translatedList">
+                </component>
             </div>
         </div>
        <div class="field">
            <div class="control">
-               <button class="button is-primary" @click="addField">Add all Fields</button>
+               <button class="button is-primary" @click="addField" :disabled="currentType === undefined">Add all Fields</button>
            </div>
        </div>
         <div class="field">
