@@ -3,19 +3,19 @@
         <div class="field">
             <div class="control">
                 <label class="label"> Name For Text</label>
-                <input class="input" type="text" :listFields="listFields.name" v-model="textfields.name">
+                <input class="input" type="text" :listFields="listFields.name" v-model="fields.name">
             </div>
         </div>
         <div class="field">
             <div class="control">
                 <label class="label"> Body/Text For Text</label>
-                <input class="input" type="text" :listFields="listFields.body" v-model="textfields.body">
+                <input class="input" type="text" :listFields="listFields.body" v-model="fields.body">
             </div>
         </div>
         <div class="field">
             <div class="control">
                 <label class="label"> Hidden Text?</label>
-                <input class="checkbox" type="checkbox" :listFields="listFields.hidden" v-model="textfields.hidden">
+                <input class="checkbox" type="checkbox" :listFields="listFields.hidden" v-model="fields.hidden">
             </div>
         </div>
 

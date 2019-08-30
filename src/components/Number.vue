@@ -33,6 +33,7 @@
         methods: {
             addField () {
                 Object.assign({}, {name: '', title: '', decimals: ''});
+                this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
                 return this.fields;
             }
         },

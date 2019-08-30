@@ -73,8 +73,8 @@
                 } else {
                     this.fields.items = [
                         {title: 'Yes'},
-                            {title: 'No'}
-                            ]
+                        {title: 'No'}
+                    ]
                 }
                 this.fields.type = 'inputradio';
                 return this.fields;

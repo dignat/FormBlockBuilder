@@ -64,6 +64,7 @@
         methods: {
             addField () {
                 Object.assign({}, {title: '', name: '', target: '', labelKey: '', idKey: '',  enabled: false});
+                this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
                 return this.fields;
             }
         },

@@ -51,11 +51,12 @@
         methods: {
             addField() {
                 Object.assign({}, {title: '', name: '', uri: '', labelKey: '', idKey: ''});
-                this.fields.uri = '/reflow/data/sync/lookup/' + this.fields.uri;
+                //this.fields.uri = '/reflow/data/sync/lookup/' + this.fields.uri;
+                this.fields.uri = '/v1/api/' + this.fields.uri;
                 return this.fields;
             },
             editField(fields) {
-                fields.uri = '/reflow/data/sync/lookup/' + fields.uri;
+                fields.uri = '/v1/api/' + fields.uri;
                 this.fields = fields;
                 return this.fields;
             }

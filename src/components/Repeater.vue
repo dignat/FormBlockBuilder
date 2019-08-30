@@ -29,6 +29,7 @@
     import Photo from "./Photo"
     import Signature from "./Signature"
     import Formula from "./Formula"
+    import DateComponent from './DateComponent'
     export default {
         name: "Repeater",
         props: {
@@ -53,7 +54,7 @@
         },
         data () {
             return {
-                types: ['inputlookup', 'inputtext', 'inputlookupalias','inputnumber', 'inputselect', 'inputradio', 'inputcheckbox', 'inputimage', 'inputsignature', 'inputformula'],
+                types: ['inputlookup', 'inputtext', 'inputlookupalias','inputnumber', 'inputselect', 'inputradio', 'inputcheckbox', 'inputimage', 'inputsignature', 'inputformula','inputdate'],
                 currentFieldType: null,
                 currentType: null,
                 currentProps: {},
@@ -118,6 +119,11 @@
                         break;
                     case 'inputformula':
                         this.currentFieldType = Formula;
+                        this.currentType = type;
+                        this.currentRepeaterFields = {};
+                        break;
+                    case 'inputdate':
+                        this.currentFieldType = DateComponent;
                         this.currentType = type;
                         this.currentRepeaterFields = {};
                         break;

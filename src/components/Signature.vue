@@ -42,7 +42,8 @@
         methods: {
             addField() {
                 Object.assign({}, {title: '', name: '', min: '', max: '', required: '', hidden: ''});
-                this.fields.type = 'inputsignature'
+                this.fields.type = 'inputsignature';
+                this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
                 return this.fields;
             },
         },

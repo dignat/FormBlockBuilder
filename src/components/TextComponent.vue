@@ -15,7 +15,7 @@
        <div class="field">
            <div class="control">
                <label class="label"> Limit Field For Text</label>
-               <input class="input" type="text" :listFields="listFields.limit" v-model="fields.limit">
+               <input class="input" type="number" :listFields="listFields.limit" v-model="fields.limit">
            </div>
        </div>
         <div class="field">
@@ -62,7 +62,7 @@
                     limit: 255,
                     hidden: false,
                     default: '',
-                    required: false,
+                    required: true,
                     enabled:false
                 }
             }
@@ -75,7 +75,7 @@
                const fields = {
                    type: 'inputtext',
                    title: this.fields.title,
-                   name: this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?]/g,"").toLowerCase() : this.fields.name,
+                   name: this.fields.name === "" ? this.fields.title.replace(/[\s,&-/_?():.]/g,"").toLowerCase().substring(0,5) : this.fields.name,
                    hidden: this.fields.hidden,
                    limit: this.fields.limit,
                    default: this.fields.default,
@@ -89,7 +89,7 @@
                const field = {
                     type: 'inputtext',
                     title: fields.title,
-                    name: fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?]/g,"").toLowerCase() : fields.name,
+                    name: fields.name === "" ? this.fields.title.replace(/[\s,&-/_?]/g,"").toLowerCase() : fields.name,
                     hidden: fields.hidden,
                     limit: fields.limit,
                     default: fields.default,

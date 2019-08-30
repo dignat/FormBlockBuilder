@@ -60,6 +60,7 @@
             addField() {
                 Object.assign({}, {title: '', name: ''});
                 this.fields.items = this.customFields;
+                this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
                 return this.fields;
             },
         },

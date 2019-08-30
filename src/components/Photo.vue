@@ -29,13 +29,14 @@
                     title: '',
                     name: '',
                     hidden: '',
-                    required: ''
+                    required: '',
+                    source: ''
                 }
             }
         },
         methods: {
             addField() {
-                Object.assign({}, {title: '', name: '', required: '', hidden: ''});
+                Object.assign({}, {title: '', name: '', required: '', hidden: '', source: ''});
                 return this.fields;
             },
         },

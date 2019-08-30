@@ -34,6 +34,7 @@
         },
         methods: {
             addField () {
+                this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
                 Object.assign({}, {title: '', name: '', time: '', required: '', hidden: ''});
                 return this.fields;
             }

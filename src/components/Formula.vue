@@ -30,7 +30,8 @@
                     title: '',
                     name: '',
                     hidden: '',
-                    script: ''
+                    script: '',
+                    store: 0
                 }
             }
         },

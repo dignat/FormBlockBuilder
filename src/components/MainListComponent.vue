@@ -10,7 +10,7 @@
                 <input class="input" type="text" name="title" :listFields="listFields.title" v-model="fields.title">
             </div>
             <div class="control">
-                <label class="label">List Itarator Key</label>
+                <label class="label">List Iterator Key</label>
                 <input class="input" type="text" name="iteratorKey" :listFields="listFields.iteratorKey" v-model="fields.iteratorKey">
             </div>
             <div class="control">
@@ -88,9 +88,10 @@
                 });
             },
             addField() {
-                this.fields.template= this.currentListFields
-                this.fields.type = 'inputlist'
+                this.fields.template= this.currentListFields;
+                this.fields.type = 'inputlist';
                 Object.assign({}, {type: '', title: '', name: '', iteratorKey: '', target: ''});
+                this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
                 return this.fields;
             }
         },

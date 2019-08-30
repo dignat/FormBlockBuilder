@@ -79,7 +79,7 @@
                 this.fields.items = this.currentRepeater;
                 this.fields.type = 'inputrepeat';
                 Object.assign({}, {type: '', title: '', name: ''});
-
+                this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
                 return this.fields;
             }
         },
