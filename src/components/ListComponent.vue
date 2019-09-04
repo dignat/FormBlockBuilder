@@ -4,7 +4,7 @@
         <div class="field">
 
             <div class="control">
-                <Radios :types="types"  :radio="transform ? listFieldType: currentType" @change="handleChange"/>
+                <Radios :types="types" :radio="transform ? listFieldType: currentType" @change="handleChange"/>
             </div>
             <div class="control" v-if="!transform">
                 <component ref="form"

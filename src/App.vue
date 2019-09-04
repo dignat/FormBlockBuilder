@@ -25,10 +25,10 @@
         </div>
         <div class="field is-grouped">
           <div class="control">
-            <button class="button is-primary" @click="addTypeFields">Add More Fields</button>
+            <button class="button is-primary" @click="addTypeFields">Add Fields To Form</button>
           </div>
           <div class="control ">
-            <button class="button is-primary" @click="removeFields()">Remove Fields</button>
+            <button class="button is-primary" @click="removeFields()">Remove Fields From Form</button>
           </div>
           <div class="control">
             <button class="button is-danger" @click="generateForm">Generate</button>

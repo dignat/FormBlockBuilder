@@ -76,6 +76,7 @@
                         {title: 'No'}
                     ]
                 }
+                this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
                 this.fields.type = 'inputradio';
                 return this.fields;
             },

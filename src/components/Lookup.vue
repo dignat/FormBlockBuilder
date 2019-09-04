@@ -1,6 +1,10 @@
 <template>
     <div class="section">
         <div class="field">
+            <label class="label">Routes ?</label>
+            <div class="control">
+                <input class="checkbox" type="checkbox" v-model="routes">
+            </div>
             <label class="label"> Name For Lookup</label>
             <div class="control">
                 <input class="input" type="text" :listFields="listFields.name" v-model="fields.name">
@@ -36,7 +40,7 @@
         },
        data () {
             return {
-
+                routes: false,
                 types: ['lookup', 'text', 'alias'],
                 fields: {
                     type: 'inputlookup',
@@ -51,8 +55,7 @@
         methods: {
             addField() {
                 Object.assign({}, {title: '', name: '', uri: '', labelKey: '', idKey: ''});
-                //this.fields.uri = '/reflow/data/sync/lookup/' + this.fields.uri;
-                this.fields.uri = '/v1/api/' + this.fields.uri;
+                this.fields.uri = this.routes ? '/v1/api/' + this.fields.uri : '/reflow/data/sync/lookup/' + this.fields.uri;
                 return this.fields;
             },
             editField(fields) {

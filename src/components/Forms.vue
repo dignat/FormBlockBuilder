@@ -55,6 +55,7 @@
     import HeaderComponent from "./HeaderComponent"
     import ListComponent from "./ListComponent";
     import TestListComponent from "./TestListComponent";
+    import AliasSelect from "./AliasSelect"
 
     export default {
         name: "Forms",
@@ -91,12 +92,13 @@
             Location,
             HeaderComponent,
             TestListComponent,
-            NumberComponent
+            NumberComponent,
+            AliasSelect
 
         },
         data() {
             return {
-                types: ['inputlookup', 'inputtext', 'inputlookupalias', 'inputrepeat', 'inputnumber', 'inputradio', 'inputselect', 'inputlist', 'inputcheckbox', 'inputimage', 'inputsignature', 'inputformula','inputdate', 'inputlocation','text'],
+                types: ['inputlookup', 'inputtext', 'inputlookupalias', 'inputlookupaliasselect', 'inputrepeat', 'inputnumber', 'inputradio', 'inputselect', 'inputlist', 'inputcheckbox', 'inputimage', 'inputsignature', 'inputformula','inputdate', 'inputlocation','text'],
                 currentFieldType: null,
                 currentType: null,
                 currentProps: {},
@@ -203,6 +205,12 @@
                         break;
                     case 'text':
                         this.currentFieldType = HeaderComponent;
+                        this.currentType = type;
+                        this.changedRules = true;
+                        this.currentProps = {};
+                        break;
+                    case 'inputlookupaliasselect':
+                        this.currentFieldType = AliasSelect;
                         this.currentType = type;
                         this.changedRules = true;
                         this.currentProps = {};
