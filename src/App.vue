@@ -122,7 +122,7 @@
       },
       generateForm() {
         Object.assign({}, {title: '', name: '', type: 'form'});
-        this.formFields.name = this.formFields.title.replace(/\s/g, "");
+        this.formFields.name = this.formFields.title.replace(/[\s,&-/_?():.]/g, "");
         this.formFields.uri = '/reflow/data/update/form/' + this.formFields.name;
         console.log(JSON.stringify(this.formFields))
       },

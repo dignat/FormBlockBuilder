@@ -25,6 +25,10 @@
             <div class="control">
                 <input class="input" type="text" :listFields="listFields.idKey" v-model="fields.idKey">
             </div>
+            <label class="label">Multi ?</label>
+            <div class="control">
+                <input class="checkbox" type="checkbox" name="multi" v-model="fields.multi">
+            </div>
         </div>
     </div>
 
@@ -48,7 +52,8 @@
                     title: '',
                     uri: '',
                     labelKey: '',
-                    idKey: ''
+                    idKey: '',
+                    multi: false
                 }
             }
        },
