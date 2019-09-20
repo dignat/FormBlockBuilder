@@ -5,12 +5,10 @@ const state = {
 
 const mutations = {
     'ADD_FIELD' (state, fields) {
-       state.fields = fields;
-       console.log(fields, 'mutations')
+        state.fields = Object.assign({}, fields);
     },
-    'EDIT_FIELD' (state, payload) {
-        console.log(payload);
-        state.fields = payload;
+    'EDIT_FIELD' (state, fields) {
+        state.fields = fields;
     },
     'DELETE_FIELD' (state, fields) {
 

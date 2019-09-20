@@ -14,6 +14,14 @@
                     <label class="label">Title Field</label>
                     <input class="input" type="text" name="title" v-model="item.title">
                 </div>
+                <label class="label">Multi ?</label>
+                <div class="control">
+                    <input class="checkbox" type="checkbox" name="multi" v-model="fields.multi">
+                </div>
+                <label class="label">Custom ?</label>
+                <div class="control">
+                    <input class="checkbox" type="checkbox" name="custom" v-model="fields.custom">
+                </div>
             </div>
         </div>
 
@@ -28,6 +36,7 @@
 </template>
 
 <script>
+    import {mapActions} from 'vuex'
     export default {
         name: "Select",
         radio: String,
@@ -45,6 +54,8 @@
                     type: "inputselect",
                     title: '',
                     name: '',
+                    multi: false,
+                    custom: false,
                     items:[
                         {title: ''},
                     ]
@@ -52,21 +63,27 @@
             }
         },
         methods: {
+            ...mapActions({
+                toAddField: 'addField'
+            }
+            ),
             addSelectFields() {
                 this.customFields.push({
                     title:''
                 });
             },
             addField() {
-                Object.assign({}, {title: '', name: ''});
-                this.fields.items = this.customFields;
-                this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
-                return this.fields;
+                const fields = {
+                    type: this.fields.multi ? "inputmultiselect" : "inputselect",
+                    title: this.fields.title,
+                    name: this.fields.name === "" ? this.fields.title.replace(/[\s,&-/_?():.]/g,"").toLowerCase().substring(0,7) : this.fields.name,
+                    multi: this.fields.multi,
+                    custom: this.fields.custom,
+                    items: this.customFields
+                };
+                this.toAddField(fields);
+                return fields;
             },
-        },
-        beforeMount() {
-            this.fields = this.listFields;
-            this.fields.type = 'inputselect'
         }
     }
 </script>

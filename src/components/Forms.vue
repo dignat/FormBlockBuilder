@@ -113,9 +113,10 @@
                 this.$emit('addFields', this.currentProps);
                 console.log(this.currentProps, 'here in the form')
             },
-            editField (fields) {
-                this.currentProps = fields;
-                this.$emit('editFields', this.currentProps)
+            editField () {
+                this.currentProps = this.$refs.form.editField();
+                this.$emit('editFields', this.currentProps);
+                console.log(this.currentProps)
             },
 
             handleChange(type) {

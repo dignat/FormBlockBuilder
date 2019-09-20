@@ -70,12 +70,13 @@
         methods: {
             ...mapActions({
                toAddField: 'addField',
+                toEditField: 'editField'
             }),
             addField() {
                const fields = {
                    type: 'inputtext',
                    title: this.fields.title,
-                   name: this.fields.name === "" ? this.fields.title.replace(/[\s,&-/_?():.]/g,"").toLowerCase().substring(0,5) : this.fields.name,
+                   name: this.fields.name === "" ? this.fields.title.replace(/[\s,&-/_?():.]/g,"").toLowerCase().substring(0,7)+Math.floor((Math.random()*36)) : this.fields.name,
                    hidden: this.fields.hidden,
                    limit: this.fields.limit,
                    default: this.fields.default,
@@ -85,18 +86,10 @@
                 this.toAddField(fields);
                 return fields;
             },
-            editField (fields) {
-               const field = {
-                    type: 'inputtext',
-                    title: fields.title,
-                    name: fields.name === "" ? this.fields.title.replace(/[\s,&-/_?]/g,"").toLowerCase() : fields.name,
-                    hidden: fields.hidden,
-                    limit: fields.limit,
-                    default: fields.default,
-                    required: fields.required,
-                    enabled: fields.enabled
-                };
-               return field;
+            editField () {
+                this.fields.name === "" ? this.fields.title.replace(/[\s,&-/_?():.]/g,"").toLowerCase().substring(0,7) : this.fields.name;
+                this.toEditField(this.fields);
+                return this.fields;
             }
         },
     }

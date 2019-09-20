@@ -3,7 +3,7 @@
         <div class="field">
             <label class="label">Routes ?</label>
             <div class="control">
-                <input class="checkbox" type="checkbox" v-model="routes">
+                <input class="checkbox" type="checkbox" v-model="routes" @change="clearField">
             </div>
             <label class="label"> Name For Lookup</label>
             <div class="control">
@@ -36,7 +36,7 @@
 </template>
 
 <script>
-
+    import {mapActions} from 'vuex'
     export default {
         name: "Lookup",
         props: {
@@ -48,8 +48,8 @@
                 types: ['lookup', 'text', 'alias'],
                 fields: {
                     type: 'inputlookup',
-                    name: '',
                     title: '',
+                    name: '',
                     uri: '',
                     labelKey: '',
                     idKey: '',
@@ -58,20 +58,30 @@
             }
        },
         methods: {
+            ...mapActions({
+                toAddField: 'addField'
+            }),
             addField() {
-                Object.assign({}, {title: '', name: '', uri: '', labelKey: '', idKey: ''});
-                this.fields.uri = this.routes ? '/v1/api/' + this.fields.uri : '/reflow/data/sync/lookup/' + this.fields.uri;
-                return this.fields;
+                const fields = {
+                    type: "inputlookup",
+                    title: this.fields.title,
+                    name: this.fields.name === "" ? this.fields.title.replace(/[\s,&-/_?():.]/g,"").toLowerCase().substring(0,7) : this.fields.name,
+                    uri: this.fields.uri = this.routes ? '/v1/api/' + this.fields.uri : '/reflow/data/sync/lookup/' + this.fields.uri,
+                    labelKey: this.fields.labelKey,
+                    idKey: this.fields.idKey,
+                    multi: this.fields.multi
+                };
+                this.toAddField(fields);
+                return fields;
+            },
+            clearField() {
+               this.fields.uri = this.fields.uri.replace(this.fields.uri, '');
             },
             editField(fields) {
                 fields.uri = '/v1/api/' + fields.uri;
                 this.fields = fields;
                 return this.fields;
             }
-        },
-        beforeMount() {
-            this.fields = this.listFields;
-            this.fields.type = 'inputlookup';
         }
     }
 

@@ -33,7 +33,7 @@
                 fields: {
                     type: 'text',
                     name: '',
-                    body: '',
+                    body: '<h3></h3>',
                     hidden: ''
                 }
             }

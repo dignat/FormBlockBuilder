@@ -27,6 +27,7 @@
 
 <script>
     import Radios from "./Radios"
+    import {mapActions} from 'vuex'
     export default {
         name: "RadioForm",
         props: {
@@ -60,25 +61,26 @@
             }
         },
         methods: {
+            ...mapActions({
+                toAddField: 'addField'
+            }),
             addCustomFields() {
                 this.customFields.push({
                     title:''
                 });
             },
             addField() {
-                Object.assign({}, {title: '', name: '', hidden: ''});
-                Object.assign({}, {title: ''});
-                if (this.customTitles) {
-                    this.fields.items = this.customFields;
-                } else {
-                    this.fields.items = [
-                        {title: 'Yes'},
-                        {title: 'No'}
-                    ]
-                }
-                this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
-                this.fields.type = 'inputradio';
-                return this.fields;
+                const fields = {
+                    type: "inputradio",
+                    title: this.fields.title,
+                    name:  this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    hidden: this.fields.hidden,
+                    items: this.customTitles ? this.fields.items = this.customFields : this.fields.items = [{title: 'Yes'},{title: 'No'}]
+
+                };
+                this.toAddField(fields);
+                return fields
+
             },
             handleChange(type) {
                 console.log(type);
@@ -95,11 +97,6 @@
                         break;
                 }
             }
-        },
-        beforeMount() {
-            this.fields = this.listFields
-            this.customType = this.radio
-            this.transformed = this.transformList;
         }
     }
 </script>

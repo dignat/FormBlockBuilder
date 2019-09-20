@@ -27,8 +27,11 @@
           <div class="control">
             <button class="button is-primary" @click="addTypeFields">Add Fields To Form</button>
           </div>
+          <div class="control">
+            <button class="button is-primary" @click="removeTypeFields">Take Out Added Fields To Form</button>
+          </div>
           <div class="control ">
-            <button class="button is-primary" @click="removeFields()">Remove Fields From Form</button>
+            <button class="button is-primary" @click="removeFields">Remove Fields From Form</button>
           </div>
           <div class="control">
             <button class="button is-danger" @click="generateForm">Generate</button>
@@ -83,6 +86,7 @@
         dependantListType: "",
         dependantRepeaterTypes: [],
         dependantList: false,
+        message: '',
         existingForm: {
           title: '',
           type: 'form',
@@ -105,9 +109,9 @@
         this.formFields.items.push(value)
       },
       edit (value) {
-        console.log(value, 'in the app');
         this.formFields.items.pop();
-        this.formFields.items.push(value)
+        this.formFields.items.push(value);
+        console.log(value, 'edit function')
       },
       removeFields () {
         this.formFields.items.pop();
@@ -120,6 +124,10 @@
           type: this.currentType,
         });
       },
+      removeTypeFields () {
+        this.buildFields.pop();
+      },
+
       generateForm() {
         Object.assign({}, {title: '', name: '', type: 'form'});
         this.formFields.name = this.formFields.title.replace(/[\s,&-/_?():.]/g, "");
