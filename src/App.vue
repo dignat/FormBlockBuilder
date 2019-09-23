@@ -23,6 +23,7 @@
                  :transformList="transform" :list="formFields" :key="index" :changeRules="changingRules" :listFieldTypes="dependantTypes" :dependant-list-types="dependantListFieldTypes" :has-list="dependantList"
                  :translatedList="formFields.items[index]" @addFields="sync" @editFields="edit"></Forms>
         </div>
+
         <div class="field is-grouped">
           <div class="control">
             <button class="button is-primary" @click="addTypeFields">Add Fields To Form</button>
@@ -55,18 +56,34 @@
 
       </div>
       </section>
+      <div class="samsung">
+        <div class="inside">
+          <h3><strong>{{formFields.title}}</strong></h3>
+          <app-html v-for="(data, index) in formFields.items"
+                    :key="index"
+                    v-bind:type="data.type"
+                    v-bind:width="data.width"
+                    v-bind:title="data.title"
+                    v-bind:items="data.items"
+                    v-bind:template="data.template" ></app-html>
+          <button class="button is-primary" style="margin-top: 10px;" v-if="formFields.items.length">Copy</button>
+          <button class="button is-primary" style="margin-top: 10px;" v-if="formFields.items.length"> Save</button>
+        </div>
+      </div>
   </div>
 </template>
 
 <script>
 
  import Forms from './components/Forms'
+ import Html from './components/Html'
 
 
   export default {
     name: 'App',
     components: {
-      Forms
+      Forms,
+      'app-html': Html
     },
     data () {
       return {
@@ -206,4 +223,43 @@
 
 <style lang="scss">
   @import "~bulma";
+
+  #app{
+    margin: 0 auto;
+    width: auto;
+  }
+
+  .samsung{
+   background: url(assets/iphone5s_portrait.svg) center no-repeat;
+    background-size: contain;
+    height: 762px;
+    width: 366px;
+    float: right;
+    bottom: 0;
+    position: sticky;
+    position: -webkit-sticky; /* Safari */
+
+  }
+  .inside {
+    width: 320px;
+    height: 570px;
+    overflow-y: scroll;
+    position: relative;
+    margin-left: 30px;
+    top: 95px;
+
+  }
+  ::-webkit-scrollbar {
+    width: 12px;
+  }
+
+  ::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+  }
 </style>

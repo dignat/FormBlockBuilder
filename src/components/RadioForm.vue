@@ -62,7 +62,8 @@
         },
         methods: {
             ...mapActions({
-                toAddField: 'addField'
+                toAddField: 'addField',
+                toEditField: 'editField'
             }),
             addCustomFields() {
                 this.customFields.push({
@@ -81,6 +82,11 @@
                 this.toAddField(fields);
                 return fields
 
+            },
+            editField () {
+                this.fields.name === "" ? this.fields.title.replace(/[\s,&-/_?():.]/g,"").toLowerCase().substring(0,7) : this.fields.name;
+                this.toEditField(this.fields);
+                return this.fields;
             },
             handleChange(type) {
                 console.log(type);
