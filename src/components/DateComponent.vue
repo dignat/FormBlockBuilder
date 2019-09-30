@@ -15,6 +15,7 @@
 </template>
 
 <script>
+    import {mapActions} from 'vuex'
     export default {
         name: "DateComponent",
         props: {
@@ -33,16 +34,28 @@
             }
         },
         methods: {
+            ...mapActions({
+                toAddField: 'addField',
+                toEditField: 'editField'
+            }),
             addField () {
+                const fields = {
+                    type: "inputdate",
+                    title: this.fields.title,
+                    name: this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    time: this.fields.time,
+                    required: this.fields.required,
+                    hidden: this.fields.hidden
+                };
+                this.toAddField(fields);
+                return fields;
+            },
+            editField() {
                 this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
-                Object.assign({}, {title: '', name: '', time: '', required: '', hidden: ''});
+                this.toEditField(this.fields);
                 return this.fields;
             }
         },
-        beforeMount() {
-            this.fields = this.listFields;
-            this.fields.type = 'inputdate'
-        }
     }
 </script>
 

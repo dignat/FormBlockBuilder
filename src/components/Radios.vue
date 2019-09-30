@@ -1,12 +1,12 @@
 <template>
     <div class="control" >
-
-            <label class="radio" for="fieldType" v-for="fieldType in types">
+<div v-for="fieldType in types">
+            <label class="radio" for="fieldType">
                 <input type="radio" :radio="radio" ref="form"
                        :id="fieldType" :name="fieldType" :value="fieldType"
                        :types="fieldType.types" v-model="radioModel" @change="updateChange">
                 <strong><i>{{ fieldType }}</i></strong></label>
-
+</div>
     </div>
 </template>
 

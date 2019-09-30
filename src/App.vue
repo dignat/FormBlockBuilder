@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <section class="section">
-      <div class="container">
+      <div class="container" style="width: 50%; margin-left: 320px;">
         <div class="field">
           <h1>Form Fields</h1>
           <label class="label">Form Title</label>
@@ -53,23 +53,25 @@
         <div class="section">
           <textarea v-model="existingForm"></textarea>
         </div>
-
       </div>
       </section>
-      <div class="samsung">
-        <div class="inside">
-          <h3><strong>{{formFields.title}}</strong></h3>
-          <app-html v-for="(data, index) in formFields.items"
-                    :key="index"
-                    v-bind:type="data.type"
-                    v-bind:width="data.width"
-                    v-bind:title="data.title"
-                    v-bind:items="data.items"
-                    v-bind:template="data.template" ></app-html>
-          <button class="button is-primary" style="margin-top: 10px;" v-if="formFields.items.length">Copy</button>
-          <button class="button is-primary" style="margin-top: 10px;" v-if="formFields.items.length"> Save</button>
+    <section class="samsung">
+      <div class="inside">
+        <h3 style="text-align: center;"><strong>{{formFields.title}}</strong></h3>
+        <app-html v-for="(data, index) in formFields.items"
+                  :key="index"
+                  v-bind:type="data.type"
+                  v-bind:width="data.width"
+                  v-bind:title="data.title"
+                  v-bind:items="data.items"
+                  v-bind:template="data.template"
+                  v-bind:body="data.body"></app-html>
+        <div class="field is-grouped">
+        <button class="button is-primary is-fullwidth" style="margin-top: 10px; margin-right: 5px;" v-if="formFields.items.length">Copy</button>
+        <button class="button is-primary is-fullwidth" style="margin-top: 10px; margin-right: 5px;" v-if="formFields.items.length"> Save</button>
         </div>
       </div>
+    </section>
   </div>
 </template>
 
@@ -155,10 +157,9 @@
         this.transform = true;
         this.formFields = JSON.parse(this.existingForm);
         //this.buildOfTranslate = this.formFields.items;
-
         for (let i = 0; i < this.formFields.items.length; i++) {
           this.currentType =  this.formFields.items[i].type;
-          this.fieldTypes.push(Forms.components)
+          this.fieldTypes.push(Forms.components);
           this.buildFields.push({
             id: this.count++,
             type: this.currentType,
@@ -194,7 +195,7 @@
                           this.dependantTypes[j] = Forms.components.TextComponent;
                           break;
                         case 'inputnumber':
-                          this.dependantTypes[j] = Forms.components.NumberComponent
+                          this.dependantTypes[j] = Forms.components.NumberComponent;
                           break;
                       }
                     }
@@ -209,7 +210,7 @@
               switch (this.dependantRepeaterType) {
                 case 'inputtext':
                     this.dependantRepeaterTypes[k] = Forms.components.TextComponent;
-                    console.log('repeater', this.dependantRepeaterTypes, this.dependantRepeaterType)
+                    console.log('repeater', this.dependantRepeaterTypes);
                   break;
               }
             }
@@ -223,11 +224,6 @@
 
 <style lang="scss">
   @import "~bulma";
-
-  #app{
-    margin: 0 auto;
-    width: auto;
-  }
 
   .samsung{
    background: url(assets/iphone5s_portrait.svg) center no-repeat;

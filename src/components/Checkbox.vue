@@ -15,6 +15,7 @@
 </template>
 
 <script>
+    import {mapActions} from 'vuex'
     export default {
         name: "Checkbox",
         props: {
@@ -32,16 +33,27 @@
             }
         },
         methods: {
+            ...mapActions({
+                toAddField: 'addField',
+                toEditField: 'editField'
+            }),
             addField() {
-                Object.assign({}, {title: '', name: '', required: '', hidden: ''});
-                this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
-                return this.fields;
+                const fields = {
+                    type: "inputcheckbox",
+                    title: this.fields.title,
+                    name: this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    required: this.fields.required,
+                    hidden: this.fields.hidden
+                };
+                this.toAddField(fields);
+                return fields;
             },
+            editField() {
+                this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
+                this.toEditField(this.fields);
+                return this.fields;
+            }
         },
-        beforeMount() {
-            this.fields = this.listFields
-            this.fields.type = 'inputcheckbox'
-        }
     }
 </script>
 

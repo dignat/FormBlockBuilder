@@ -59,7 +59,8 @@
        },
         methods: {
             ...mapActions({
-                toAddField: 'addField'
+                toAddField: 'addField',
+                toEditField: 'editField'
             }),
             addField() {
                 const fields = {
@@ -77,9 +78,10 @@
             clearField() {
                this.fields.uri = this.fields.uri.replace(this.fields.uri, '');
             },
-            editField(fields) {
-                fields.uri = '/v1/api/' + fields.uri;
-                this.fields = fields;
+            editField() {
+                    this.fields.name === "" ? this.fields.title.replace(/[\s,&-/_?():.]/g,"").toLowerCase().substring(0,7) : this.fields.name,
+                    this.fields.uri = this.routes ? '/v1/api/' + this.fields.uri : '/reflow/data/sync/lookup/' + this.fields.uri,
+                    this.toEditField(this.fields);
                 return this.fields;
             }
         }

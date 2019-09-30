@@ -23,6 +23,7 @@
 </template>
 
 <script>
+    import {mapActions} from 'vuex'
     export default {
         name: "HeaderComponent",
         props: {
@@ -39,19 +40,26 @@
             }
         },
         methods: {
+            ...mapActions({
+                toAddField: 'addField',
+                toEditField: 'editField'
+            }),
             addField() {
                 Object.assign({}, {body: '', name: '', hidden: ''});
                 this.fields.type = 'text';
-                return this.fields;
+                const fields = {
+                    type: 'text',
+                    name: this.fields.name,
+                    body: '<h3></h3>',
+                    hidden: this.fields.hidden
+                };
+                this.toAddField(fields);
+                return fields;
             },
-            editField (fields) {
-                this.textfields = fields;
+            editField () {
+                this.toEditField(this.fields);
                 return this.fields
             }
-        },
-        beforeMount() {
-            this.textfields = this.listFields;
-            this.fields.type = 'text'
         }
     }
 </script>

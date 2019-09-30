@@ -33,8 +33,8 @@
 
         <div class="field">
             <div class="control">
-                <label class="label">Alias Select Enabled</label>
-                <input class="checkbox" type="checkbox" name="enabled" v-model="fields.enabled">
+                <label class="label">Alias Select Key</label>
+                <input class="checkbox" type="checkbox" name="selectKey" v-model="fields.selectKey">
             </div>
         </div>
         <div class="field">
@@ -48,6 +48,7 @@
 </template>
 
 <script>
+    import {mapActions} from 'vuex'
     export default {
         name: "AliasSelect",
         props: {
@@ -61,25 +62,39 @@
                     title: '',
                     target: '',
                     labelKey: '',
+                    selectKey: '',
                     idKey: '',
                     multi: false,
-                    enabled: false
                 }
             }
 
         },
         methods : {
+            ...mapActions({
+                toAddField: 'addField',
+                toEditField: 'editField'
+            }),
             addField() {
-                Object.assign({}, {title: '', name: '', target: '', labelKey: '', idKey: '', multi: false, enabled: false});
+                const fields = {
+                    type: 'inputlookupaliasselect',
+                    name: this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    title: this.fields.title,
+                    target: this.fields.target,
+                    labelKey: this.fields.labelKey,
+                    selectKey: this.fields.selectKey,
+                    idKey: this.fields.idKey,
+                    multi: this.fields.multi,
+                };
+                this.toAddField(fields);
+                return fields;
+            },
+            editField() {
                 this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
+                this.toEditField(this.fields);
                 return this.fields;
             }
 
         },
-        beforeMount() {
-            this.fields = this.listFields;
-            this.fields.type = "inputlookupaliasselect";
-        }
 
     }
 </script>

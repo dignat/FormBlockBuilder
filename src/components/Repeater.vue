@@ -7,12 +7,17 @@
                 <component ref="form" :type="currentType" :is="currentFieldType" :props="currentProps" :listFields="currentRepeaterFields"></component>
             </div>
             <div v-if="transform" class="control">
-                <component ref="form" :repeaterTypes="repeaterTypes"
-                           :is="changeRules ? currentFieldType: repeaterTypes" :props="currentProps"  :changeRules="changeRules"
-                           :listFields="changeRules ? currentRepeaterFields : listFields"></component>
+                <component ref="form"
+                           :is="changeRules ? currentFieldType: translatedFieldType" :props="currentProps" :changeRules="changeRules"
+                           :listFields="changeRules ? currentRepeaterFields : transformedFields"></component>
             </div>
-            <div class="control">
-                <button class="button is-info" @click="addField">Add Repeater Fields</button>
+            <div class="field is-grouped">
+                <div class="control">
+                    <button class="button is-info" @click="addField">Add Repeater Fields</button>
+                </div>
+                <div class="control">
+                    <button class="button is-primary" @click="editField">Edit Repeater Fields</button>
+                </div>
             </div>
         </div>
 </template>
@@ -39,7 +44,7 @@
             changeRules: Boolean,
             radio: String,
             repeaterType: String,
-            repeaterTypes: Object
+            repeaterFieldType: Object
         },
         components: {
             Radios,
@@ -60,6 +65,7 @@
                 currentFieldType: null,
                 currentType: null,
                 currentProps: {},
+                translatedFieldType: null,
                 currentRepeaterFields: {},
                 transformedFields: {},
                 transform: null,
@@ -70,6 +76,10 @@
             addField() {
                 this.currentRepeaterFields = this.$refs.form.addField();
                 this.$emit('addRepeater', this.currentRepeaterFields);
+            },
+            editField () {
+              this.currentRepeaterFields = this.$refs.form.editField();
+              this.$emit('editRepeater', this.currentRepeaterFields);
             },
             handleChange(type) {
                 console.log(type);
@@ -140,10 +150,11 @@
         },
         beforeMount() {
             this.currentType = this.radio;
-            this.currentFieldType  = this.repeaterTypes;
             this.transform = this.transformList;
             this.changedRules = this.changeRules;
-            this.repeaterType = this.radio
+            this.repeaterType = this.radio;
+            this.translatedFieldType = this.repeaterFieldType;
+            this.transformedFields = this.listFields;
         }
     }
 </script>

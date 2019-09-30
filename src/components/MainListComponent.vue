@@ -43,6 +43,7 @@
 
 <script>
     import ListComponent from "./ListComponent"
+    import {mapActions} from 'vuex'
     export default {
         name: "MainListComponent",
         props: {
@@ -77,6 +78,10 @@
             }
         },
         methods: {
+            ...mapActions({
+                toAddField: 'addField',
+                toEditField: 'editField'
+            }),
             sync (value) {
                 this.currentListFields.push(value);
             },
@@ -88,19 +93,24 @@
                 });
             },
             addField() {
-                this.fields.template= this.currentListFields;
-                this.fields.type = 'inputlist';
-                Object.assign({}, {type: '', title: '', name: '', iteratorKey: '', target: ''});
+                const fields = {
+                    type: 'inputlist',
+                    name: this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    title: this.fields.title,
+                    iteratorKey: this.fields.iteratorKey,
+                    target: this.fields.target,
+                    template: this.currentListFields
+                };
+                this.toAddField(fields);
+                return fields;
+            },
+            editField() {
                 this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
+                this.fields.template = this.currentListFields;
+                this.toEditField(this.fields);
                 return this.fields;
             }
         },
-         beforeMount() {
-            this.fields = this.listFields
-             this.translateList = this.translatedList
-             this.transform = this.transformList
-             this.dependantList = this.hasList
-         }
     }
 </script>
 

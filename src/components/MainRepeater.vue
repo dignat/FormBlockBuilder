@@ -10,15 +10,15 @@
                 <input class="input" type="text" name="title" :listFields="listFields.title" v-model="fields.title">
             </div>
             <div v-if="!transform" class="control">
-                <Repeater ref="form" v-for="(field, index) in buildFields" :listFields="fields.items"
+                <Repeater ref="form" v-for="(field, index) in buildFields" :listFields="field"
                           :id="index" :type=field.type :key="index" v-model="fields.items"
-                          @addRepeater="sync"></Repeater>
+                          @addRepeater="sync" @editRepeater="edit"></Repeater>
             </div>
             <div v-if="transform" class="control">
-                <Repeater ref="form" v-for="(field, index) in translateRepeater.items" :listFields="field"
-                          :radio="field.type" :repeaterType="field.type" :transformList="transform"
-                          :changeRules="changeRules" :repeaterTypes="repeaterTypes[index]"
-                          :id="index"  :key="index" @addRepeater="sync"></Repeater>
+                <Repeater ref="form" v-for="(field, index) in translateRepeater.items" :listFields="field" v-model="fields.items"
+                          :radio="field.type" :repeaterType="field.type" :transformList="transform" :type="field.type"
+                          :changeRules="changeRules" :repeaterFieldType="translateTypes[index]"
+                          :id="index" :key="index" @addRepeater="sync" @editRepeater="edit"></Repeater>
             </div>
         </div>
         <div class="field is-grouped">
@@ -35,6 +35,8 @@
 
 <script>
     import Repeater from './Repeater'
+    import {mapActions} from 'vuex'
+    import {mapGetters} from 'vuex'
     export default {
         name: "MainRepeater",
         props: {
@@ -42,7 +44,7 @@
             transformList: Boolean,
             changeRules: Boolean,
             translatedList: Object,
-            repeaterTypes: Object,
+            repeaterTypes: Array,
             repeaterType: String,
         },
         components: {
@@ -51,8 +53,9 @@
         data () {
             return {
                 buildFields: [],
-                translateRepeater: [],
+                translateRepeater: {},
                 currentRepeater: [],
+                translateTypes: [],
                 transform: false,
                 count: 0,
                 fields: {
@@ -64,10 +67,17 @@
             }
         },
         methods: {
-
+            ...mapActions({
+                toAddField: 'addField',
+                toEditField: 'editField'
+            }),
             sync (value) {
                 console.log(value)
                 this.currentRepeater.push(value);
+            },
+            edit(value) {
+                this.translateRepeater.items.pop();
+                this.translateRepeater.items.push(value);
             },
             addMoreRepeaterFields() {
                 this.buildFields.push({
@@ -76,17 +86,26 @@
                 });
             },
             addField() {
-                this.fields.items = this.currentRepeater;
-                this.fields.type = 'inputrepeat';
-                Object.assign({}, {type: '', title: '', name: ''});
+                const fields = {
+                    type: 'inputrepeat',
+                    name: this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    title: this.fields.title,
+                    items: this.currentRepeater
+                };
+                this.toAddField(fields);
+                return fields;
+            },
+            editField() {
                 this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
+                this.fields.items = this.currentRepeater;
+                this.toEditField(this.fields);
                 return this.fields;
             }
         },
         beforeMount() {
-            this.fields = this.listFields
-            this.transform = this.transformList
-            this.translateRepeater = this.translatedList
+            this.translateRepeater = this.translatedList;
+            this.translateTypes = this.repeaterTypes;
+            this.transform = this.transformList;
         }
     }
 </script>

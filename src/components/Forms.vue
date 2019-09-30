@@ -76,7 +76,7 @@
         },
         components: {
             Radios,
-           Lookup,
+            Lookup,
             TextComponent,
             MainRepeater,
             Alias,

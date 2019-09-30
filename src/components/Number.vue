@@ -15,6 +15,7 @@
 </template>
 
 <script>
+    import {mapActions} from 'vuex'
     export default {
         name: "Number",
         props: {
@@ -31,16 +32,27 @@
             }
         },
         methods: {
+            ...mapActions({
+                toAddField: 'addField',
+                toEditField: 'editField'
+            }),
             addField () {
-                Object.assign({}, {name: '', title: '', decimals: ''});
+                const fields = {
+                    type: this.fields.type,
+                    name: this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    title: this.fields.title,
+                    decimals: this.fields.decimals
+                };
+                this.toAddField(fields);
+                return fields;
+
+            },
+            editField() {
                 this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
+                this.toEditField(this.fields);
                 return this.fields;
             }
         },
-        beforeMount() {
-            this.fields = this.listFields;
-            this.fields.type = 'inputnumber';
-        }
     }
 </script>
 

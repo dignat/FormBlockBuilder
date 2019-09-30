@@ -91,7 +91,7 @@
                 this.toEditField(this.fields);
                 return this.fields;
             }
-        },
+        }
     }
 </script>
 

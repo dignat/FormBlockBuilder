@@ -21,6 +21,7 @@
 </template>
 
 <script>
+    import {mapActions} from 'vuex'
     export default {
         name: "Signature",
         props: {
@@ -40,16 +41,29 @@
             }
         },
         methods: {
+            ...mapActions({
+                toAddField: 'addField',
+                toEditField: 'editField'
+            }),
             addField() {
-                Object.assign({}, {title: '', name: '', min: '', max: '', required: '', hidden: ''});
-                this.fields.type = 'inputsignature';
-                this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
-                return this.fields;
+                const fields = {
+                    type: "inputsignature",
+                    title: this.fields.title,
+                    name: this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    min: this.fields.min,
+                    max: this.fields.max,
+                    hidden: this.fields.hidden,
+                    statement: this.fields.statement
+                };
+                this.toAddField(fields);
+                return fields;
             },
+            editField() {
+                this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
+                this.toEditField(this.fields);
+                return this.fields;
+            }
         },
-        beforeMount() {
-            this.fields = this.listFields
-        }
     }
 </script>
 

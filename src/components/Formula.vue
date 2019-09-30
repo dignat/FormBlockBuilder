@@ -18,6 +18,7 @@
 </template>
 
 <script>
+    import {mapActions} from 'vuex'
     export default {
         name: "Formula",
         props: {
@@ -36,15 +37,30 @@
             }
         },
         methods: {
+            ...mapActions({
+                toAddField: 'addField',
+                toEditField: 'editField'
+            }),
             addField() {
                 Object.assign({}, {title: '', name: '', required: '', hidden: '', script: ''});
                 this.fields.type = "inputformula";
-                return this.fields;
+                const fields = {
+                    type: "inputformula",
+                    title: this.fields.title,
+                    name: this.fields.name,
+                    hidden: this.fields.hidden,
+                    script: this.fields.script,
+                    store: 0
+                };
+                this.toAddField(fields);
+                return fields;
             },
-        },
-        beforeMount() {
-            this.fields = this.listFields
+            editField() {
+                this.toEditField(this.fields);
+                return this.fields;
+            }
         }
+
     }
 </script>
 

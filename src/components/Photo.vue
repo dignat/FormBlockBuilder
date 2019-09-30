@@ -17,6 +17,7 @@
 </template>
 
 <script>
+    import {mapActions} from 'vuex'
     export default {
         name: "Photo",
         props: {
@@ -35,14 +36,26 @@
             }
         },
         methods: {
+            ...mapActions({
+                toAddField: 'addField',
+                toEditField: 'editField'
+            }),
             addField() {
-                Object.assign({}, {title: '', name: '', required: '', hidden: '', source: ''});
-                return this.fields;
+                const fields = {
+                        type: 'inputimage',
+                        title: this.fields.title,
+                        name: this.fields.name,
+                        hidden: this.fields.hidden,
+                        required: this.fields.required,
+                        source: this.fields.source
+                };
+                this.toAddField(fields);
+                return fields;
             },
-        },
-        beforeMount() {
-            this.fields = this.listFields;
-            this.fields.type = 'inputimage';
+            editField() {
+                this.toEditField(this.fields);
+                return this.fields;
+            }
         }
     }
 </script>
