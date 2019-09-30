@@ -1,7 +1,7 @@
 <template>
     <div>
         <label class="label" v-html="title" v-if="!['inputsignature'].includes(type)"></label>
-        <input class="input is-medium" :type="type.replace('input','')" v-bind:style="{width: width}" v-if="!['inputselect','inputmultiselect','inputlookup','inputrepeat', 'inputlist', 'inputradio','inputsignature','inputformula','text','inputlookupaliasselect'].includes(type)"/>
+        <input class="input is-medium" :type="type.replace('input','')" v-bind:style="{width: width}" v-if="!['inputselect','inputmultiselect','inputlookup','inputrepeat', 'inputlist', 'inputradio','inputsignature','inputformula','text','inputlookupaliasselect','inputcheckbox'].includes(type)"/>
 
         <div class="select is-primary is-fullwidth"   v-if="type === 'inputselect' || type === 'inputmultiselect' || type === 'inputlookupaliasselect'">
             <select v-bind:items="items" class="select">
@@ -48,6 +48,9 @@
                 </div>
             </div>
         </div>
+        <label class="checkbox" v-bind:items="items" v-if="type ==='inputcheckbox'">
+            <input type="checkbox" :type="type.replace('input','')" v-bind:style="{width:width}"/>
+        </label>
             <label class="radio" v-bind:items="items" v-if="type === 'inputradio'" v-for="item in items">{{item.title}}
                 <input class="radio" :type="type.replace('input','')" v-bind:style="{width:width}"/>
             </label>
