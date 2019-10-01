@@ -1,7 +1,7 @@
 <template>
         <div class="field">
             <div class="control">
-            <Radios :types="types" :radio="transform ? repeaterType: currentType" @change="handleChange"/>
+            <Radios :types="types" :radio="transform ? translatedRepeaterType: currentType" @change="handleChange"/>
         </div>
             <div class="control" v-if="!transform">
                 <component ref="form" :type="currentType" :is="currentFieldType" :props="currentProps" :listFields="currentRepeaterFields"></component>
@@ -68,6 +68,7 @@
                 translatedFieldType: null,
                 currentRepeaterFields: {},
                 transformedFields: {},
+                translatedRepeaterType: '',
                 transform: null,
                 changedRules: false,
             }
@@ -152,7 +153,7 @@
             this.currentType = this.radio;
             this.transform = this.transformList;
             this.changedRules = this.changeRules;
-            this.repeaterType = this.radio;
+            this.translatedRepeaterType = this.repeaterType;
             this.translatedFieldType = this.repeaterFieldType;
             this.transformedFields = this.listFields;
         }

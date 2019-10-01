@@ -36,7 +36,6 @@
 <script>
     import Repeater from './Repeater'
     import {mapActions} from 'vuex'
-    import {mapGetters} from 'vuex'
     export default {
         name: "MainRepeater",
         props: {

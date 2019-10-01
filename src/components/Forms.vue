@@ -13,9 +13,9 @@
         <div class="field" v-if="transform">
             <div class="control">
                 <component ref="form" :is="changedRules ? currentFieldType : fieldsType"
-                           :fieldsType="fieldsType" :list="list" :listFieldType="listFieldType" :repeaterTypes="repeaterTypes" :repeaterType="repeaterType"
-                           :transformList="transformList" :translatedList="translatedList" :changeRules="changeRules" :listFieldTypes="listFieldTypes"
-                           :dependantListTypes="dependantListTypes" :hasList="hasList"
+                           :fieldListType="listFieldType" :list="list" :dependantTypes="dependantTypes" :repeaterTypes="repeaterTypes" :repeaterType="repeaterType"
+                           :transformList="transformList" :translatedList="transformedFields" :changeRules="changeRules"
+                            :hasList="hasList"
                            :listFields="changedRules ? currentProps: translatedList">
                 </component>
             </div>
@@ -69,9 +69,10 @@
             changeRules: Boolean,
             listFieldTypes: Array,
             listFieldType: String,
+            fieldListType: String,
             repeaterTypes: Array,
             repeaterType: String,
-            dependantListTypes: Array,
+            dependantTypes: Array,
             hasList: Boolean
         },
         components: {

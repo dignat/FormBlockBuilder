@@ -50,7 +50,7 @@
                 const fields = {
                     type: 'text',
                     name: this.fields.name,
-                    body: '<h3></h3>',
+                    body: this.fields.body,
                     hidden: this.fields.hidden
                 };
                 this.toAddField(fields);

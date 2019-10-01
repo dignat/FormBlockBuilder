@@ -26,7 +26,10 @@
                     <select>
                         <option v-html="item.title"></option>
                     </select>
-
+                </div>
+                <div v-if="item.type === 'inputsignature'" class="control">
+                    <button class="button is-info" style="margin: 0 auto; display: block; width: 100%;"><font-awesome-icon icon="pen" />
+                        <span>{{item.title}}</span></button>
                 </div>
             </div>
             <button class="button is-info" style="margin-top: 5px;">Copy</button> <button class="button is-info" style="margin-top: 5px;">Add {{title}}</button>

@@ -18,14 +18,14 @@
                 <input class="input" type="text" name="target" :listFields="listFields.target" v-model="fields.target">
             </div>
             <div class="control" v-if="!transform">
-                    <ListComponent ref="form" v-for="(field, index) in buildFields" :listFields="fields.template" v-model="fields.template"
-                               :id="index" :key="index" @addList="sync"></ListComponent>
+                    <ListComponent ref="form" v-for="(field, index) in buildFields" :listFields="fields" v-model="fields.template"
+                               :id="index" :key="index" @addList="sync" @editList="edit"></ListComponent>
             </div>
             <div class="control" v-if="transform">
-                <ListComponent ref="form" v-for="(field, index) in translateList.template" :listFields="field"
-                               :radio="field.type" :listFieldType="field.type" :hasList="hasList"
-                               :transformList="transform" :changeRules="changeRules" :listFieldTypes="listFieldTypes[index]"
-                               :id="index" :key="index" @addList="sync"></ListComponent>
+                <ListComponent ref="form" v-for="(field, index) in translatedInputList.template" :listFields="field" v-model="fields.template"
+                               :radio="field.type" :hasList="hasList"  :fieldListType="field.type" :type="field.type"
+                               :transformList="transform" :changeRules="changeRules" :listFieldType="translatedListTypes[index]"
+                               :id="index" :key="index" @addList="sync" @editList="edit"></ListComponent>
             </div>
         </div>
 
@@ -51,9 +51,9 @@
             transformList: Boolean,
             changeRules: Boolean,
             translatedList: Object,
-            listFieldTypes: Object,
-            listFieldType: String,
-            dependantListTypes: Array,
+            fieldListType: String,
+            listFieldType: {},
+            dependantTypes: Array,
             hasList: Boolean
         },
         components: {
@@ -63,7 +63,8 @@
             return {
                 buildFields: [],
                 currentListFields: [],
-                translateList: [],
+                translatedInputList: {},
+                translatedListTypes:[],
                 transform: false,
                 dependantList: false,
                 count: 0,
@@ -84,6 +85,10 @@
             }),
             sync (value) {
                 this.currentListFields.push(value);
+            },
+            edit(value) {
+              this.translatedInputList.template.pop();
+              this.translatedInputList.template.push(value)
             },
             addMoreListFields() {
                 console.log(this.$refs.form, 'in the main list');
@@ -111,6 +116,11 @@
                 return this.fields;
             }
         },
+        beforeMount() {
+            this.translatedInputList = this.translatedList;
+            this.translatedListTypes = this.dependantTypes;
+            this.transform=this.transformList;
+        }
     }
 </script>
 

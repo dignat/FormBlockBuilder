@@ -19,8 +19,9 @@
         </div>
         <div class="field" v-if="transform">
           <Forms :fieldsType="changingRules? currentFieldType: fieldTypes[index]" ref="form"
-                 v-for="(field, index) in buildFields" :radio="field.type" :listType="dependantType" :repeaterType="dependantRepeaterType" :repeaterTypes="dependantRepeaterTypes"
-                 :transformList="transform" :list="formFields" :key="index" :changeRules="changingRules" :listFieldTypes="dependantTypes" :dependant-list-types="dependantListFieldTypes" :has-list="dependantList"
+                 v-for="(field, index) in buildFields" :radio="field.type" :fieldListType="dependantType" :repeaterType="dependantRepeaterType" :repeaterTypes="dependantRepeaterTypes"
+                 :transformList="transform" :list="formFields" :key="index" :changeRules="changingRules"  :dependantTypes="dependantListTypes"
+                 :hasList="dependantList"
                  :translatedList="formFields.items[index]" @addFields="sync" @editFields="edit"></Forms>
         </div>
 
@@ -100,7 +101,7 @@
         currentProps: {},
         changingRules: false,
         fieldTypes: [],
-        dependantTypes: [],
+        dependantListTypes: [],
         dependantListFieldTypes: [],
         dependantListType: "",
         dependantRepeaterTypes: [],
@@ -189,13 +190,26 @@
               console.log('inputlist', this.fieldTypes[i]);
                     for (let j = 0; j < this.formFields.items[i].template.length; j++) {
                       this.dependantType = this.formFields.items[i].template[j].type;
+                      this.dependantListTypes.push(Forms.components);
                       console.log('dependant types1', this.dependantType);
                       switch (this.dependantType) {
                         case 'inputtext':
-                          this.dependantTypes[j] = Forms.components.TextComponent;
+                          this.dependantListTypes[j] = Forms.components.TextComponent;
                           break;
                         case 'inputnumber':
-                          this.dependantTypes[j] = Forms.components.NumberComponent;
+                          this.dependantListTypes[j] = Forms.components.NumberComponent;
+                          break;
+                        case 'inputlookup':
+                          this.dependantListTypes[j] = Forms.components.Lookup;
+                          break;
+                        case 'inputdate':
+                          this.dependantListTypes[j] = Forms.components.DateComponent;
+                          break;
+                        case 'inputcheckbox':
+                          this.dependantListTypes[j] = Forms.components.Checkbox;
+                          break;
+                        case 'inputradio':
+                          this.dependantListTypes[j] = Forms.components.RadioForm;
                           break;
                       }
                     }
@@ -211,6 +225,26 @@
                 case 'inputtext':
                     this.dependantRepeaterTypes[k] = Forms.components.TextComponent;
                     console.log('repeater', this.dependantRepeaterTypes);
+                  break;
+                case 'inputnumber':
+                  this.dependantRepeaterTypes[k] = Forms.components.NumberComponent;
+                  console.log('repeater', this.dependantRepeaterTypes);
+                  break;
+                case 'inputlookup':
+                  this.dependantRepeaterTypes[k] = Forms.components.Lookup;
+                  console.log('repeater', this.dependantRepeaterTypes);
+                  break;
+                case 'inputcheckbox':
+                  this.dependantRepeaterTypes[k] = Forms.components.Checkbox;
+                  console.log('repeater', this.dependantRepeaterTypes);
+                  break;
+                case 'inputradio':
+                  this.dependantRepeaterTypes[k] = Forms.components.RadioForm;
+                  console.log('repeater', this.dependantRepeaterTypes);
+                  break;
+                case 'inputdate':
+                  this.dependantRepeaterTypes[k] = Forms.components.DateComponent;
+                  console.log('repeater', this.dependantRepeaterTypes);
                   break;
               }
             }

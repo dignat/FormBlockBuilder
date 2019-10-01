@@ -4,7 +4,7 @@
         <div class="field">
 
             <div class="control">
-                <Radios :types="types" :radio="transform ? listFieldType: currentType" @change="handleChange"/>
+                <Radios :types="types" :radio="transform ? listTypeField: currentType" @change="handleChange"/>
             </div>
             <div class="control" v-if="!transform">
                 <component ref="form"
@@ -13,15 +13,18 @@
                            ></component>
             </div>
             <div class="control" v-if="transform && !dependantList">
-                <component ref="form" :listFieldTypes="listFieldTypes"
-                           :is="changedRules ? currentFieldType: listFieldTypes" :props="currentProps"
+                <component ref="form"
+                           :is="changedRules ? currentFieldType: listFieldType" :props="currentProps"
                            :transformList="transformList"  :changeRules="changeRules"
-                           :listFields="changedRules ? currentListFields : listFields"></component>
+                           :listFields="changedRules ? currentListFields : transformedFields"></component>
             </div>
         </div>
-            <div class="field">
+            <div class="field is-grouped">
                 <div class="control">
                     <button class="button is-info" @click="addField">Add List Fields</button>
+                </div>
+                <div class="control">
+                    <button class="button is-info" @click="editField">Edit List Fields</button>
                 </div>
             </div>
     </div>
@@ -51,9 +54,10 @@
             changeRules: Boolean,
             mainListFields: Object,
             radio: String,
-            listFieldType: String,
-            listFieldTypes: Object,
-            dependantListTypes: Object,
+            fieldListType: String,
+
+            listFieldType: {},
+            dependantTypes: Array,
             hasList: Boolean
         },
         components: {
@@ -87,6 +91,7 @@
                     'inputdate'],
                 currentFieldType: null,
                 currentType: null,
+                listTypeField: '',
                 currentProps: {},
                 currentListFields: {},
                 transformedFields: {},
@@ -100,6 +105,10 @@
             addField() {
                 this.currentListFields = this.$refs.form.addField();
                 this.$emit('addList', this.currentListFields);
+            },
+            editField() {
+                this.currentListFields = this.$refs.form.editField();
+                this.$emit('editList', this.currentListFields);
             },
             handleChange(type) {
                 console.log(type);
@@ -170,12 +179,12 @@
         },
         beforeMount() {
             this.currentType = this.radio;
-            this.currentFieldType  = this.listFieldTypes;
+           this.listTypeField = this.fieldListType;
             this.transform = this.transformList;
             this.changedRules = this.changeRules;
-            this.listFieldType = this.radio
-            this.dependantList = this.hasList
-            this.dependantListFieldTypes = this.dependantListTypes
+
+            this.dependantList = this.hasList;
+            this.dependantListFieldTypes = this.dependantListTypes;
             this.transformedFields = this.listFields
         }
     }
