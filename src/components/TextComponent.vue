@@ -42,12 +42,12 @@
                 <input class="input" type="text" name="default" :listFields="listFields.default" v-model="fields.default">
             </div>
         </div>
-
     </div>
 </template>
 
 <script>
     import {mapActions} from 'vuex'
+    import {mapGetters} from 'vuex'
     export default {
         name: "TextComponent",
         props: {
@@ -60,23 +60,26 @@
                     name: '',
                     title: '',
                     limit: 255,
-                    hidden: false,
+                    hidden: 0,
                     default: '',
-                    required: true,
-                    enabled:false
-                }
+                    required: 0,
+                    enabled: 0
+                },
+                toEdit: false
             }
         },
         methods: {
             ...mapActions({
                toAddField: 'addField',
-                toEditField: 'editField'
+                toEditField: 'editField',
+                sendTheEditFields: 'checkedField'
             }),
+            ...mapGetters(['getTransform','getRules']),
             addField() {
                const fields = {
                    type: 'inputtext',
                    title: this.fields.title,
-                   name: this.fields.name === "" ? this.fields.title.replace(/[\s,&-/_?():.]/g,"").toLowerCase().substring(0,7)+Math.floor((Math.random()*36)) : this.fields.name,
+                   name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&-/_?():.]/g,"").toLowerCase().substring(0,7)+Math.floor((Math.random()*36)) : this.fields.name,
                    hidden: this.fields.hidden,
                    limit: this.fields.limit,
                    default: this.fields.default,
@@ -87,9 +90,24 @@
                 return fields;
             },
             editField () {
-                this.fields.name === "" ? this.fields.title.replace(/[\s,&-/_?():.]/g,"").toLowerCase().substring(0,7) : this.fields.name;
-                this.toEditField(this.fields);
+                const editedFields = {
+                    type: 'inputtext',
+                    title: this.fields.title,
+                    name: this.fields.name,
+                    hidden: this.fields.hidden,
+                    limit: this.fields.limit,
+                    default: this.fields.default,
+                    required: this.fields.required,
+                    enabled: this.fields.enabled
+                };
+
+                this.toEditField(editedFields);
                 return this.fields;
+            },
+        },
+        beforeMount() {
+            if (this.getTransform() && !this.getRules()) {
+                this.fields = this.listFields;
             }
         }
     }

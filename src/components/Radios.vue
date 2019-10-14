@@ -3,7 +3,7 @@
 <div v-for="fieldType in types">
             <label class="radio" for="fieldType">
                 <input type="radio" :radio="radio" ref="form"
-                       :id="fieldType" :name="fieldType" :value="fieldType"
+                       :id="fieldType" :value="fieldType"
                        :types="fieldType.types" v-model="radioModel" @change="updateChange">
                 <strong><i>{{ fieldType }}</i></strong></label>
 </div>

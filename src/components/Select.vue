@@ -54,8 +54,8 @@
                     type: "inputselect",
                     title: '',
                     name: '',
-                    multi: false,
-                    custom: false,
+                    multi: 0,
+                    custom: 0,
                     items:[
                         {title: ''},
                     ]
@@ -77,7 +77,7 @@
                 const fields = {
                     type: this.fields.multi ? "inputmultiselect" : "inputselect",
                     title: this.fields.title,
-                    name: this.fields.name === "" ? this.fields.title.replace(/[\s,&-/_?():.]/g,"").toLowerCase().substring(0,7) : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&-/_?():.]/g,"").toLowerCase().substring(0,7) : this.fields.name,
                     multi: this.fields.multi,
                     custom: this.fields.custom,
                     items: this.customFields
@@ -86,10 +86,16 @@
                 return fields;
             },
             editField() {
-                this.fields.name === "" ? this.fields.title.replace(/[\s,&-/_?():.]/g,"").toLowerCase().substring(0,7) : this.fields.name;
-                this.fields.items = this.customFields;
-                this.toEditField(this.fields);
-                return this.fields;
+                const editFields = {
+                    type: this.fields.multi ? "inputmultiselect" : "inputselect",
+                    title: this.fields.title,
+                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&-/_?():.]/g,"").toLowerCase().substring(0,7) : this.fields.name,
+                    multi: this.fields.multi,
+                    custom: this.fields.custom,
+                    items: this.customFields
+                };
+                this.toEditField(editFields);
+                return editFields;
             }
         }
     }

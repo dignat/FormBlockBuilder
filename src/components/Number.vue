@@ -16,6 +16,7 @@
 
 <script>
     import {mapActions} from 'vuex'
+    import {mapGetters} from 'vuex'
     export default {
         name: "Number",
         props: {
@@ -27,20 +28,21 @@
                     type: 'inputnumber',
                     name: '',
                     title: '',
-                    decimals: ''
-                }
+                    decimals: 0
+                },
             }
         },
         methods: {
             ...mapActions({
                 toAddField: 'addField',
-                toEditField: 'editField'
+                toEditField: 'editField',
             }),
+            ...mapGetters(['getTransform','getRules']),
             addField () {
                 const fields = {
-                    type: this.fields.type,
-                    name: this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    type: 'inputnumber',
                     title: this.fields.title,
+                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
                     decimals: this.fields.decimals
                 };
                 this.toAddField(fields);
@@ -48,11 +50,21 @@
 
             },
             editField() {
-                this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
-                this.toEditField(this.fields);
+                const editedFields = {
+                    type: this.fields.type,
+                    name: this.fields.name,
+                    title: this.fields.title,
+                    decimals: this.fields.decimals
+                };
+                this.toEditField(editedFields);
                 return this.fields;
-            }
+            },
         },
+        beforeMount() {
+            if (this.getTransform() && !this.getRules()) {
+                this.fields = this.listFields;
+            }
+        }
     }
 </script>
 

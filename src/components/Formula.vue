@@ -10,7 +10,7 @@
                 <input class="input" name="script" type="text" :listFields="listFields.script" v-model="fields.script">
                 <label class="label">Hidden Formula?</label>
                 <input class="checkbox" name="hidden" type="checkbox" :listFields="listFields.hidden" v-model="fields.hidden">
-                <input class="is-hidden" name="type" type="hidden" :listFields="listFields.type" v-model="fields.type" value="inputformula">
+                <input class="checkbox" name="required" type="checkbox" :listFields="listFields.required" v-model="fields.required">
             </div>
         </div>
     </div>
@@ -30,9 +30,10 @@
                     type: "inputformula",
                     title: '',
                     name: '',
-                    hidden: '',
+                    hidden: 0,
                     script: '',
-                    store: 0
+                    store: 0,
+                    required: 0
                 }
             }
         },
@@ -42,8 +43,6 @@
                 toEditField: 'editField'
             }),
             addField() {
-                Object.assign({}, {title: '', name: '', required: '', hidden: '', script: ''});
-                this.fields.type = "inputformula";
                 const fields = {
                     type: "inputformula",
                     title: this.fields.title,

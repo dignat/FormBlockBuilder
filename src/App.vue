@@ -18,11 +18,11 @@
           </Forms>
         </div>
         <div class="field" v-if="transform">
-          <Forms :fieldsType="changingRules? currentFieldType: fieldTypes[index]" ref="form"
-                 v-for="(field, index) in buildFields" :radio="field.type" :fieldListType="dependantType" :repeaterType="dependantRepeaterType" :repeaterTypes="dependantRepeaterTypes"
+          <Forms :fieldsType="fieldTypes[index]" ref="form"
+                 v-for="(field, index) in buildFields" :radio="field.type" :type="field.type" :fieldListType="dependantType" :repeaterType="dependantRepeaterType" :repeaterTypes="dependantRepeaterTypes"
                  :transformList="transform" :list="formFields" :key="index" :changeRules="changingRules"  :dependantTypes="dependantListTypes"
                  :hasList="dependantList"
-                 :translatedList="formFields.items[index]" @addFields="sync" @editFields="edit"></Forms>
+                 :translatedList="formFields.items[index]" @addFields="sync" @editFields="editTranslated"></Forms>
         </div>
 
         <div class="field is-grouped">
@@ -40,6 +40,9 @@
           </div>
           <div class="control">
             <button class="button is-danger" @click="translateForm()">Translate Form</button>
+          </div>
+          <div class="control">
+            <button class="button is-danger" @click="translateOldForm()">Translate Old Form</button>
           </div>
         </div>
 
@@ -80,7 +83,9 @@
 
  import Forms from './components/Forms'
  import Html from './components/Html'
-
+import {mapActions} from 'vuex'
+ import {mapGetters} from 'vuex'
+ import {mapState} from 'vuex'
 
   export default {
     name: 'App',
@@ -125,23 +130,55 @@
       }
     },
     methods: {
+      ...mapActions({
+        toTransform: 'translateOldForm',
+        buildTypeFields: 'addTypeFields',
+        setTransform: 'setTransform',
+      }),
+      ...mapGetters(['translatedForm', 'editFields', 'currentFormFields', 'currentForm','editedName','getRules']),
+      translateOldForm() {
+        return this.toTransform(JSON.parse(this.existingForm), this.existingForm.items);
+      },
       sync (value) {
+        console.log(value, this.formFields.items);
         this.formFields.items.push(value)
       },
       edit (value) {
-        this.formFields.items.pop();
-        this.formFields.items.push(value);
-        console.log(value, 'edit function')
+          for(let j = 0; j < this.buildFields[0].items.length; j++) {
+           // console.log('come on do it ',this.currentForm[j].fields.name, this.buildFields[0].items[j].name, value.name);
+            if (this.buildFields[0].items[j].name === value.name) {
+              console.log(j, value);
+             Object.assign(this.buildFields[0].items[j],value);
+            } else if (value.name === '') {
+              if (this.buildFields[0].items[j].name === this.editedName) {
+                value.name = this.editedName;
+                Object.assign(this.buildFields[0].items[j], value)
+              }
+            }
+          }
+      },
+      editTranslated(value) {
+        for(let j = 0; j < this.buildFields[0].items.length; j++) {
+          if (value.name === this.buildFields[0].items[j].name) {
+            Object.assign(this.buildFields[0].items[j], value);
+          }
+          else if (this.editedName === this.buildFields[0].items[j].name) {
+            console.log('I edit translated field', value.name, this.buildFields[0].items[j].name);
+            value.name = this.editedName;
+            Object.assign(this.buildFields[0].items[j], value);
+          }
+        }
       },
       removeFields () {
         this.formFields.items.pop();
       },
       addTypeFields() {
         this.changingRules = true;
-        console.log(this.changingRules);
+        this.buildTypeFields(this.formFields);
         this.buildFields.push({
           id: this.count++,
           type: this.currentType,
+          items: this.formFields.items
         });
       },
       removeTypeFields () {
@@ -150,40 +187,69 @@
 
       generateForm() {
         Object.assign({}, {title: '', name: '', type: 'form'});
-        this.formFields.name = this.formFields.title.replace(/[\s,&-/_?():.]/g, "");
+        this.formFields.name = this.formFields.title.replace(/[\s,&\/_?():.]/g, "");
         this.formFields.uri = '/reflow/data/update/form/' + this.formFields.name;
         console.log(JSON.stringify(this.formFields))
       },
       translateForm() {
         this.transform = true;
-        this.formFields = JSON.parse(this.existingForm);
-        //this.buildOfTranslate = this.formFields.items;
+        this.setTransform(this.transform);
+        Object.assign(this.formFields,JSON.parse(this.existingForm));
         for (let i = 0; i < this.formFields.items.length; i++) {
-          this.currentType =  this.formFields.items[i].type;
+          this.currentType = this.formFields.items[i].type;
           this.fieldTypes.push(Forms.components);
           this.buildFields.push({
             id: this.count++,
             type: this.currentType,
-            items: this.formFields.items[i]
+            items: this.formFields.items
           });
           switch (this.currentType) {
             case 'inputtext':
               this.fieldTypes[i] = Forms.components.TextComponent;
-              console.log('inputtext',this.fieldTypes[i])
               break;
             case 'inputlocation':
               this.fieldTypes[i] = Forms.components.Location;
-              console.log('inputlocation', this.fieldTypes[i])
+              console.log('inputlocation', this.fieldTypes[i]);
               break;
             case 'inputradio':
-              this.fieldTypes[i] = Forms.components.RadioForm
-                    console.log('inputradio', this.formFields.items[i].items)
+              this.fieldTypes[i] = Forms.components.RadioForm;
+                    console.log('inputradio', this.formFields.items[i].items);
               break;
             case 'inputselect':
-              this.fieldTypes[i] = Forms.components.SelectComponent
+              this.fieldTypes[i] = Forms.components.SelectComponent;
               break;
             case 'inputnumber':
-              this.fieldTypes[i] = Forms.components.NumberComponent
+              this.fieldTypes[i] = Forms.components.NumberComponent;
+              break;
+            case 'inputlookup':
+              this.fieldTypes[i] = Forms.components.Lookup;
+              break;
+            case 'inputlookupalias':
+              this.fieldTypes[i] = Forms.components.Alias;
+              break;
+            case 'inputlookupaliasselect':
+              this.fieldTypes[i] = Forms.components.AliasSelect;
+              break;
+            case 'inputcheckbox':
+              this.fieldTypes[i] = Forms.components.Checkbox;
+              break;
+            case 'inputlocation':
+              this.fieldTypes[i] = Forms.components.Location;
+              break;
+            case 'text':
+              this.fieldTypes[i] = Forms.components.HeaderComponent;
+              break;
+            case 'inputformula':
+              this.fieldTypes[i] = Forms.components.Formula;
+              break;
+            case 'inpudate':
+              this.fieldTypes[i] = Forms.components.DateComponent;
+              break;
+            case 'inputimage':
+              this.fieldTypes[i] = Forms.components.Photo;
+              break;
+            case 'inputsignature':
+              this.fieldTypes[i] = Forms.components.Signature;
               break;
             case 'inputlist':
               this.fieldTypes[i] = Forms.components.MainListComponent;
@@ -210,6 +276,9 @@
                           break;
                         case 'inputradio':
                           this.dependantListTypes[j] = Forms.components.RadioForm;
+                          break;
+                        case 'text':
+                          this.dependantListTypes[j] = Forms.components.HeaderComponent;
                           break;
                       }
                     }
@@ -252,6 +321,14 @@
           }
         }
       }
+    },
+    computed: {
+      buildArray() {
+        return this.$store.getters.translatedForm;
+      },
+      fields() {
+        return this.$store.getters.fields;
+      },
     }
   }
 </script>

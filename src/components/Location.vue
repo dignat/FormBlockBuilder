@@ -23,6 +23,7 @@
 </template>
 
 <script>
+    import {mapActions} from 'vuex'
     export default {
         name: "Location",
         props: {
@@ -35,22 +36,42 @@
                     name: '',
                     title: '',
                     minute: '',
-                    hidden: '',
-                    required:  ''
+                    hidden: 0,
+                    required:  0
                 }
             }
         },
         methods: {
+            ...mapActions({
+                toAddField: 'addField',
+                toEditField: 'editField'
+            }),
             addField() {
-                Object.assign({}, {title: '', name: '', minute: '', hidden: '',  required: ''});
-                this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
-                this.fields.type = 'inputlocation';
+                const fields = {
+                    type: "inputlocation",
+                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    title: this.fields.title,
+                    minute: this.fields.minute,
+                    hidden: this.fields.hidden,
+                    required:  this.fields.required
+                };
+                this.toAddField(fields);
+                return fields;
+            },
+            editField() {
+                const fields = {
+                    type: "inputlocation",
+                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    title: this.fields.title,
+                    minute: this.fields.minute,
+                    hidden: this.fields.hidden,
+                    required:  this.fields.required
+                };
+                this.toEditField(fields);
                 return this.fields;
             }
         },
-        beforeMount() {
-            this.fields = this.listFields;
-        }
+
     }
 </script>
 

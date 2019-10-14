@@ -63,7 +63,7 @@
                     labelKey: '',
                     idKey: '',
                     format: '',
-                    custom: false
+                    custom: 0
 
 
                 }
@@ -77,7 +77,7 @@
             addField () {
                 const fields = {
                     type: 'inputlookupalias',
-                    name: this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
                     title: this.fields.title,
                     target: this.fields.target,
                     labelKey: this.fields.labelKey,
@@ -89,7 +89,7 @@
                 return fields;
             },
             editField() {
-                this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
+                this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
                 this.toEditField(this.fields);
                 return this.fields;
             }

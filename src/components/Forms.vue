@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="field">
-                <Radios :types="types" :radio="currentType" @change="handleChange"/>
+                <Radios :types="types" :radio="transform ? changedRules ? currentType : translatedType : currentType" @change="handleChange"/>
         </div>
        <div class="field" v-if="!transform">
            <div class="control">
@@ -14,9 +14,9 @@
             <div class="control">
                 <component ref="form" :is="changedRules ? currentFieldType : fieldsType"
                            :fieldListType="listFieldType" :list="list" :dependantTypes="dependantTypes" :repeaterTypes="repeaterTypes" :repeaterType="repeaterType"
-                           :transformList="transformList" :translatedList="transformedFields" :changeRules="changeRules"
+                           :transformList="transformList" :translatedList="transformedFields"
                             :hasList="hasList"
-                           :listFields="changedRules ? currentProps: translatedList">
+                           :listFields="changedRules ? currentProps: transformedFields">
                 </component>
             </div>
         </div>
@@ -27,7 +27,7 @@
        </div>
         <div class="field">
             <div class="control">
-                <button class="button is-primary" @click="changedRules ? editField(currentProps) : editField(translatedList)">Edit all Fields</button>
+                <button class="button is-primary" @click="changedRules ? editField(currentProps) : editField(transformedFields)">Edit all Fields</button>
             </div>
         </div>
 
@@ -37,6 +37,8 @@
 </template>
 
 <script>
+    import {mapActions} from 'vuex';
+    import {mapGetters} from 'vuex';
     import Lookup from './Lookup';
     import Radios from "./Radios";
     import TextComponent from "./TextComponent"
@@ -105,10 +107,16 @@
                 currentProps: {},
                 transformedFields: {},
                 transform: null,
-                changedRules: false
+                changedRules: false,
+                translatedType: null
             }
         },
         methods: {
+            ...mapActions({
+                updateType: 'updateType',
+                sendTheEditFields: 'checkedField'
+            }),
+            ...mapGetters(['getRules']),
             addField() {
                 this.currentProps = this.$refs.form.addField();
                 this.$emit('addFields', this.currentProps);
@@ -119,114 +127,91 @@
                 this.$emit('editFields', this.currentProps);
                 console.log(this.currentProps)
             },
-
             handleChange(type) {
                 console.log(type);
-                switch(type) {
+                this.currentType = type;
+                this.translatedType = type;
+                let changedType = this.transform ? this.translatedType : this.currentType;
+                this.updateType({
+                    type: changedType
+                });
+                switch(changedType) {
                     case 'inputlookup':
                         this.currentFieldType = Lookup;
-                        this.currentType = type;
                         this.changedRules = true;
-                        this.currentProps = {};
                         break;
                     case 'inputtext':
                         this.currentFieldType = TextComponent;
-                        this.currentType = type;
                         this.changedRules = true;
-                        this.currentProps = {};
+                        this.transform ? this.transformedFields !== undefined ? this.sendTheEditFields(this.transformedFields.name) : '' : this.currentProps !== undefined ? this.sendTheEditFields(this.currentProps.name) : '';
                         break;
                     case 'inputrepeat':
                         this.currentFieldType = MainRepeater;
-                        this.currentType = type;
                         this.changedRules = true;
-                        this.currentProps = {};
                         break;
                     case 'inputlookupalias':
                         this.currentFieldType = Alias;
-                        this.currentType = type;
                         this.changedRules = true;
-                        this.currentProps = {};
                         break;
                     case 'inputnumber':
                         this.currentFieldType = NumberComponent;
-                        this.currentType = type;
                         this.changedRules = true;
-                        this.currentProps = {};
+                        this.transform ? this.transformedFields !== undefined ? this.sendTheEditFields(this.transformedFields.name) : '' : this.currentProps !== undefined ? this.sendTheEditFields(this.currentProps.name) : '';
                         break;
                     case 'inputradio':
                         this.currentFieldType = RadioForm;
-                        this.currentType = type;
                         this.changedRules = true;
                         break;
                     case 'inputselect':
                         this.currentFieldType = SelectComponent;
-                        this.currentType = type;
                         this.changedRules = true;
-                        this.currentProps = {};
                         break;
                     case 'inputlist':
                         this.currentFieldType = MainListComponent;
-                        this.currentType = type;
                         this.changedRules = true;
-                        this.currentProps = {};
                         break;
                     case 'inputcheckbox':
                         this.currentFieldType = Checkbox;
-                        this.currentType = type;
                         this.changedRules = true;
-                        this.currentProps = {};
                         break;
                     case 'inputimage':
                         this.currentFieldType = Photo;
-                        this.currentType = type;
                         this.changedRules = true;
-                        this.currentProps = {};
                         break;
                     case 'inputsignature':
                         this.currentFieldType = Signature;
-                        this.currentType = type;
                         this.changedRules = true;
-                        this.currentProps = {};
                         break;
                     case 'inputformula':
                         this.currentFieldType = Formula;
-                        this.currentType = type;
                         this.changedRules = true;
                         break;
                     case 'inputdate':
                         this.currentFieldType = DateComponent;
-                        this.currentType = type;
                         this.changedRules = true;
-                        this.currentProps = {};
                         break;
                     case 'inputlocation':
                         this.currentFieldType = Location;
-                        this.currentType = type;
                         this.changedRules = true;
-                        this.currentProps = {};
                         break;
                     case 'text':
                         this.currentFieldType = HeaderComponent;
-                        this.currentType = type;
                         this.changedRules = true;
-                        this.currentProps = {};
                         break;
                     case 'inputlookupaliasselect':
                         this.currentFieldType = AliasSelect;
-                        this.currentType = type;
                         this.changedRules = true;
-                        this.currentProps = {};
                         break;
 
                 }
             }
         },
         beforeMount() {
-            this.currentType = this.radio;
             this.currentFieldType  = this.fieldsType;
             this.transform = this.transformList;
+            this.translatedType = this.radio;
+            this.currentType = this.radio;
             this.transformedFields = this.translatedList;
-            this.changedRules = this.changeRules;
         }
     }
 </script>

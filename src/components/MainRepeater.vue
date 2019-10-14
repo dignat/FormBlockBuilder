@@ -9,6 +9,14 @@
                 <label class="label">Repeater Title</label>
                 <input class="input" type="text" name="title" :listFields="listFields.title" v-model="fields.title">
             </div>
+            <div class="control">
+                <label class="label">Min</label>
+                <input class="input" type="number" name="min" :listFields="listFields.min" v-model="fields.min">
+            </div>
+            <div class="control">
+                <label class="label">Max</label>
+                <input class="input" type="number" name="max" :listFields="listFields.max" v-model="fields.max">
+            </div>
             <div v-if="!transform" class="control">
                 <Repeater ref="form" v-for="(field, index) in buildFields" :listFields="field"
                           :id="index" :type=field.type :key="index" v-model="fields.items"
@@ -61,7 +69,9 @@
                     type: 'inputrepeat',
                     name: '',
                     title: '',
-                    items: []
+                    items: [],
+                    min: 0,
+                    max: 0
                 }
             }
         },
@@ -87,18 +97,26 @@
             addField() {
                 const fields = {
                     type: 'inputrepeat',
-                    name: this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
                     title: this.fields.title,
+                    min: this.fields.min,
+                    max: this.fields.max,
                     items: this.currentRepeater
                 };
                 this.toAddField(fields);
                 return fields;
             },
             editField() {
-                this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
-                this.fields.items = this.currentRepeater;
-                this.toEditField(this.fields);
-                return this.fields;
+                const editFields = {
+                    type: 'inputrepeat',
+                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    title: this.fields.title,
+                    min: this.fields.min,
+                    max: this.fields.max,
+                    items: this.currentRepeater
+                };
+                this.toEditField(editFields);
+                return editFields;
             }
         },
         beforeMount() {

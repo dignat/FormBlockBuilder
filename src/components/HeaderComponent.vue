@@ -35,7 +35,7 @@
                     type: 'text',
                     name: '',
                     body: '<h3></h3>',
-                    hidden: ''
+                    hidden: 0
                 }
             }
         },
@@ -45,8 +45,6 @@
                 toEditField: 'editField'
             }),
             addField() {
-                Object.assign({}, {body: '', name: '', hidden: ''});
-                this.fields.type = 'text';
                 const fields = {
                     type: 'text',
                     name: this.fields.name,

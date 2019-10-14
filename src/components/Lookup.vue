@@ -53,7 +53,7 @@
                     uri: '',
                     labelKey: '',
                     idKey: '',
-                    multi: false
+                    multi: 0
                 }
             }
        },

@@ -27,8 +27,8 @@
                     type: "inputcheckbox",
                     title: '',
                     name: '',
-                    required: '',
-                    hidden: ''
+                    required: 0,
+                    hidden: 0
                 }
             }
         },
@@ -37,11 +37,11 @@
                 toAddField: 'addField',
                 toEditField: 'editField'
             }),
-            addField() {
+             addField() {
                 const fields = {
                     type: "inputcheckbox",
                     title: this.fields.title,
-                    name: this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
                     required: this.fields.required,
                     hidden: this.fields.hidden
                 };
@@ -49,7 +49,7 @@
                 return fields;
             },
             editField() {
-                this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
+                this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
                 this.toEditField(this.fields);
                 return this.fields;
             }

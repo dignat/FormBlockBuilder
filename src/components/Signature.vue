@@ -33,9 +33,9 @@
                     type: "inputsignature",
                     title: '',
                     name: '',
-                    min: '',
-                    max: '',
-                    hidden: '',
+                    min: 0,
+                    max: 0,
+                    hidden: 0,
                     statement: ''
                 }
             }
@@ -49,7 +49,7 @@
                 const fields = {
                     type: "inputsignature",
                     title: this.fields.title,
-                    name: this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
                     min: this.fields.min,
                     max: this.fields.max,
                     hidden: this.fields.hidden,
@@ -59,7 +59,7 @@
                 return fields;
             },
             editField() {
-                this.fields.name === "" ? this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
+                this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
                 this.toEditField(this.fields);
                 return this.fields;
             }

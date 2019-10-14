@@ -10,6 +10,8 @@
                 <input class="checkbox" type="checkbox" name="required" :listFields="listFields.required" v-model="fields.required">
                 <label class="label">Photo Hidden?</label>
                 <input class="checkbox" name="hidden" type="checkbox" :listFields="listFields.hidden" v-model="fields.hidden">
+                <label class="label">Photo Width?</label>
+                <input class="number" name="width" type="number" :listFields="listFields.width" v-model="fields.width">
             </div>
         </div>
     </div>
@@ -29,9 +31,10 @@
                     type: 'inputimage',
                     title: '',
                     name: '',
-                    hidden: '',
-                    required: '',
-                    source: ''
+                    hidden: 0,
+                    required: 0,
+                    source: '',
+                    width: 50
                 }
             }
         },
@@ -47,14 +50,24 @@
                         name: this.fields.name,
                         hidden: this.fields.hidden,
                         required: this.fields.required,
-                        source: this.fields.source
+                        source: this.fields.source,
+                        width: this.fields.width
                 };
                 this.toAddField(fields);
                 return fields;
             },
             editField() {
-                this.toEditField(this.fields);
-                return this.fields;
+                const editedFields = {
+                    type: 'inputimage',
+                    title: this.fields.title,
+                    name: this.fields.name,
+                    hidden: this.fields.hidden,
+                    required: this.fields.required,
+                    source: this.fields.source,
+                    width: this.fields.width
+                };
+                this.toEditField(editedFields);
+                return editedFields;
             }
         }
     }

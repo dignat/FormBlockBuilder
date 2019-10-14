@@ -46,6 +46,7 @@
     import Formula from "./Formula"
     import MainListComponent from "./MainListComponent"
     import DateComponent from "./DateComponent"
+    import HeaderComponent from "./HeaderComponent";
     export default {
         name: "ListComponent",
         props: {
@@ -72,7 +73,8 @@
             Signature,
             Formula,
             MainListComponent,
-            DateComponent
+            DateComponent,
+            HeaderComponent
 
         },
         data () {
@@ -88,7 +90,8 @@
                     'inputsignature',
                     'inputformula',
                     'inputlist',
-                    'inputdate'],
+                    'inputdate',
+                    'text'],
                 currentFieldType: null,
                 currentType: null,
                 listTypeField: '',
@@ -170,6 +173,11 @@
                         break;
                     case 'inputdate':
                         this.currentFieldType = DateComponent;
+                        this.currentType = type;
+                        this.currentListFields = {};
+                        break;
+                    case 'text':
+                        this.currentFieldType = HeaderComponent;
                         this.currentType = type;
                         this.currentListFields = {};
                         break;
