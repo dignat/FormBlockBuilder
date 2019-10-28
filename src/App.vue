@@ -20,9 +20,10 @@
         <div class="field" v-if="transform">
           <Forms :fieldsType="fieldTypes[index]" ref="form"
                  v-for="(field, index) in buildFields" :radio="field.type" :type="field.type" :fieldListType="dependantType" :repeaterType="dependantRepeaterType" :repeaterTypes="dependantRepeaterTypes"
-                 :transformList="transform" :list="formFields" :key="index" :changeRules="changingRules"  :dependantTypes="dependantListTypes"
+                 :transformList="transform" :list="formFields" :key="index" :changeRules="changingRules" :dependantTypes="dependantListTypes"
+                  :deepDependantType="deepDependantType" :deepDependantListTypes="deepDependantListFieldTypes"
                  :hasList="dependantList"
-                 :translatedList="formFields.items[index]" @addFields="sync" @editFields="editTranslated"></Forms>
+                 :translatedList="field.items[index]"   @addFields="sync" @editFields="editTranslated"></Forms>
         </div>
 
         <div class="field is-grouped">
@@ -102,11 +103,13 @@ import {mapActions} from 'vuex'
         currentFieldType: null,
         currentType: "",
         dependantType: "",
+        deepDependantType: "",
         dependantRepeaterType: "",
         currentProps: {},
         changingRules: false,
         fieldTypes: [],
         dependantListTypes: [],
+        deepDependantListFieldTypes: [],
         dependantListFieldTypes: [],
         dependantListType: "",
         dependantRepeaterTypes: [],
@@ -280,6 +283,62 @@ import {mapActions} from 'vuex'
                         case 'text':
                           this.dependantListTypes[j] = Forms.components.HeaderComponent;
                           break;
+                        case 'inputlookupalias':
+                          this.dependantListTypes[j] = Forms.components.Alias;
+                          break;
+                        case 'inputimage':
+                          this.dependantListTypes[j] = Forms.components.Photo;
+                          break;
+                        case 'inputselect':
+                          this.dependantListTypes[j] = Forms.components.SelectComponent;
+                          break;
+                        case 'inputlist':
+                          this.dependantList = true;
+                          console.log('in the second list');
+                          this.dependantListTypes[j] = Forms.components.MainListComponent;
+                          for (let k = 0; k < this.formFields.items[i].template[j].template.length; k++) {
+                            this.deepDependantType = this.formFields.items[i].template[j].template[k].type;
+                           this.deepDependantListFieldTypes.push(Forms.components);
+                            console.log('the whole array',this.deepDependantListFieldTypes);
+                            console.log('dependant types2', this.dependantType);
+                            console.log(this.formFields.items[i].template[j].template);
+
+                            console.log('the deep one',this.deepDependantType);
+                            switch (this.deepDependantType) {
+                              case 'inputtext':
+                                this.deepDependantListFieldTypes[k] = Forms.components.TextComponent;
+                                break;
+                              case 'inputnumber':
+                                this.deepDependantListFieldTypes[k] = Forms.components.NumberComponent;
+                                break;
+                              case 'inputlookup':
+                                this.deepDependantListFieldTypes[k] = Forms.components.Lookup;
+                                break;
+                              case 'inputdate':
+                                this.deepDependantListFieldTypes[k] = Forms.components.DateComponent;
+                                break;
+                              case 'inputcheckbox':
+                                this.deepDependantListFieldTypes[k] = Forms.components.Checkbox;
+                                break;
+                              case 'inputradio':
+                                this.deepDependantListFieldTypes[k] = Forms.components.RadioForm;
+                                break;
+                              case 'text':
+                                this.deepDependantListFieldTypes[k] = Forms.components.HeaderComponent;
+                                break;
+                              case 'inputlookupalias':
+                                this.deepDependantListFieldTypes[k] = Forms.components.Alias;
+                                break;
+                              case 'inputimage':
+                                this.deepDependantListFieldTypes[k] = Forms.components.Photo;
+                                break;
+                              case 'inputselect':
+                                this.deepDependantListFieldTypes[k] = Forms.components.SelectComponent;
+                                break;
+                            }
+                          }
+                          break;
+
                       }
                     }
               break;
@@ -313,6 +372,18 @@ import {mapActions} from 'vuex'
                   break;
                 case 'inputdate':
                   this.dependantRepeaterTypes[k] = Forms.components.DateComponent;
+                  console.log('repeater', this.dependantRepeaterTypes);
+                  break;
+                case 'inputlookupalias':
+                  this.dependantRepeaterTypes[k] = Forms.components.Alias;
+                  console.log('repeater', this.dependantRepeaterTypes);
+                  break;
+                case 'inputimage':
+                  this.dependantRepeaterTypes[k] = Forms.components.Photo;
+                  console.log('repeater', this.dependantRepeaterTypes);
+                  break;
+                case 'text':
+                  this.dependantRepeaterTypes[k] = Forms.components.HeaderComponent;
                   console.log('repeater', this.dependantRepeaterTypes);
                   break;
               }

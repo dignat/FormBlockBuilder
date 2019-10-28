@@ -74,7 +74,7 @@
                 const fields = {
                     type: "inputradio",
                     title: this.fields.title,
-                    name:  this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    name:  this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase().substring(0,7)+Math.floor((Math.random()*36)) : this.fields.name,
                     hidden: this.fields.hidden,
                     items: this.customTitles ? this.fields.items = this.customFields : this.fields.items = [{title: 'Yes'},{title: 'No'}]
 
@@ -84,9 +84,16 @@
 
             },
             editField () {
-                this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&-/_?():.]/g,"").toLowerCase().substring(0,7) : this.fields.name;
-                this.toEditField(this.fields);
-                return this.fields;
+                const editFields = {
+                    type: "inputradio",
+                    title: this.fields.title,
+                    name:  this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase().substring(0,7)+Math.floor((Math.random()*36)) : this.fields.name,
+                    hidden: this.fields.hidden,
+                    items: this.customTitles ? this.fields.items = this.customFields : this.fields.items = [{title: 'Yes'},{title: 'No'}]
+
+                };
+                this.toEditField(editFields);
+                return editFields;
             },
             handleChange(type) {
                 console.log(type);

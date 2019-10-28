@@ -33,7 +33,7 @@
                     name: '',
                     hidden: 0,
                     required: 0,
-                    source: '',
+                    source: 1,
                     width: 50
                 }
             }

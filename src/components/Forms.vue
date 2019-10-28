@@ -13,9 +13,9 @@
         <div class="field" v-if="transform">
             <div class="control">
                 <component ref="form" :is="changedRules ? currentFieldType : fieldsType"
-                           :fieldListType="listFieldType" :list="list" :dependantTypes="dependantTypes" :repeaterTypes="repeaterTypes" :repeaterType="repeaterType"
-                           :transformList="transformList" :translatedList="transformedFields"
-                            :hasList="hasList"
+                            :list="list" :dependantTypes="dependantFieldTypes" :repeaterTypes="repeaterTypes" :repeaterType="repeaterType"
+                           :transformList="transformList" :translatedList="transformedFields" :deepDependantListTypes="deepDependantListTypes"
+                            :hasList="hasList" :deepdependantType="deepDependantFieldType"
                            :listFields="changedRules ? currentProps: transformedFields">
                 </component>
             </div>
@@ -58,7 +58,7 @@
     import ListComponent from "./ListComponent";
     import TestListComponent from "./TestListComponent";
     import AliasSelect from "./AliasSelect"
-
+    import AliasImage from "./AliasImage";
     export default {
         name: "Forms",
         props: {
@@ -75,7 +75,10 @@
             repeaterTypes: Array,
             repeaterType: String,
             dependantTypes: Array,
-            hasList: Boolean
+            deepDependant: Object,
+            deepDependantType: String,
+            deepDependantListTypes: Array,
+            hasList: Boolean,
         },
         components: {
             Radios,
@@ -101,14 +104,19 @@
         },
         data() {
             return {
-                types: ['inputlookup', 'inputtext', 'inputlookupalias', 'inputlookupaliasselect', 'inputrepeat', 'inputnumber', 'inputradio', 'inputselect', 'inputlist', 'inputcheckbox', 'inputimage', 'inputsignature', 'inputformula','inputdate', 'inputlocation','text'],
+                types: ['inputlookup', 'inputtext', 'inputlookupalias', 'inputlookupaliasselect', 'inputrepeat', 'inputnumber', 'inputradio', 'inputselect', 'inputlist', 'inputcheckbox', 'inputimage', 'inputsignature', 'inputformula','inputdate', 'inputlocation','text','inputlookupaliasimage'],
                 currentFieldType: null,
                 currentType: null,
                 currentProps: {},
                 transformedFields: {},
+                deepTransformedFields:{},
+                deepDependantFieldType: null,
+                deepDependantField: null,
                 transform: null,
                 changedRules: false,
-                translatedType: null
+                translatedType: null,
+                dependantFieldTypes:[],
+                deepDependantFieldTypes: []
             }
         },
         methods: {
@@ -128,7 +136,7 @@
                 console.log(this.currentProps)
             },
             handleChange(type) {
-                console.log(type);
+                console.log('type',type);
                 this.currentType = type;
                 this.translatedType = type;
                 let changedType = this.transform ? this.translatedType : this.currentType;
@@ -202,12 +210,19 @@
                         this.currentFieldType = AliasSelect;
                         this.changedRules = true;
                         break;
+                    case 'inputlookupaliasimage':
+                        this.currentFieldType = AliasImage;
+                        this.changedRules = true;
+                        break
 
                 }
             }
         },
         beforeMount() {
             this.currentFieldType  = this.fieldsType;
+            this.deepDependantFieldType = this.fieldsType;
+            this.deepDependantFieldType = this.deepDependantType;
+            this.dependantFieldTypes = this.dependantTypes;
             this.transform = this.transformList;
             this.translatedType = this.radio;
             this.currentType = this.radio;

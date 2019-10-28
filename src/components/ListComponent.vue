@@ -12,10 +12,10 @@
                            :listFields="currentListFields"
                            ></component>
             </div>
-            <div class="control" v-if="transform && !dependantList">
+            <div class="control" v-if="transform">
                 <component ref="form"
-                           :is="changedRules ? currentFieldType: listFieldType" :props="currentProps"
-                           :transformList="transformList"  :changeRules="changeRules"
+                           :is="changedRules ? currentFieldType: transformedListType"
+                           :transformList="transformList" :changeRules="changeRules" :hasList="dependantList"
                            :listFields="changedRules ? currentListFields : transformedFields"></component>
             </div>
         </div>
@@ -33,6 +33,7 @@
 </template>
 
 <script>
+    import {mapActions} from 'vuex';
     import Lookup from './Lookup';
     import Radios from "./Radios";
     import TextComponent from "./TextComponent"
@@ -47,6 +48,7 @@
     import MainListComponent from "./MainListComponent"
     import DateComponent from "./DateComponent"
     import HeaderComponent from "./HeaderComponent";
+    import AliasImage from "./AliasImage";
     export default {
         name: "ListComponent",
         props: {
@@ -56,10 +58,12 @@
             mainListFields: Object,
             radio: String,
             fieldListType: String,
-
             listFieldType: {},
             dependantTypes: Array,
-            hasList: Boolean
+            deepDependant: Array,
+            hasList: Boolean,
+            translatedList: Object,
+            deepDependantType: String
         },
         components: {
             Lookup,
@@ -91,20 +95,26 @@
                     'inputformula',
                     'inputlist',
                     'inputdate',
-                    'text'],
+                    'text',
+                'inputlookupaliasimage'],
                 currentFieldType: null,
                 currentType: null,
                 listTypeField: '',
                 currentProps: {},
                 currentListFields: {},
                 transformedFields: {},
-                dependantListFieldTypes: null,
+                dependantListFieldType: '',
+                deepDependantListFieldTypes: null,
                 transform: null,
                 dependantList: false,
                 changedRules: false,
+                transformedListType: null
             }
         },
         methods: {
+            ...mapActions({
+                updateType: 'updateType',
+            }),
             addField() {
                 this.currentListFields = this.$refs.form.addField();
                 this.$emit('addList', this.currentListFields);
@@ -114,85 +124,84 @@
                 this.$emit('editList', this.currentListFields);
             },
             handleChange(type) {
-                console.log(type);
-                switch(type) {
+                console.log('type list',type);
+                this.currentType = type;
+                this.listTypeField = type;
+                let changedType = this.transform ? this.listTypeField : this.currentType;
+                this.updateType({
+                    type: changedType
+                });
+                switch(changedType) {
                     case 'inputlookup':
                         this.currentFieldType = Lookup;
-                        this.currentType = type;
                         this.currentListFields = {};
                         break;
                     case 'inputtext':
                         this.currentFieldType = TextComponent;
-                        this.currentType = type;
                         this.currentListFields = {};
+                        console.log('hello from the list')
                         break;
                     case 'inputnumber':
                         this.currentFieldType = Number;
-                        this.currentType = type;
                         this.currentListFields = {};
                         break;
                     case 'inputlookupalias':
                         this.currentFieldType = Alias;
-                        this.currentType = type;
                         this.currentListFields = {};
                         break;
                     case 'inputselect':
                         this.currentFieldType = Select;
-                        this.currentType = type;
                         this.currentListFields = {};
                         break;
                     case 'inputradio':
                         this.currentFieldType = RadioForm;
-                        this.currentType = type;
                         this.currentListFields = {};
                         break;
                     case 'inputcheckbox':
                         this.currentFieldType = Checkbox;
-                        this.currentType = type;
                         this.currentListFields = {};
                         break;
                     case 'inputimage':
                         this.currentFieldType = Photo;
-                        this.currentType = type;
                         this.currentListFields = {};
                         break;
                     case 'inputsignature':
                         this.currentFieldType = Signature;
-                        this.currentType = type;
                         this.currentListFields = {};
                         break;
                     case 'inputformula':
                         this.currentFieldType = Formula;
-                        this.currentType = type;
                         this.currentListFields = {};
                         break;
                     case 'inputlist':
                         this.currentFieldType = MainListComponent;
-                        this.currentType = type;
                         this.currentListFields = {};
+                        console.log('in the list and I should see you once');
                         break;
                     case 'inputdate':
                         this.currentFieldType = DateComponent;
-                        this.currentType = type;
                         this.currentListFields = {};
                         break;
                     case 'text':
                         this.currentFieldType = HeaderComponent;
-                        this.currentType = type;
                         this.currentListFields = {};
                         break;
+                    case 'inputlookupaliasimage':
+                        this.currentFieldType = AliasImage;
+                            this.currentListFields = {}
 
                 }
             }
         },
         beforeMount() {
             this.currentType = this.radio;
-           this.listTypeField = this.fieldListType;
+            this.listTypeField = this.fieldListType;
             this.transform = this.transformList;
             this.changedRules = this.changeRules;
-
+            this.currentFieldType = this.listFieldType;
+            this.transformedListType = this.listFieldType;
             this.dependantList = this.hasList;
-            this.dependantListFieldTypes = this.dependantListTypes;
+            this.dependantListFieldType = this.deepDependantType;
             this.transformedFields = this.listFields
         }
     }

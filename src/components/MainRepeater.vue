@@ -10,6 +10,10 @@
                 <input class="input" type="text" name="title" :listFields="listFields.title" v-model="fields.title">
             </div>
             <div class="control">
+                <label class="label">Repeater Item Title</label>
+                <input class="input" type="text" name="title" :listFields="listFields.item_title" v-model="fields.item_title">
+            </div>
+            <div class="control">
                 <label class="label">Min</label>
                 <input class="input" type="number" name="min" :listFields="listFields.min" v-model="fields.min">
             </div>
@@ -69,6 +73,7 @@
                     type: 'inputrepeat',
                     name: '',
                     title: '',
+                    item_title: '',
                     items: [],
                     min: 0,
                     max: 0
@@ -99,6 +104,7 @@
                     type: 'inputrepeat',
                     name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
                     title: this.fields.title,
+                    item_title: this.item_title,
                     min: this.fields.min,
                     max: this.fields.max,
                     items: this.currentRepeater
@@ -111,6 +117,7 @@
                     type: 'inputrepeat',
                     name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
                     title: this.fields.title,
+                    item_title: this.item_title,
                     min: this.fields.min,
                     max: this.fields.max,
                     items: this.currentRepeater

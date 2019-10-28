@@ -1,7 +1,7 @@
 <template>
     <div>
-        <label class="label" v-html="title" v-if="!['inputsignature','inputimage'].includes(type)"></label>
-        <input class="input is-medium" :type="type.replace('input','')" v-bind:style="{width: width}" v-if="!['inputselect','inputmultiselect','inputlookup','inputrepeat', 'inputlist', 'inputradio','inputsignature','inputformula','text','inputlookupaliasselect','inputcheckbox','inputimage','inputlocation'].includes(type)"/>
+        <label class="label" v-html="title" v-if="!['inputsignature','inputimage','inputlookupaliasimage'].includes(type)"></label>
+        <input class="input is-medium" :type="type.replace('input','')" v-bind:style="{width: width}" v-if="!['inputselect','inputmultiselect','inputlookup','inputrepeat', 'inputlist', 'inputradio','inputsignature','inputformula','text','inputlookupaliasselect','inputcheckbox','inputimage','inputlocation','inputlookupaliasimage'].includes(type)"/>
 
         <div class="select is-primary is-fullwidth"   v-if="type === 'inputselect' || type === 'inputmultiselect' || type === 'inputlookupaliasselect'">
             <select v-bind:items="items" class="select">
@@ -16,7 +16,7 @@
         <div v-bind:items="items" v-if="type === 'inputrepeat'" style="border: solid lightgrey;">
             <div v-for="item in items">
                 <label class="label" v-html="item.title"></label>
-                <input class="input is-medium" :type="item.type.replace('input','')"  v-if="!['inputselect','inputmultiselect','inputlookup','inputrepeat', 'inputlist', 'inputradio','inputsignature', 'inputformula','text','inputlookupaliasselect','inputimage','inputlocation'].includes(item.type)">
+                <input class="input is-medium" :type="item.type.replace('input','')"  v-if="!['inputselect','inputmultiselect','inputlookup','inputrepeat', 'inputlist', 'inputradio','inputsignature', 'inputformula','text','inputlookupaliasselect','inputimage','inputlocation','inputlookupaliasimage'].includes(item.type)">
                 <div class="select is-primary is-fullwidth"   v-if="item.type === 'inputselect' || item.type === 'inputmultiselect'">
                     <select v-bind:items="item.items" class="select">
                         <option v-html="item.title" v-for="item in item.items"></option>
@@ -31,7 +31,7 @@
                     <button class="button is-info" style="margin: 0 auto; display: block; width: 100%;"><font-awesome-icon icon="pen" />
                         <span>{{item.title}}</span></button>
                 </div>
-                <div v-if="type === 'inputimage'">
+                <div v-if="item.type === 'inputimage' || item.type === 'inputlookupaliasimage'">
                     <button class="button is-info" style=" display: block; width: 50%;"><font-awesome-icon icon="camera" />
                         <span>{{item.title}}</span></button>
                 </div>
@@ -44,12 +44,12 @@
                     </label>
                 </div>
             </div>
-            <button class="button is-info" style="margin-top: 5px;">Copy</button> <button class="button is-info" style="margin-top: 5px;">Add {{title}}</button>
+            <button class="button is-info is-left" style="margin-top: 5px; width: 45%; ">Copy</button> <button class="button is-info is-right" style="margin-top: 5px; width:45%;">Add {{title}}</button>
         </div>
         <div v-bind:template="template" v-if="type === 'inputlist'" style="border: solid lightgrey;">
             <div v-for="item in template">
                 <label v-html="item.title"></label>
-                <input class="input is-medium" :type="item.type.replace('input','')" v-bind:style="{width:item.width}" v-if="!['inputselect','inputmultiselect','inputlookup','inputrepeat', 'inputlist', 'inputradio','inputsignature', 'inputformula','text','inputlookupaliasselect','inputimage','inputlocation'].includes(item.type)"/>
+                <input class="input is-medium" :type="item.type.replace('input','')" v-bind:style="{width:item.width}" v-if="!['inputselect','inputmultiselect','inputlookup','inputrepeat', 'inputlist', 'inputradio','inputsignature', 'inputformula','text','inputlookupaliasselect','inputimage','inputlocation','inputlookupaliasimage'].includes(item.type)"/>
                 <div class="select is-primary is-fullwidth"   v-if="item.type === 'inputselect' || item.type === 'inputmultiselect'">
                     <select v-bind:items="item.items" class="select">
                         <option v-html="item.title" v-for="item in item.items"></option>
@@ -63,8 +63,8 @@
                 <div v-if="item.type === 'text'">
                     <h3 style="text-align: center;"><strong><span v-html="item.body"></span></strong></h3>
                 </div>
-                <div v-if="type === 'inputimage'">
-                    <button class="button is-info" style=" display: block;"><font-awesome-icon icon="camera" />
+                <div v-if="item.type === 'inputimage' || item.type === 'inputlookupaliasimage'">
+                    <button class="button is-info is-fullwidth" style="display: block;"><font-awesome-icon icon="camera" />
                         <span>{{item.title}}</span></button>
                 </div>
                 <div v-if="item.type==='inputcheckbox'">
@@ -93,7 +93,7 @@
         <div v-if="type === 'text'" v-bind:items="items">
             <h3 style="text-align: center;"><strong><span v-html="body"></span></strong></h3>
         </div>
-        <div v-if="type === 'inputimage'" v-bind:items="items">
+        <div v-if="type === 'inputimage' || type === 'inputlookupaliasimage'" v-bind:items="items">
             <button class="button is-info" style="margin:2px; display: block; width: 100%;"><font-awesome-icon icon="camera" v-bind:style="{width:width}"/>
                 <span>{{title}}</span></button>
         </div>
@@ -105,8 +105,11 @@
 </template>
 
 <script>
+    import Select from "./Select";
+    import ListComponent from "./ListComponent";
     export default {
         name: "Html",
+        components: {ListComponent, Select},
         props: {
             type: String,
             width: String,
@@ -117,9 +120,11 @@
         },
         data() {
             return {
-                now: new Date()
+                now: new Date(),
+                isDropdownActive: false,
+                Show: false
             }
-        }
+        },
     }
 </script>
 
