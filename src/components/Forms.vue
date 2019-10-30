@@ -12,10 +12,10 @@
        </div>
         <div class="field" v-if="transform">
             <div class="control">
-                <component ref="form" :is="changedRules ? currentFieldType : fieldsType"
+                <component :is="changedRules ? currentFieldType : fieldsType"
                             :list="list" :dependantTypes="dependantFieldTypes" :repeaterTypes="repeaterTypes" :repeaterType="repeaterType"
-                           :transformList="transformList" :translatedList="transformedFields" :deepDependantListTypes="deepDependantListTypes"
-                            :hasList="hasList" :deepdependantType="deepDependantFieldType"
+                           :transformList="transformList" :translatedList="transformedFields" :deepDependantListTypes="deepDependantFieldTypes"
+                           :hasList="hasList"
                            :listFields="changedRules ? currentProps: transformedFields">
                 </component>
             </div>
@@ -76,7 +76,6 @@
             repeaterType: String,
             dependantTypes: Array,
             deepDependant: Object,
-            deepDependantType: String,
             deepDependantListTypes: Array,
             hasList: Boolean,
         },
@@ -214,7 +213,6 @@
                         this.currentFieldType = AliasImage;
                         this.changedRules = true;
                         break
-
                 }
             }
         },
@@ -227,6 +225,7 @@
             this.translatedType = this.radio;
             this.currentType = this.radio;
             this.transformedFields = this.translatedList;
+            this.deepDependantFieldTypes = this.deepDependantListTypes
         }
     }
 </script>

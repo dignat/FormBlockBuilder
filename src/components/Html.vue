@@ -3,7 +3,7 @@
         <label class="label" v-html="title" v-if="!['inputsignature','inputimage','inputlookupaliasimage'].includes(type)"></label>
         <input class="input is-medium" :type="type.replace('input','')" v-bind:style="{width: width}" v-if="!['inputselect','inputmultiselect','inputlookup','inputrepeat', 'inputlist', 'inputradio','inputsignature','inputformula','text','inputlookupaliasselect','inputcheckbox','inputimage','inputlocation','inputlookupaliasimage'].includes(type)"/>
 
-        <div class="select is-primary is-fullwidth"   v-if="type === 'inputselect' || type === 'inputmultiselect' || type === 'inputlookupaliasselect'">
+        <div class="select is-primary is-fullwidth"   v-if="type === 'inputselect'  || type === 'inputlookupaliasselect'">
             <select v-bind:items="items" class="select">
                 <option v-html="item.title" v-for="item in items"></option>
             </select>
@@ -13,6 +13,16 @@
                 <option v-html="title"></option>
             </select>
         </div>
+        <div class="select is-primary is-fullwidth" style="background: white;" @click="Show=!Show" v-if="type === 'inputmultiselect' || type === 'inputlookup'">
+            <p style="margin-left: 5px;">Select Item</p>
+        </div>
+
+            <div  style="background: white; padding: 5px;" v-for="item in items" v-if="Show">
+                <input type="checkbox" class="checkbox is-fullwidth"/>
+                <span  v-html="item.title"></span>
+            </div>
+
+
         <div v-bind:items="items" v-if="type === 'inputrepeat'" style="border: solid lightgrey;">
             <div v-for="item in items">
                 <label class="label" v-html="item.title"></label>

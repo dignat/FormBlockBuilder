@@ -26,10 +26,10 @@
                                :id="index" :key="index" @addList="sync" @editList="edit"></ListComponent>
             </div>
             <div class="control" v-if="transform">
-                <ListComponent ref="form" v-for="(field, index) in translatedInputList.template" :listFields="field" v-model="fields.template"
-                               :radio="field.type" :hasList="dependantList" :fieldListType="field.type" :type="field.type" :deepDependantType="field.type"
+                <ListComponent v-for="(field, index) in translatedInputList.template" :listFields="field" v-model="fields.template"
+                               :radio="field.type" :hasList="dependantList"  :type="field.type"
                                :transformList="transform" :changeRules="changeRules" :listFieldType="translatedListTypes[index]"
-                               :deepDependantListFieldType="deepDependantTypes[index]"
+                               :deepDependantListTypes="deepDependantFieldTypes"
                                :id="index" :key="index" @addList="sync" @editList="edit"></ListComponent>
             </div>
         </div>
@@ -58,12 +58,10 @@
             transformList: Boolean,
             changeRules: Boolean,
             translatedList: Object,
-            fieldListType: String,
             listFieldType: Object,
-            deepDependantListFieldType: Object,
             dependantTypes: Array,
             hasList: Boolean,
-            deepDependantType: String,},
+        },
         components: {
             ListComponent
         },
@@ -78,6 +76,7 @@
                 transform: false,
                 dependantList: false,
                 transformedArray: [],
+                deepDependantFieldTypes: [],
                 count: 0,
                 fields: {
                     type: 'inputlist',
@@ -143,9 +142,9 @@
             }
             this.translatedInputList = this.listFields;
             this.translatedListTypes = this.dependantTypes;
-            this.deepDependantTypes = this.deepDependantListTypes;
             this.transform=this.transformList;
             this.dependantList = this.hasList;
+            this.deepDependantFieldTypes = this.deepDependantListTypes
         }
     }
 </script>

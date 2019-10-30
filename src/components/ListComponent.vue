@@ -13,9 +13,9 @@
                            ></component>
             </div>
             <div class="control" v-if="transform">
-                <component ref="form"
-                           :is="changedRules ? currentFieldType: transformedListType"
-                           :transformList="transformList" :changeRules="changeRules" :hasList="dependantList"
+                <component :is="changedRules ?  currentFieldType  : transformedListType"
+                           :transformList="transformList" :changeRules="changeRules" :hasList="dependantList" :translatedList="transformedFields"
+                           :dependantTypes="[transformedListType]" :deepDependantListFieldTypes="[deepDependantFieldType]"
                            :listFields="changedRules ? currentListFields : transformedFields"></component>
             </div>
         </div>
@@ -58,12 +58,14 @@
             mainListFields: Object,
             radio: String,
             fieldListType: String,
-            listFieldType: {},
+            listFieldType: Object,
             dependantTypes: Array,
             deepDependant: Array,
             hasList: Boolean,
             translatedList: Object,
-            deepDependantType: String
+            deepDependantType: String,
+            deepDependantListFieldType: Object,
+            deepDependantListTypes: Array,
         },
         components: {
             Lookup,
@@ -104,11 +106,15 @@
                 currentListFields: {},
                 transformedFields: {},
                 dependantListFieldType: '',
-                deepDependantListFieldTypes: null,
+                deepDependantFieldTypes: [],
                 transform: null,
                 dependantList: false,
                 changedRules: false,
-                transformedListType: null
+                transformedListType: null,
+                translatedListTypes:[],
+                deepDependantTypes:[],
+                deepDependantFieldType: null,
+                deepDependantRadioType: null,
             }
         },
         methods: {
@@ -126,8 +132,7 @@
             handleChange(type) {
                 console.log('type list',type);
                 this.currentType = type;
-                this.listTypeField = type;
-                let changedType = this.transform ? this.listTypeField : this.currentType;
+                let changedType =  this.currentType;
                 this.updateType({
                     type: changedType
                 });
@@ -138,6 +143,7 @@
                         break;
                     case 'inputtext':
                         this.currentFieldType = TextComponent;
+                        this.deepDependantFieldType = TextComponent;
                         this.currentListFields = {};
                         console.log('hello from the list')
                         break;
@@ -195,14 +201,17 @@
         },
         beforeMount() {
             this.currentType = this.radio;
-            this.listTypeField = this.fieldListType;
+            this.listTypeField = this.radio;
+            this.deepDependantRadioType = this.deepDependantType;
             this.transform = this.transformList;
             this.changedRules = this.changeRules;
             this.currentFieldType = this.listFieldType;
             this.transformedListType = this.listFieldType;
+            this.deepDependantFieldType = this.deepDependantListFieldType;
             this.dependantList = this.hasList;
-            this.dependantListFieldType = this.deepDependantType;
-            this.transformedFields = this.listFields
+            this.transformedFields = this.listFields;
+            this.translatedListTypes = this.dependantTypes;
+            this.deepDependantFieldTypes = this.deepDependantTypes
         }
     }
 </script>
