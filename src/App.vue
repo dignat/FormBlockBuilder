@@ -70,7 +70,8 @@
                   v-bind:title="data.title"
                   v-bind:items="data.items"
                   v-bind:template="data.template"
-                  v-bind:body="data.body"></app-html>
+                  v-bind:body="data.body"
+                  v-bind:multi="data.multi"></app-html>
         <div class="field is-grouped">
         <button class="button is-primary is-fullwidth" style="margin-top: 10px; margin-right: 5px;" v-if="formFields.items.length">Copy</button>
         <button class="button is-primary is-fullwidth" style="margin-top: 10px; margin-right: 5px;" v-if="formFields.items.length"> Save</button>

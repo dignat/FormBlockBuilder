@@ -13,7 +13,7 @@
                 <option v-html="title"></option>
             </select>
         </div>
-        <div class="select is-primary is-fullwidth" style="background: white;" @click="Show=!Show" v-if="type === 'inputmultiselect' || type === 'inputlookup'">
+        <div class="select is-primary is-fullwidth" style="background: white;" @click="Show=!Show" v-if="type === 'inputmultiselect' || type === 'inputlookup' && multi === 1">
             <p style="margin-left: 5px;">Select Item</p>
         </div>
 
@@ -51,6 +51,11 @@
                 <div v-if="item.type==='inputradio'">
                     <label class="radio" v-bind:items="item.items" v-if="item.type === 'inputradio'" v-for="itemRadio in item.items">{{itemRadio.title}}
                         <input class="radio" type="radio" v-bind:style="{width:width}"/>
+                    </label>
+                </div>
+                <div v-if="item.type==='inputcheckbox'">
+                    <label class="checkbox" v-if="item.type ==='inputcheckbox'">
+                        <input class="checkbox" type="checkbox" v-bind:style="{width:item.width}"/>
                     </label>
                 </div>
             </div>
@@ -126,7 +131,8 @@
             title: String,
             items: Array,
             template: Array,
-            body: String
+            body: String,
+            multi: Number
         },
         data() {
             return {
