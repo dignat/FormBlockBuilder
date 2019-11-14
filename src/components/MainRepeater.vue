@@ -11,7 +11,7 @@
             </div>
             <div class="control">
                 <label class="label">Repeater Item Title</label>
-                <input class="input" type="text" name="title" :listFields="listFields.item_title" v-model="fields.item_title">
+                <input class="input" type="text" name="item_title" :listFields="listFields.item_title" v-model="fields.item_title">
             </div>
             <div class="control">
                 <label class="label">Min</label>

@@ -13,7 +13,7 @@
                 <option v-html="title"></option>
             </select>
         </div>
-        <div class="select is-primary is-fullwidth" style="background: white;" @click="Show=!Show" v-if="type === 'inputmultiselect' || type === 'inputlookup' && multi === 1">
+        <div class="select is-primary is-fullwidth" style="background: white;" @click="Show=!Show" v-if="type === 'inputmultiselect' || type === 'inputlookup' && multi">
             <p style="margin-left: 5px;">Select Item</p>
         </div>
 
@@ -43,7 +43,7 @@
                 </div>
                 <div v-if="item.type === 'inputimage' || item.type === 'inputlookupaliasimage'">
                     <button class="button is-info" style=" display: block; width: 50%;"><font-awesome-icon icon="camera" />
-                        <span>{{item.title}}</span></button>
+                        <span>{{item.item_title !== ''? item.item_title : item.title}}</span></button>
                 </div>
                 <div v-if="item.type === 'text'">
                     <h3 style="text-align: center;"><strong><span v-html="item.body"></span></strong></h3>
@@ -127,7 +127,7 @@
         components: {ListComponent, Select},
         props: {
             type: String,
-            width: String,
+            width: Number,
             title: String,
             items: Array,
             template: Array,

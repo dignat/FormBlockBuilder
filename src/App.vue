@@ -2,8 +2,8 @@
   <div id="app">
     <section class="section">
       <div class="container" style="width: 50%; margin-left: 320px;">
+        <h1 class="has-text-centered"><strong>Form Fields</strong></h1>
         <div class="field">
-          <h1>Form Fields</h1>
           <label class="label">Form Title</label>
           <input class="input" type="text" name="title" v-model="formFields.title">
         </div>
@@ -17,6 +17,16 @@
                  :key="index" :type="field.type" @addFields="sync" @editFields="edit">
           </Forms>
         </div>
+          <div class="field">
+            <p><strong>Pick Forms From DB</strong></p>
+            <div class="select is-primary is-fullwidth">
+                <select class="select" @click="formsFromFirebase" v-model="selectedName">
+                  <option v-for="name in formNames" v-bind:value="name">{{name}}</option>
+                </select>
+            </div>
+          </div>
+
+
         <div class="field" v-if="transform">
           <Forms :fieldsType="fieldTypes[index]" ref="form"
                  v-for="(field, index) in buildFields" :radio="field.type" :type="field.type" :fieldListType="dependantType" :repeaterType="dependantRepeaterType" :repeaterTypes="dependantRepeaterTypes"
@@ -44,6 +54,12 @@
           </div>
           <div class="control">
             <button class="button is-danger" @click="translateOldForm()">Translate Old Form</button>
+          </div>
+          <div class="control">
+            <button class="button is-danger" @click="loadForm()">Load Form</button>
+          </div>
+          <div class="control">
+            <button class="button is-danger" @click="updateForm(formFields.id)">Update Form {{formFields.id}}</button>
           </div>
         </div>
 
@@ -88,15 +104,22 @@
 import {mapActions} from 'vuex'
  import {mapGetters} from 'vuex'
  import {mapState} from 'vuex'
+ import axios from 'axios'
+import {db} from "./database/db";
+ import Select from "./components/Select";
 
-  export default {
+ export default {
     name: 'App',
+
     components: {
+      Select,
       Forms,
       'app-html': Html
     },
     data () {
       return {
+        forms: [],
+        selectedName: '',
         transform: false,
         buildFields: [],
         tempFields: {},
@@ -116,6 +139,7 @@ import {mapActions} from 'vuex'
         dependantRepeaterTypes: [],
         dependantList: false,
         message: '',
+        formNames:[],
         existingForm: {
           title: '',
           type: 'form',
@@ -142,6 +166,19 @@ import {mapActions} from 'vuex'
       ...mapGetters(['translatedForm', 'editFields', 'currentFormFields', 'currentForm','editedName','getRules']),
       translateOldForm() {
         return this.toTransform(JSON.parse(this.existingForm), this.existingForm.items);
+      },
+      formsFromFirebase() {
+        axios.get('https://formbuilder-f0c5e.firebaseio.com/forms.json')
+                .then(res => {
+                  const data = res.data;
+                  const dbFormName = [];
+                  for (let key in data) {
+                    const formName = data[key].title;
+                    dbFormName.push(formName);
+                  }
+                  this.formNames = dbFormName;
+                })
+                .catch(error => console.log(error))
       },
       sync (value) {
         console.log(value, this.formFields.items);
@@ -193,12 +230,39 @@ import {mapActions} from 'vuex'
         Object.assign({}, {title: '', name: '', type: 'form'});
         this.formFields.name = this.formFields.title.replace(/[\s,&\/_?():.]/g, "");
         this.formFields.uri = '/reflow/data/update/form/' + this.formFields.name;
-        console.log(JSON.stringify(this.formFields))
+        console.log(JSON.stringify('before save',this.formFields));
+        axios.post('https://formbuilder-f0c5e.firebaseio.com/forms.json',this.formFields)
+                .then(res => console.log(res))
+                .catch(error => console.log(error))
+      },
+      loadForm() {
+        axios.get('https://formbuilder-f0c5e.firebaseio.com/forms.json')
+                .then(res =>  {
+                  const data = res.data;
+                  const dbForm = [];
+                  for (let key in data) {
+                    const form = data[key];
+                    form.id = key;
+                    if (this.selectedName === data[key].title) {
+                      dbForm.push(form);
+                    }
+                  }
+                  Object.assign(this.existingForm, dbForm[0]);
+                })
+                .catch(error => console.log(error));
+      },
+      updateForm(formId) {
+        var config = {
+          headers: {'Access-Control-Allow-Origin': '*'}
+        };
+         axios.put('https://formbuilder-f0c5e.firebaseio.com/forms/'+formId+".json",this.formFields,config)
+                .then(res => console.log(res.data))
+                .catch(error => console.log(error))
       },
       translateForm() {
         this.transform = true;
         this.setTransform(this.transform);
-        Object.assign(this.formFields,JSON.parse(this.existingForm));
+        Object.assign(this.formFields,this.existingForm);
         for (let i = 0; i < this.formFields.items.length; i++) {
           this.currentType = this.formFields.items[i].type;
           this.fieldTypes.push(Forms.components);
@@ -246,7 +310,7 @@ import {mapActions} from 'vuex'
             case 'inputformula':
               this.fieldTypes[i] = Forms.components.Formula;
               break;
-            case 'inpudate':
+            case 'inputdate':
               this.fieldTypes[i] = Forms.components.DateComponent;
               break;
             case 'inputimage':
@@ -254,6 +318,9 @@ import {mapActions} from 'vuex'
               break;
             case 'inputsignature':
               this.fieldTypes[i] = Forms.components.Signature;
+              break;
+            case 'inputmultiselect':
+              this.fieldListType[i] = Forms.components.SelectComponent
               break;
             case 'inputlist':
               this.fieldTypes[i] = Forms.components.MainListComponent;
@@ -386,6 +453,12 @@ import {mapActions} from 'vuex'
                 case 'text':
                   this.dependantRepeaterTypes[k] = Forms.components.HeaderComponent;
                   console.log('repeater', this.dependantRepeaterTypes);
+                  break;
+                case 'inputselect':
+                  this.dependantRepeaterTypes[k] = Forms.components.SelectComponent;
+                  break;
+                case 'inputmultiselect':
+                  this.dependantRepeaterTypes[k] = Forms.components.SelectComponent;
                   break;
               }
             }

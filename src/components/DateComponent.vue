@@ -51,9 +51,16 @@
                 return fields;
             },
             editField() {
-                this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
-                this.toEditField(this.fields);
-                return this.fields;
+                const editFields = {
+                    type: "inputdate",
+                    title: this.fields.title,
+                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    time: this.fields.time,
+                    required: this.fields.required,
+                    hidden: this.fields.hidden
+                };
+                this.toEditField(editFields);
+                return editFields;
             }
         },
     }

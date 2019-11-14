@@ -2,6 +2,12 @@
     <div class="section">
         <div class="field">
             <div class="control">
+                <label class="label">Uri ?</label>
+                <input class="checkbox" type="checkbox" name="uri" v-model="uri"/>
+            </div>
+        </div>
+        <div class="field">
+            <div class="control">
                 <label class="label">Alias Name</label>
                 <input class="input" type="text" name="name" v-model="fields.name">
             </div>
@@ -55,6 +61,7 @@
         },
         data () {
             return {
+                uri: false,
                 fields: {
                     type: 'inputlookupalias',
                     name: '',
@@ -85,6 +92,9 @@
                     format: this.fields.format,
                     custom: this.fields.custom
                 };
+                if(this.uri) {
+                    delete Object.assign(fields,{'uri': fields['target']})['target']
+                }
                 this.toAddField(fields);
                 return fields;
             },

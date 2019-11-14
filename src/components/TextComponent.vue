@@ -63,7 +63,7 @@
                     hidden: 0,
                     default: '',
                     required: 0,
-                    enabled: 0
+                    enabled: 1
                 },
                 toEdit: false
             }
