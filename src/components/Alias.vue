@@ -94,6 +94,8 @@
                 };
                 if(this.uri) {
                     delete Object.assign(fields,{'uri': fields['target']})['target']
+                    //const newObject = {}; - for a new object
+                  //  delete Object.assign(newObject, o, {[newKey]: o[oldKey] })[oldKey];
                 }
                 this.toAddField(fields);
                 return fields;
