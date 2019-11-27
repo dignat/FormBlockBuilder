@@ -37,6 +37,8 @@
 
 <script>
     import {mapActions} from 'vuex'
+    import {mapGetters} from 'vuex'
+
     export default {
         name: "Lookup",
         props: {
@@ -62,6 +64,7 @@
                 toAddField: 'addField',
                 toEditField: 'editField'
             }),
+            ...mapGetters(['getTransform','getRules']),
             addField() {
                 const fields = {
                     type: "inputlookup",
@@ -83,6 +86,11 @@
                     this.fields.uri = this.routes ? '/v1/api/' + this.fields.uri : '/reflow/data/sync/lookup/' + this.fields.uri,
                     this.toEditField(this.fields);
                 return this.fields;
+            }
+        },
+        beforeMount() {
+            if (this.getTransform() && !this.getRules()) {
+                this.fields = this.listFields;
             }
         }
     }

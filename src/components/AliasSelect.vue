@@ -49,6 +49,7 @@
 
 <script>
     import {mapActions} from 'vuex'
+    import {mapGetters} from 'vuex'
     export default {
         name: "AliasSelect",
         props: {
@@ -74,6 +75,7 @@
                 toAddField: 'addField',
                 toEditField: 'editField'
             }),
+            ...mapGetters(['getTransform','getRules']),
             addField() {
                 const fields = {
                     type: 'inputlookupaliasselect',
@@ -95,7 +97,11 @@
             }
 
         },
-
+        beforeMount() {
+            if (this.getTransform() && !this.getRules()) {
+                this.fields = this.listFields;
+            }
+        }
     }
 </script>
 

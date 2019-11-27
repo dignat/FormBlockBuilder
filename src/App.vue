@@ -2,7 +2,7 @@
   <div id="app">
     <section class="section">
       <div class="container" style="width: 50%; margin-left: 320px;">
-        <h1 class="has-text-centered"><strong>Form Fields</strong></h1>
+        <h1 class="has-text-centered"><strong>Form</strong></h1>
         <div class="field">
           <label class="label">Form Title</label>
           <input class="input" type="text" name="title" v-model="formFields.title">
@@ -165,6 +165,11 @@ import {db} from "./database/db";
       }),
       ...mapGetters(['translatedForm', 'editFields', 'currentFormFields', 'currentForm','editedName','getRules']),
       translateOldForm() {
+        let word = 'Deleveled';
+        let reverse = word.split('').reverse().join().toLowerCase().toUpperCase();
+        reverse = reverse.replace(/,/g,'');
+        reverse = reverse[0].toUpperCase();
+         console.log(reverse);
         return this.toTransform(JSON.parse(this.existingForm), this.existingForm.items);
       },
       formsFromFirebase() {
@@ -228,7 +233,7 @@ import {db} from "./database/db";
 
       generateForm() {
         Object.assign({}, {title: '', name: '', type: 'form'});
-        this.formFields.name = this.formFields.title.replace(/[\s,&\/_?():.]/g, "");
+        this.formFields.name = this.formFields.title.replace(/[\s,&,-\/_?():.]/g, "");
         this.formFields.uri = '/reflow/data/update/form/' + this.formFields.name;
         console.log(JSON.stringify('before save',this.formFields));
         axios.post('https://formbuilder-f0c5e.firebaseio.com/forms.json',this.formFields)

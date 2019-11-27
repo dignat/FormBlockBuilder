@@ -20,6 +20,8 @@
 
 <script>
     import {mapActions} from 'vuex'
+    import {mapGetters} from 'vuex'
+
     export default {
         name: "Photo",
         props: {
@@ -68,6 +70,11 @@
                 };
                 this.toEditField(editedFields);
                 return editedFields;
+            }
+        },
+        beforeMount() {
+            if (this.getTransform() && !this.getRules()) {
+                this.fields = this.listFields;
             }
         }
     }

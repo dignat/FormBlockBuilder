@@ -145,6 +145,11 @@
                         this.currentType = type;
                         this.currentRepeaterFields = {};
                         break;
+                    case 'inputlookupalias':
+                        this.currentFieldType = Alias;
+                        this.currentType = type;
+                        this.currentRepeaterFields = {};
+                        break;
 
                 }
             }

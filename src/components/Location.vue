@@ -24,6 +24,8 @@
 
 <script>
     import {mapActions} from 'vuex'
+    import {mapGetters} from 'vuex'
+
     export default {
         name: "Location",
         props: {
@@ -46,6 +48,7 @@
                 toAddField: 'addField',
                 toEditField: 'editField'
             }),
+            ...mapGetters(['getTransform','getRules']),
             addField() {
                 const fields = {
                     type: "inputlocation",
@@ -71,6 +74,11 @@
                 return this.fields;
             }
         },
+        beforeMount() {
+            if (this.getTransform() && !this.getRules()) {
+                this.fields = this.listFields;
+            }
+        }
 
     }
 </script>

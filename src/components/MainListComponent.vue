@@ -119,6 +119,8 @@
                 };
                 if(this.targetStatus) {
                     delete Object.assign(fields, {['uri']:fields['iteratorKey']})['iteratorKey'];
+                    //const newObject = {}; - for a new object
+                    //  delete Object.assign(newObject, o, {[newKey]: o[oldKey] })[oldKey];
                 }
                 this.toAddField(fields);
                 return fields;

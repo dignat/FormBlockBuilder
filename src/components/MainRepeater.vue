@@ -48,6 +48,8 @@
 <script>
     import Repeater from './Repeater'
     import {mapActions} from 'vuex'
+    import {mapGetters} from 'vuex'
+
     export default {
         name: "MainRepeater",
         props: {
@@ -85,6 +87,7 @@
                 toAddField: 'addField',
                 toEditField: 'editField'
             }),
+            ...mapGetters(['getTransform','getRules']),
             sync (value) {
                 console.log(value)
                 this.currentRepeater.push(value);
@@ -127,6 +130,9 @@
             }
         },
         beforeMount() {
+            if (this.getTransform() && !this.getRules()) {
+                this.fields = this.listFields;
+            }
             this.translateRepeater = this.translatedList;
             this.translateTypes = this.repeaterTypes;
             this.transform = this.transformList;

@@ -2,12 +2,6 @@
     <div class="section">
         <div class="field">
             <div class="control">
-                <label class="label">Uri ?</label>
-                <input class="checkbox" type="checkbox" name="uri" v-model="uri"/>
-            </div>
-        </div>
-        <div class="field">
-            <div class="control">
                 <label class="label">Alias Name</label>
                 <input class="input" type="text" name="name" v-model="fields.name">
             </div>
@@ -54,6 +48,7 @@
 
 <script>
     import {mapActions} from 'vuex'
+    import {mapGetters} from 'vuex'
     export default {
         name: "Alias",
         props: {
@@ -61,7 +56,6 @@
         },
         data () {
             return {
-                uri: false,
                 fields: {
                     type: 'inputlookupalias',
                     name: '',
@@ -81,6 +75,7 @@
                 toAddField: 'addField',
                 toEditField: 'editField'
             }),
+            ...mapGetters(['getTransform','getRules']),
             addField () {
                 const fields = {
                     type: 'inputlookupalias',
@@ -92,11 +87,7 @@
                     format: this.fields.format,
                     custom: this.fields.custom
                 };
-                if(this.uri) {
-                    delete Object.assign(fields,{'uri': fields['target']})['target']
-                    //const newObject = {}; - for a new object
-                  //  delete Object.assign(newObject, o, {[newKey]: o[oldKey] })[oldKey];
-                }
+
                 this.toAddField(fields);
                 return fields;
             },

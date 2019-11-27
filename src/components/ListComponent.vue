@@ -13,7 +13,7 @@
                            ></component>
             </div>
             <div class="control" v-if="transform">
-                <component :is="changedRules ?  currentFieldType  : transformedListType"
+                <component :is="changedRules ?  currentFieldType  : transformedListType" ref="form"
                            :transformList="transformList" :changeRules="changeRules" :hasList="dependantList" :translatedList="transformedFields"
                            :dependantTypes="[transformedListType]" :deepDependantListFieldTypes="[deepDependantFieldType]"
                            :listFields="changedRules ? currentListFields : transformedFields"></component>

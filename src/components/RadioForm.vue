@@ -28,6 +28,8 @@
 <script>
     import Radios from "./Radios"
     import {mapActions} from 'vuex'
+    import {mapGetters} from 'vuex'
+
     export default {
         name: "RadioForm",
         props: {
@@ -65,6 +67,7 @@
                 toAddField: 'addField',
                 toEditField: 'editField'
             }),
+            ...mapGetters(['getTransform','getRules']),
             addCustomFields() {
                 this.customFields.push({
                     title:''
@@ -109,6 +112,11 @@
                         this.customType = type;
                         break;
                 }
+            }
+        },
+        beforeMount() {
+            if (this.getTransform() && !this.getRules()) {
+                this.fields = this.listFields;
             }
         }
     }

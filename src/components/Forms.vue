@@ -12,7 +12,7 @@
        </div>
         <div class="field" v-if="transform">
             <div class="control">
-                <component :is="changedRules ? currentFieldType : fieldsType"
+                <component :is="changedRules ? currentFieldType : fieldsType" ref="form"
                             :list="list" :dependantTypes="dependantFieldTypes" :repeaterTypes="repeaterTypes" :repeaterType="repeaterType"
                            :transformList="transformList" :translatedList="transformedFields" :deepDependantListTypes="deepDependantFieldTypes"
                            :hasList="hasList"

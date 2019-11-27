@@ -8,7 +8,7 @@
                 <input class="input" name="name" type="text" :listFields="listFields.name" v-model="fields.name">
                 <label class="label">Statement</label>
                 <input class="input" name="statement" type="text" :listFields="listFields.statement" v-model="fields.statement">
-                <label class="label">Min</label>
+                <label class="label">Max</label>
                 <input class="label" type="text" name="max" :listFields="listFields.max" v-model="fields.max">
                 <label class="label">Min</label>
                 <input class="label" type="text" name="min" :listFields="listFields.min" v-model="fields.min">
@@ -22,6 +22,7 @@
 
 <script>
     import {mapActions} from 'vuex'
+    import {mapGetters} from 'vuex'
     export default {
         name: "Signature",
         props: {
@@ -45,6 +46,7 @@
                 toAddField: 'addField',
                 toEditField: 'editField'
             }),
+            ...mapGetters(['getTransform','getRules']),
             addField() {
                 const fields = {
                     type: "inputsignature",
@@ -64,6 +66,11 @@
                 return this.fields;
             }
         },
+        beforeMount() {
+            if (this.getTransform() && !this.getRules()) {
+                this.fields = this.listFields;
+            }
+        }
     }
 </script>
 

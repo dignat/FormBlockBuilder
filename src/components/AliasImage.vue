@@ -48,6 +48,7 @@
 
 <script>
     import {mapActions} from 'vuex'
+    import {mapGetters} from 'vuex'
     export default {
         name: "AliasImage",
         props: {
@@ -74,6 +75,7 @@
                 toAddField: 'addField',
                 toEditField: 'editField'
             }),
+            ...mapGetters(['getTransform','getRules']),
             addField () {
                 const fields = {
                     type: 'inputlookupaliasimage',
@@ -103,6 +105,11 @@
                 return editFields;
             }
         },
+        beforeMount() {
+            if (this.getTransform() && !this.getRules()) {
+                this.fields = this.listFields;
+            }
+        }
     }
 </script>
 

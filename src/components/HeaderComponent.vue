@@ -18,12 +18,19 @@
                 <input class="checkbox" type="checkbox" :listFields="listFields.hidden" v-model="fields.hidden">
             </div>
         </div>
-
+        <div class="field">
+            <div class="control">
+                <label class="label">Paragraph text?</label>
+                <input class="checkbox" name="required" type="checkbox" v-model="isParagraph" @click="changeToParagraph">
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
     import {mapActions} from 'vuex'
+    import {mapGetters} from 'vuex'
+
     export default {
         name: "HeaderComponent",
         props: {
@@ -31,6 +38,7 @@
         },
         data () {
             return {
+                isParagraph: false,
                 fields: {
                     type: 'text',
                     name: '',
@@ -44,21 +52,38 @@
                 toAddField: 'addField',
                 toEditField: 'editField'
             }),
+            ...mapGetters(['getTransform','getRules']),
+            changeToParagraph() {
+                this.isParagraph = true;
+              this.fields.body = this.isParagraph ? '<p></p>' : '<h3></h3>';
+            },
             addField() {
                 const fields = {
                     type: 'text',
                     name: this.fields.name,
-                    body: this.fields.body,
+                    body:  this.fields.body,
                     hidden: this.fields.hidden
                 };
                 this.toAddField(fields);
                 return fields;
             },
             editField () {
-                this.toEditField(this.fields);
-                return this.fields
+                const editFields = {
+                    type: 'text',
+                    name: this.fields.name,
+                    body: this.isParagraph ? '<p></p>' : this.fields.body,
+                    hidden: this.fields.hidden
+                };
+                this.toEditField(editFields);
+                return editFields;
+            }
+        },
+        beforeMount() {
+            if (this.getTransform() && !this.getRules()) {
+                this.fields = this.listFields;
             }
         }
+
     }
 </script>
 
