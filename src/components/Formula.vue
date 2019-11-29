@@ -14,8 +14,46 @@
                 <input class="checkbox" name="required" type="checkbox" :listFields="listFields.required" v-model="fields.required">
                 <label class="label">Store Formula?</label>
                 <input class="checkbox" name="required" type="checkbox" :listFields="listFields.store" v-model="fields.store">
+                <label class="label">Generate Formula?</label>
+                <input class="checkbox" name="required" type="checkbox" v-model="generateFormula">
+            </div>
+            <div class="control" v-if="generateFormula">
+                <label class="label">Select  type of Formula</label>
+                <div class="select is-fullwidth">
+                    <select class="select" v-model="selectedFormula">
+                        <option v-for="formula in formulas" :value="formula">{{ formula.type }}</option>
+                    </select>
+                </div>
             </div>
         </div>
+
+        <div class="control" v-if="selectedFormula.type === 'hide' && generateFormula">
+            <label class="label">Field Names</label>
+            <div class="select is-fullwidth">
+                <select class="select" v-model="selectedName">
+                    <option v-for="(element, index) in list.items" :key="index" :value="element.name" :fieldName="element.name">{{ element.name }}</option>
+                </select>
+            </div>
+            <div class="select is-primary is-fullwidth" style="background: white;" @click="Show=!Show" >
+                <label class="label">To Hide Field</label>
+            </div>
+            <div  style="background: white; padding: 5px;" v-for="element in list.items"  :fieldName="element.name" v-if="Show">
+                <input type="checkbox" class="checkbox is-fullwidth" :value="element.name" v-model="checked" :disabled="element.name === selectedName"/>
+                <span>{{ element.name }}</span>
+            </div>
+
+
+            <label class="label">Select Type of Controller Field</label>
+            <div class="select is-fullwidth">
+                <select class="select" v-model="selected">
+                <option v-for="element in types" :value="element" >{{ element.type }}</option>
+                </select>
+            </div>
+            <div class="control">
+                <button class="button is-primary" @click="generateHide(fields.name, selected.type, selectedName, checked.join(','))">Generate Script</button>
+            </div>
+        </div>
+
     </div>
     
 </template>
@@ -23,20 +61,31 @@
 <script>
     import {mapActions} from 'vuex'
     import {mapGetters} from 'vuex'
+    import Select from "./Select";
 
     export default {
         name: "Formula",
+        components: {Select},
         props: {
-            listFields: Object
+            listFields: Object,
+            list: Object
         },
         data () {
             return {
+                checked:[],
+                Show: false,
+                generateFormula: false,
+                selected: {},
+                selectedName: {},
+                selectedFormula: {},
+                types: [{'type':'string'}, {'type':'number'}],
+                formulas: [{'type': 'hide'},{'type': 'calculate'}],
                 fields: {
                     type: "inputformula",
                     title: '',
                     name: '',
                     hidden: 0,
-                    script: '',
+                    script: 'form=GetForm();',
                     store: 0,
                     required: 0
                 }
@@ -48,6 +97,13 @@
                 toEditField: 'editField'
             }),
             ...mapGetters(['getTransform','getRules']),
+            generateHide(type, typeOfControllerField, controllerField, fieldToHide) {
+                switch(typeOfControllerField) {
+                    case 'string':
+                        this.fields.script = `form=GetForm();result=form.GetStringValue('${controllerField}');if (result == 'Yes'){form.SetDisplay('${fieldToHide}',1);}else{form.SetDisplay('${fieldToHide}',0);}`;
+                        break;
+                }
+            },
             addField() {
                 const fields = {
                     type: "inputformula",
@@ -79,8 +135,7 @@
             if (this.getTransform() && !this.getRules()) {
                 this.fields = this.listFields;
             }
-        }
-
+        },
     }
 </script>
 

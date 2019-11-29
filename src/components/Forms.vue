@@ -103,6 +103,7 @@
         },
         data() {
             return {
+                selected: {},
                 types: ['inputlookup', 'inputtext', 'inputlookupalias', 'inputlookupaliasselect', 'inputrepeat', 'inputnumber', 'inputradio', 'inputselect', 'inputlist', 'inputcheckbox', 'inputimage', 'inputsignature', 'inputformula','inputdate', 'inputlocation','text','inputlookupaliasimage'],
                 currentFieldType: null,
                 currentType: null,

@@ -25,16 +25,16 @@
                 </select>
             </div>
           </div>
-
-
         <div class="field" v-if="transform">
           <Forms :fieldsType="fieldTypes[index]" ref="form"
                  v-for="(field, index) in buildFields" :radio="field.type" :type="field.type" :fieldListType="dependantType" :repeaterType="dependantRepeaterType" :repeaterTypes="dependantRepeaterTypes"
                  :transformList="transform" :list="formFields" :key="index" :changeRules="changingRules" :dependantTypes="dependantListTypes"
                   :deepDependantType="deepDependantType" :deepDependantListTypes="deepDependantListFieldTypes"
                  :hasList="dependantList"
-                 :translatedList="field.items[index]"   @addFields="sync" @editFields="editTranslated"></Forms>
+                 :translatedList="field.items[index]"   @addFields="sync" @editFields="editTranslated">
+          </Forms>
         </div>
+
 
         <div class="field is-grouped">
           <div class="control">
@@ -72,7 +72,9 @@
           </div>
         </div>
         <div class="section">
-          <textarea v-model="existingForm"></textarea>
+          <textarea v-model="existingForm">
+
+          </textarea>
         </div>
       </div>
       </section>
@@ -87,7 +89,9 @@
                   v-bind:items="data.items"
                   v-bind:template="data.template"
                   v-bind:body="data.body"
-                  v-bind:multi="data.multi"></app-html>
+                  v-bind:multi="data.multi">
+
+        </app-html>
         <div class="field is-grouped">
         <button class="button is-primary is-fullwidth" style="margin-top: 10px; margin-right: 5px;" v-if="formFields.items.length">Copy</button>
         <button class="button is-primary is-fullwidth" style="margin-top: 10px; margin-right: 5px;" v-if="formFields.items.length"> Save</button>
@@ -110,7 +114,6 @@ import {db} from "./database/db";
 
  export default {
     name: 'App',
-
     components: {
       Select,
       Forms,
@@ -289,6 +292,9 @@ import {db} from "./database/db";
                     console.log('inputradio', this.formFields.items[i].items);
               break;
             case 'inputselect':
+              this.fieldTypes[i] = Forms.components.SelectComponent;
+              break;
+            case 'inputmultiselect':
               this.fieldTypes[i] = Forms.components.SelectComponent;
               break;
             case 'inputnumber':

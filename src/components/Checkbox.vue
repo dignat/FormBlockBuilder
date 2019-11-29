@@ -51,9 +51,15 @@
                 return fields;
             },
             editField() {
-                this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
-                this.toEditField(this.fields);
-                return this.fields;
+                const editFields = {
+                    type: "inputcheckbox",
+                    title: this.fields.title,
+                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    required: this.fields.required,
+                    hidden: this.fields.hidden
+                };
+                this.toEditField(editFields);
+                return editFields;
             }
         },
         beforeMount() {

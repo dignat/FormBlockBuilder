@@ -92,11 +92,25 @@
                 return fields;
             },
             editField() {
-                this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
-                this.toEditField(this.fields);
-                return this.fields;
+                const editFields = {
+                    type: 'inputlookupalias',
+                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    title: this.fields.title,
+                    target: this.fields.target,
+                    labelKey: this.fields.labelKey,
+                    idKey: this.fields.idKey,
+                    format: this.fields.format,
+                    custom: this.fields.custom
+                };
+                this.toEditField(editFields);
+                return editFields;
             }
         },
+        beforeMount() {
+            if (this.getTransform() && !this.getRules()) {
+                this.fields = this.listFields;
+            }
+        }
     }
 </script>
 

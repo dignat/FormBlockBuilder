@@ -61,9 +61,17 @@
                 return fields;
             },
             editField() {
-                this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
-                this.toEditField(this.fields);
-                return this.fields;
+                const editFields = {
+                    type: "inputsignature",
+                    title: this.fields.title,
+                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    min: this.fields.min,
+                    max: this.fields.max,
+                    hidden: this.fields.hidden,
+                    statement: this.fields.statement
+                };
+                this.toEditField(editFields);
+                return editFields;
             }
         },
         beforeMount() {

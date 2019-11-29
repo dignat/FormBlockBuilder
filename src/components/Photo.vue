@@ -45,6 +45,7 @@
                 toAddField: 'addField',
                 toEditField: 'editField'
             }),
+            ...mapGetters(['getTransform','getRules']),
             addField() {
                 const fields = {
                         type: 'inputimage',

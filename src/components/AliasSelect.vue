@@ -91,9 +91,18 @@
                 return fields;
             },
             editField() {
-                this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name;
-                this.toEditField(this.fields);
-                return this.fields;
+                const editFields = {
+                    type: 'inputlookupaliasselect',
+                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    title: this.fields.title,
+                    target: this.fields.target,
+                    labelKey: this.fields.labelKey,
+                    selectKey: this.fields.selectKey,
+                    idKey: this.fields.idKey,
+                    multi: this.fields.multi,
+                };
+                this.toEditField(editFields);
+                return editFields;
             }
 
         },
