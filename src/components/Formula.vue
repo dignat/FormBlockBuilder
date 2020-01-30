@@ -109,10 +109,10 @@
                     type: "inputformula",
                     title: this.fields.title,
                     name: this.fields.name,
-                    hidden: 0,
+                    hidden: this.fields.hidden,
                     script: this.fields.script,
                     required: 0,
-                    store: 0
+                    store: this.fields.store
                 };
                 this.toAddField(fields);
                 return fields;

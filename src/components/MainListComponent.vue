@@ -23,14 +23,18 @@
             </div>
             <div class="control" v-if="!transform">
                     <ListComponent ref="form" v-for="(field, index) in buildFields" :listFields="field" v-model="fields.template"
-                               :id="index" :key="index" @addList="sync" @editList="edit"></ListComponent>
+                               :id="index" :key="index" @addList="sync" @editList="edit">
+
+                    </ListComponent>
             </div>
             <div class="control" v-if="transform">
                 <ListComponent v-for="(field, index) in translatedInputList.template" :listFields="field" v-model="fields.template"
                                :radio="field.type" :hasList="dependantList"  :type="field.type"
                                :transformList="transform" :changeRules="changeRules" :listFieldType="translatedListTypes[index]"
                                :deepDependantListTypes="deepDependantFieldTypes"
-                               :id="index" :key="index" @addList="sync" @editList="edit"></ListComponent>
+                               :id="index" :key="index" @addList="sync" @editList="edit">
+
+                </ListComponent>
             </div>
         </div>
 

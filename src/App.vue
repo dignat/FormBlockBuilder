@@ -168,11 +168,6 @@ import {db} from "./database/db";
       }),
       ...mapGetters(['translatedForm', 'editFields', 'currentFormFields', 'currentForm','editedName','getRules']),
       translateOldForm() {
-        let word = 'Deleveled';
-        let reverse = word.split('').reverse().join().toLowerCase().toUpperCase();
-        reverse = reverse.replace(/,/g,'');
-        reverse = reverse[0].toUpperCase();
-         console.log(reverse);
         return this.toTransform(JSON.parse(this.existingForm), this.existingForm.items);
       },
       formsFromFirebase() {

@@ -42,7 +42,7 @@
                 const fields = {
                     type: 'inputnumber',
                     title: this.fields.title,
-                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&-/_?():.]/g,"").toLowerCase().substring(0,7)+Math.floor((Math.random()*36)) : this.fields.name,
                     decimals: this.fields.decimals
                 };
                 this.toAddField(fields);

@@ -10,13 +10,17 @@
                 <component ref="form"
                            :is="currentFieldType" :props="currentProps" :mainListFields="mainListFields"
                            :listFields="currentListFields"
-                           ></component>
+                           >
+
+                </component>
             </div>
             <div class="control" v-if="transform">
                 <component :is="changedRules ?  currentFieldType  : transformedListType" ref="form"
                            :transformList="transformList" :changeRules="changeRules" :hasList="dependantList" :translatedList="transformedFields"
                            :dependantTypes="[transformedListType]" :deepDependantListFieldTypes="[deepDependantFieldType]"
-                           :listFields="changedRules ? currentListFields : transformedFields"></component>
+                           :listFields="changedRules ? currentListFields : transformedFields">
+
+                </component>
             </div>
         </div>
             <div class="field is-grouped">
@@ -123,6 +127,7 @@
             }),
             addField() {
                 this.currentListFields = this.$refs.form.addField();
+                console.log('in the list xaxa');
                 this.$emit('addList', this.currentListFields);
             },
             editField() {

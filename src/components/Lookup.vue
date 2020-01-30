@@ -27,7 +27,19 @@
             </div>
             <label class="label">Multi ?</label>
             <div class="control">
-                <input class="checkbox" type="checkbox" name="multi" v-model="fields.multi">
+                <input class="checkbox" type="checkbox" :listFields="listFields.multi" name="multi" v-model="fields.multi">
+            </div>
+            <label class="label">Custom ?</label>
+            <div class="control">
+                <input class="checkbox" type="checkbox" :listFields="listFields.custom" name="custom" v-model="fields.custom">
+            </div>
+            <label class="label">Filter ?</label>
+            <div class="control">
+                <input class="checkbox" type="checkbox" name="filter" v-model="filterPicked">
+            </div>
+            <div class="control" v-for="filter in fields.filter">
+                <input class="input" type="text" name="key"  v-model="filter.key">
+                <input class="input" type="text" name="values" v-model="filter.values">
             </div>
         </div>
     </div>
@@ -47,6 +59,7 @@
        data () {
             return {
                 routes: false,
+                filterPicked: false,
                 types: ['lookup', 'text', 'alias'],
                 fields: {
                     type: 'inputlookup',
@@ -55,7 +68,14 @@
                     uri: '',
                     labelKey: '',
                     idKey: '',
-                    multi: 0
+                    multi: 0,
+                    custom: 0,
+                    filter: [
+                        {
+                            key: '',
+                            values: []
+                        }
+                    ]
                 }
             }
        },
@@ -73,8 +93,13 @@
                     uri: this.fields.uri = this.routes ? '/v1/api/' + this.fields.uri : '/reflow/data/sync/lookup/' + this.fields.uri,
                     labelKey: this.fields.labelKey,
                     idKey: this.fields.idKey,
-                    multi: this.fields.multi
+                    multi: this.fields.multi,
+                    custom: this.fields.custom
+
                 };
+                if (this.filterPicked) {
+                    fields.filter = this.fields.filter
+                }
                 this.toAddField(fields);
                 return fields;
             },
@@ -89,8 +114,12 @@
                     uri: this.fields.uri = this.routes ? '/v1/api/' + this.fields.uri : '/reflow/data/sync/lookup/' + this.fields.uri,
                     labelKey: this.fields.labelKey,
                     idKey: this.fields.idKey,
-                    multi: this.fields.multi
+                    multi: this.fields.multi,
+                    custom: this.fields.custom
                 };
+                if (this.fields.filter !== undefined) {
+                    editFields.filter = this.fields.filter
+                }
                     this.toEditField(editFields);
                 return editFields;
             }

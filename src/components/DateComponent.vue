@@ -61,6 +61,7 @@
                     required: this.fields.required,
                     hidden: this.fields.hidden
                 };
+                console.log(editFields.name);
                 this.toEditField(editFields);
                 return editFields;
             }
