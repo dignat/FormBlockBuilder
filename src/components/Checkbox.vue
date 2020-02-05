@@ -43,7 +43,7 @@
                 const fields = {
                     type: "inputcheckbox",
                     title: this.fields.title,
-                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase().substring(0,7)+Math.floor((Math.random()*36)) : this.fields.name,
                     required: this.fields.required,
                     hidden: this.fields.hidden
                 };
@@ -54,7 +54,7 @@
                 const editFields = {
                     type: "inputcheckbox",
                     title: this.fields.title,
-                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase().substring(0,7)+Math.floor((Math.random()*36)) : this.fields.name,
                     required: this.fields.required,
                     hidden: this.fields.hidden
                 };
