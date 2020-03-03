@@ -56,7 +56,7 @@
                 const editFields = {
                     type: "inputdate",
                     title: this.fields.title,
-                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name =  this.nameGenerator(this.fields.title) : this.fields.name,
                     time: this.fields.time,
                     required: this.fields.required,
                     hidden: this.fields.hidden

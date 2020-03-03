@@ -14,6 +14,17 @@
                 <input class="label" type="text" name="min" :listFields="listFields.min" v-model="fields.min">
                 <label class="label">Hidden Signature?</label>
                 <input class="checkbox" name="hidden" type="checkbox"  :listFields="listFields.hidden" v-model="fields.hidden">
+                <label class="label">Add Uri to Signature?</label>
+                <input class="checkbox" name="hidden" type="checkbox"   v-model="addUri">
+                <div v-if="addUri">
+                    <label class="label">Uri</label>
+                    <input class="label" type="text" name="min" :listFields="listFields.uri" v-model="fields.uri">
+                    <label class="label">Id Key</label>
+                    <input class="label" type="text" name="min" :listFields="listFields.idKey" v-model="fields.idKey">
+                    <label class="label">Label Key</label>
+                    <input class="label" type="text" name="min" :listFields="listFields.labelKey" v-model="fields.labelKey">
+                </div>
+
             </div>
         </div>
     </div>
@@ -30,6 +41,7 @@
         },
         data () {
             return {
+                addUri: false,
                 fields: {
                     type: "inputsignature",
                     title: '',
@@ -37,7 +49,10 @@
                     min: 0,
                     max: 0,
                     hidden: 0,
-                    statement: ''
+                    statement: '',
+                    uri: '',
+                    idKey: '',
+                    labelKey: ''
                 }
             }
         },
@@ -64,7 +79,7 @@
                 const editFields = {
                     type: "inputsignature",
                     title: this.fields.title,
-                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name = this.nameGenerator(this.fields.title) : this.fields.name,
                     min: this.fields.min,
                     max: this.fields.max,
                     hidden: this.fields.hidden,

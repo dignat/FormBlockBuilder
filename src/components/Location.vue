@@ -52,7 +52,7 @@
             addField() {
                 const fields = {
                     type: "inputlocation",
-                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name =  this.nameGenerator(this.fields.title) : this.fields.name,
                     title: this.fields.title,
                     minute: this.fields.minute,
                     hidden: this.fields.hidden,
@@ -64,7 +64,7 @@
             editField() {
                 const fields = {
                     type: "inputlocation",
-                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name =  this.nameGenerator(this.fields.title) : this.fields.name,
                     title: this.fields.title,
                     minute: this.fields.minute,
                     hidden: this.fields.hidden,

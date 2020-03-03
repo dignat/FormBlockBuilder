@@ -21,9 +21,11 @@
 <script>
     import {mapActions} from 'vuex'
     import {mapGetters} from 'vuex'
+    import appMixin from "../mixins";
 
     export default {
         name: "Photo",
+        mixins: [appMixin],
         props: {
             listFields: Object
         },
@@ -50,7 +52,7 @@
                 const fields = {
                         type: 'inputimage',
                         title: this.fields.title,
-                        name: this.fields.name,
+                        name: this.fields.name === "" ? this.fields.name = this.nameGenerator(this.fields.title) : this.fields.name,
                         hidden: this.fields.hidden,
                         required: this.fields.required,
                         source: this.fields.source,

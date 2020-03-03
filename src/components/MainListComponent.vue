@@ -115,7 +115,7 @@
             addField() {
                 const fields = {
                     type: 'inputlist',
-                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name =  this.nameGenerator(this.fields.title) : this.fields.name,
                     title: this.fields.title,
                     iteratorKey: this.fields.iteratorKey,
                     target: this.fields.target,
@@ -132,7 +132,7 @@
             editField() {
                 const editFields = {
                     type: 'inputlist',
-                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name =  this.nameGenerator(this.fields.title) : this.fields.name,
                     title: this.fields.title,
                     iteratorKey: this.fields.iteratorKey,
                     target: this.fields.target,

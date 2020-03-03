@@ -101,7 +101,10 @@
                 switch(typeOfControllerField) {
                     case 'string':
                         this.fields.script = `form=GetForm();result=form.GetStringValue('${controllerField}');if (result == 'Yes'){form.SetDisplay('${fieldToHide}',1);}else{form.SetDisplay('${fieldToHide}',0);}`;
-                        break;
+                    break;
+                    case 'number':
+                        this.fields.script = `form=GetForm();result=form.GetValue('${controllerField}');if (result > 0){form.SetDisplay('${fieldToHide}',1);}else{form.SetDisplay('${fieldToHide}',0);}`;
+                    break;
                 }
             },
             addField() {

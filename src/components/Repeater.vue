@@ -36,6 +36,7 @@
     import Formula from "./Formula"
     import DateComponent from './DateComponent'
     import MainRepeater from './MainRepeater'
+    import Duration from "./Duration"
     export default {
         name: "Repeater",
         props: {
@@ -57,11 +58,12 @@
             Photo,
             Signature,
             Formula,
-            MainRepeater
+            MainRepeater,
+            Duration
         },
         data () {
             return {
-                types: ['inputlookup', 'inputtext', 'inputlookupalias','inputnumber', 'inputselect', 'inputradio', 'inputcheckbox', 'inputimage', 'inputsignature', 'inputformula','inputdate', 'inputrepeat'],
+                types: ['inputlookup', 'inputtext', 'inputlookupalias','inputnumber', 'inputselect', 'inputradio', 'inputcheckbox', 'inputimage', 'inputsignature', 'inputformula','inputdate', 'inputrepeat','inputduration'],
                 currentFieldType: null,
                 currentType: null,
                 currentProps: {},
@@ -147,6 +149,11 @@
                         break;
                     case 'inputlookupalias':
                         this.currentFieldType = Alias;
+                        this.currentType = type;
+                        this.currentRepeaterFields = {};
+                        break;
+                    case 'inputduration':
+                        this.currentFieldType = Duration;
                         this.currentType = type;
                         this.currentRepeaterFields = {};
                         break;

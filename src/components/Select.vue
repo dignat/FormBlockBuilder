@@ -6,6 +6,10 @@
                 <input class="input" type="text" name="name" :listFields="listFields.name" v-model="fields.name">
                 <label class="label">Select Field Title</label>
                 <input class="input" type="text" name="title" :listFields="listFields.title" v-model="fields.title">
+                <label class="label"> Icon Key Field For Select</label>
+                <div class="control">
+                    <input class="input" type="text" :listFields="listFields.iconKey" v-model="fields.iconKey">
+                </div>
                 <div  v-for="item in customFields">
                     <label class="label">Title Field</label>
                     <input class="input" type="text" name="title" :listFields="item.title" v-model="item.title">
@@ -91,7 +95,7 @@
                 const editFields = {
                     type: this.fields.multi ? "inputmultiselect" : "inputselect",
                     title: this.fields.title,
-                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&-/_?():.]/g,"").toLowerCase().substring(0,7) : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name = this.nameGenerator(this.fields.title) : this.fields.name,
                     multi: this.fields.multi,
                     custom: this.fields.custom,
                     items: this.customFields

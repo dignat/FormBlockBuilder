@@ -79,7 +79,7 @@
             addField () {
                 const fields = {
                     type: 'inputlookupalias',
-                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name =  this.nameGenerator(this.fields.title) : this.fields.name,
                     title: this.fields.title,
                     target: this.fields.target,
                     labelKey: this.fields.labelKey,
@@ -94,7 +94,7 @@
             editField() {
                 const editFields = {
                     type: 'inputlookupalias',
-                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name =  this.nameGenerator(this.fields.title) : this.fields.name,
                     title: this.fields.title,
                     target: this.fields.target,
                     labelKey: this.fields.labelKey,

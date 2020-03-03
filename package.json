@@ -2,7 +2,7 @@
   "name": "re-flow-form-builder",
   "version": "1.0.0",
   "description": "A Vue.js project",
-  "author": "",
+  "author": "Denise",
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
@@ -19,6 +19,7 @@
     "bulma": "^0.7.4",
     "bulma-extensions": "^6.2.4",
     "firebase": "^7.3.0",
+    "mocha": "^7.1.0",
     "sass-loader": "^7.1.0",
     "vue": "^2.6.10",
     "vue-router": "^3.1.5",

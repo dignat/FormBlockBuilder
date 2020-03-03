@@ -25,6 +25,10 @@
             <div class="control">
                 <input class="input" type="text" :listFields="listFields.idKey" v-model="fields.idKey">
             </div>
+            <label class="label"> Icon Key Field For Lookup</label>
+            <div class="control">
+                <input class="input" type="text" :listFields="listFields.iconKey" v-model="fields.iconKey">
+            </div>
             <label class="label">Multi ?</label>
             <div class="control">
                 <input class="checkbox" type="checkbox" :listFields="listFields.multi" name="multi" v-model="fields.multi">
@@ -50,9 +54,11 @@
 <script>
     import {mapActions} from 'vuex'
     import {mapGetters} from 'vuex'
+    import appMixin from "../mixins";
 
     export default {
         name: "Lookup",
+        mixins: [appMixin],
         props: {
             listFields: Object
         },
@@ -70,6 +76,7 @@
                     idKey: '',
                     multi: 0,
                     custom: 0,
+                    iconKey: '',
                     filter: [
                         {
                             key: '',
@@ -89,10 +96,11 @@
                 const fields = {
                     type: "inputlookup",
                     title: this.fields.title,
-                    name: this.fields.name === "" ? this.fields.title.replace(/[\s,&-/_?():.]/g,"").toLowerCase().substring(0,7) : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name = this.lookupNameGenerator(this.fields.title, this.fields.idKey) : this.fields.name,
                     uri: this.fields.uri = this.routes ? '/v1/api/' + this.fields.uri : '/reflow/data/sync/lookup/' + this.fields.uri,
                     labelKey: this.fields.labelKey,
                     idKey: this.fields.idKey,
+                    iconKey: this.fields.iconKey,
                     multi: this.fields.multi,
                     custom: this.fields.custom
 
@@ -110,10 +118,11 @@
                 const editFields = {
                     type: "inputlookup",
                     title: this.fields.title,
-                    name: this.fields.name === "" ? this.fields.title.replace(/[\s,&-/_?():.]/g,"").toLowerCase().substring(0,7) : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name = this.lookupNameGenerator(this.fields.title, this.fields.idKey) : this.fields.name,
                     uri: this.fields.uri = this.routes ? '/v1/api/' + this.fields.uri : '/reflow/data/sync/lookup/' + this.fields.uri,
                     labelKey: this.fields.labelKey,
                     idKey: this.fields.idKey,
+                    iconKey: this.fields.iconKey,
                     multi: this.fields.multi,
                     custom: this.fields.custom
                 };

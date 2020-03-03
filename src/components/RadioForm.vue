@@ -29,9 +29,11 @@
     import Radios from "./Radios"
     import {mapActions} from 'vuex'
     import {mapGetters} from 'vuex'
+    import appMixin from '../mixins'
 
     export default {
         name: "RadioForm",
+        mixins: [appMixin],
         props: {
             listFields: Object,
             radio: String,
@@ -77,7 +79,7 @@
                 const fields = {
                     type: "inputradio",
                     title: this.fields.title,
-                    name:  this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase().substring(0,7)+Math.floor((Math.random()*36)) : this.fields.name,
+                    name:  this.fields.name === "" ? this.fields.name = this.nameGenerator(this.fields.title) : this.fields.name,
                     hidden: this.fields.hidden,
                     items: this.customTitles ? this.fields.items = this.customFields : this.fields.items = [{title: 'Yes'},{title: 'No'}]
 
@@ -90,7 +92,7 @@
                 const editFields = {
                     type: "inputradio",
                     title: this.fields.title,
-                    name:  this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase().substring(0,7)+Math.floor((Math.random()*36)) : this.fields.name,
+                    name:  this.fields.name === "" ? this.fields.name = this.nameGenerator(this.fields.title) : this.fields.name,
                     hidden: this.fields.hidden,
                     items: this.customTitles ? this.fields.items = this.customFields : this.fields.items = [{title: 'Yes'},{title: 'No'}]
 

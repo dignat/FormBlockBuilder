@@ -111,6 +111,7 @@ import {mapActions} from 'vuex'
  import axios from 'axios'
 import {db} from "./database/db";
  import Select from "./components/Select";
+ import appMixin from "./mixins";
 
  export default {
     name: 'App',
@@ -119,6 +120,7 @@ import {db} from "./database/db";
       Forms,
       'app-html': Html
     },
+   mixins: [appMixin],
     data () {
       return {
         forms: [],
@@ -217,6 +219,11 @@ import {db} from "./database/db";
         this.formFields.items.pop();
       },
       addTypeFields() {
+        if (this.formFields.items.length > 1) {
+          if (this.uniqueFieldName(this.formFields.items)) {
+            alert('The field that you just added has a duplicate name!!!');
+          }
+        }
         this.changingRules = true;
         this.buildTypeFields(this.formFields);
         this.buildFields.push({

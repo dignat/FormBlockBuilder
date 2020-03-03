@@ -105,7 +105,7 @@
             addField() {
                 const fields = {
                     type: 'inputrepeat',
-                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name =  this.nameGenerator(this.fields.title) : this.fields.name,
                     title: this.fields.title,
                     item_title: this.item_title,
                     min: this.fields.min,
@@ -118,7 +118,7 @@
             editField() {
                 const editFields = {
                     type: 'inputrepeat',
-                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name =  this.nameGenerator(this.fields.title) : this.fields.name,
                     title: this.fields.title,
                     item_title: this.item_title,
                     min: this.fields.min,
