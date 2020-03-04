@@ -49,9 +49,11 @@
     import Repeater from './Repeater'
     import {mapActions} from 'vuex'
     import {mapGetters} from 'vuex'
+    import appMixin from '../mixins'
 
     export default {
         name: "MainRepeater",
+        mixins: [appMixin],
         props: {
             listFields: Object,
             transformList: Boolean,
@@ -97,6 +99,11 @@
                 this.translateRepeater.items.push(value);
             },
             addMoreRepeaterFields() {
+                if (this.currentRepeater.length > 1) {
+                    if (this.uniqueFieldName(this.currentRepeater)) {
+                        alert('The field that you just added has a duplicate name!!!');
+                    }
+                }
                 this.buildFields.push({
                     id: this.count++,
                     items: this.currentRepeater

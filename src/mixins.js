@@ -8,7 +8,7 @@
          nameGenerator (str) {
              let regex = str.replace(/[,&-/_?():.]/g,"").toLowerCase();
              let strArray = regex.split(' ');
-             if (strArray.length > 1) { console.log(strArray.length)
+             if (strArray.length > 1) { console.log(strArray.length);
                  return strArray[0].concat(strArray[1].charAt(0).toUpperCase()+strArray[1].slice(1));
              } else {
                  return strArray[0];

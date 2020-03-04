@@ -54,8 +54,10 @@
     import ListComponent from "./ListComponent"
     import {mapActions} from 'vuex'
     import {mapGetters} from 'vuex'
+    import appMixin from '../mixins'
     export default {
         name: "MainListComponent",
+        mixins: [appMixin],
         props: {
             listFields: Object,
             deepDependantListTypes: Array,
@@ -106,6 +108,12 @@
 
             },
             addMoreListFields() {
+                if (this.currentListFields.length > 1) {
+                    console.log(this.currentListFields.length, 'bls bla in the unique name func')
+                    if (this.uniqueFieldName(this.currentListFields)) {
+                        alert('The field that you just added has a duplicate name!!!');
+                    }
+                }
                 console.log(this.currentListFields, 'in the main list');
                 this.buildFields.push({
                     id: this.count++,
