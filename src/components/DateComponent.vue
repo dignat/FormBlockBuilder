@@ -17,8 +17,10 @@
 <script>
     import {mapActions} from 'vuex'
     import {mapGetters} from 'vuex'
+    import appMixin from '../mixins'
     export default {
         name: "DateComponent",
+        mixins: [appMixin],
         props: {
             listFields: Object
         },
@@ -44,7 +46,7 @@
                 const fields = {
                     type: "inputdate",
                     title: this.fields.title,
-                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name = this.nameGenerator(this.fields.title) : this.fields.name,
                     time: this.fields.time,
                     required: this.fields.required,
                     hidden: this.fields.hidden

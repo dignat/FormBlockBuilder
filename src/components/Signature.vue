@@ -34,8 +34,10 @@
 <script>
     import {mapActions} from 'vuex'
     import {mapGetters} from 'vuex'
+    import appMixin from '../mixins'
     export default {
         name: "Signature",
+        mixins: appMixin,
         props: {
             listFields: Object
         },
@@ -66,7 +68,7 @@
                 const fields = {
                     type: "inputsignature",
                     title: this.fields.title,
-                    name: this.fields.name === "" ? this.fields.name = this.fields.title.replace(/[\s,&\-/_?():]/g,"").toLowerCase() : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name = this.nameGenerator(this.fields.title): this.fields.name,
                     min: this.fields.min,
                     max: this.fields.max,
                     hidden: this.fields.hidden,

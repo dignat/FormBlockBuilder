@@ -17,8 +17,10 @@
 <script>
     import {mapActions} from 'vuex'
     import {mapGetters} from 'vuex'
+    import appMixin from '../mixins'
     export default {
         name: "Checkbox",
+        mixins: [appMixin],
         props: {
             listFields: Object
         },

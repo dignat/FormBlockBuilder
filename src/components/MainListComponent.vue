@@ -2,6 +2,10 @@
     <div class="section">
         <div class="field">
             <div class="control">
+                <label class="label">Target -1</label>
+                <input class="checkbox" type="checkbox" name="targetStatus" @change="populateTarget()" @click="" v-model="targetStatus">
+            </div>
+            <div class="control">
                 <label class="label">List Name</label>
                 <input class="input" type="text" name="name" :listFields="listFields.name" v-model="fields.name">
             </div>
@@ -10,16 +14,12 @@
                 <input class="input" type="text" name="title" :listFields="listFields.title" v-model="fields.title">
             </div>
             <div class="control">
-                <label class="label">List Iterator Key</label>
+                <label class="label">List Iterator/Uri Key</label>
                 <input class="input" type="text" name="iteratorKey" :listFields="listFields.iteratorKey" v-model="fields.iteratorKey">
             </div>
             <div class="control">
                 <label class="label">List Target</label>
                 <input class="input" type="text" name="target" :listFields="listFields.target" v-model="fields.target">
-            </div>
-            <div class="control">
-                <label class="label">Target -1</label>
-                <input class="checkbox" type="checkbox" name="targetStatus" @change="!targetStatus === targetStatus" v-model="targetStatus">
             </div>
             <div class="control" v-if="!transform">
                     <ListComponent ref="form" v-for="(field, index) in buildFields" :listFields="field" v-model="fields.template"
@@ -109,12 +109,10 @@
             },
             addMoreListFields() {
                 if (this.currentListFields.length > 1) {
-                    console.log(this.currentListFields.length, 'bls bla in the unique name func')
                     if (this.uniqueFieldName(this.currentListFields)) {
                         alert('The field that you just added has a duplicate name!!!');
                     }
                 }
-                console.log(this.currentListFields, 'in the main list');
                 this.buildFields.push({
                     id: this.count++,
                     template: this.currentListFields
@@ -132,10 +130,17 @@
                 if(this.targetStatus) {
                     delete Object.assign(fields, {['uri']:fields['iteratorKey']})['iteratorKey'];
                     //const newObject = {}; - for a new object
-                    //  delete Object.assign(newObject, o, {[newKey]: o[oldKey] })[oldKey];
+                    //delete Object.assign(newObject, o, {[newKey]: o[oldKey] })[oldKey];
                 }
                 this.toAddField(fields);
                 return fields;
+            },
+            populateTarget() {
+                if (this.targetStatus) {
+                    this.fields.target = '-1';
+                    this.fields.iteratorKey = '/v1/api/' + this.fields.iteratorKey;
+                }
+                return !this.targetStatus === this.targetStatus
             },
             editField() {
                 const editFields = {
