@@ -37,7 +37,7 @@
     import appMixin from '../mixins'
     export default {
         name: "Signature",
-        mixins: appMixin,
+        mixins: [appMixin],
         props: {
             listFields: Object
         },
