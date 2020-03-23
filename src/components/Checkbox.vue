@@ -3,6 +3,8 @@
         <div class="control">
             <label class="label">Title for Checkbox</label>
             <input class="input" type="text" name="title" :listFields="listFields.title" v-model="fields.title">
+            <label class="label">Choose slices from title to generate name ( ex. 0,1,2 - start from 0)</label>
+            <input class="input" type="text"  v-model="slices">
             <label class="label">Name for Checkbox</label>
             <input class="input" type="text" name="name" :listFields="listFields.name" v-model="fields.name">
             <label class="label">Width for Checkbox</label>
@@ -28,6 +30,7 @@
         },
         data () {
             return {
+                slices: '',
                 fields: {
                     type: "inputcheckbox",
                     title: '',
@@ -48,7 +51,7 @@
                 const fields = {
                     type: "inputcheckbox",
                     title: this.fields.title,
-                    name: this.fields.name === "" ? this.fields.name =  this.nameGenerator(this.fields.title) : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name =  this.nameGenerator(this.fields.title,this.slices.length > 0 ? this.slices.split(',') : []) : this.fields.name,
                     required: this.fields.required,
                     hidden: this.fields.hidden,
                     width: this.fields.width

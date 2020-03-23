@@ -86,6 +86,7 @@
                   v-bind:type="data.type"
                   v-bind:width="data.width"
                   v-bind:title="data.title"
+                  v-bind:item_title="data.item_title"
                   v-bind:items="data.items"
                   v-bind:template="data.template"
                   v-bind:body="data.body"

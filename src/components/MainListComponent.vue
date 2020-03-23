@@ -2,16 +2,20 @@
     <div class="section">
         <div class="field">
             <div class="control">
+                <label class="label">Keep Iterator With Target</label>
+                <input class="checkbox" type="checkbox" name="keepIterator" @change="populateTarget"  v-model="keepIteratorKey">
                 <label class="label">Target -1</label>
-                <input class="checkbox" type="checkbox" name="targetStatus" @change="populateTarget()" @click="" v-model="targetStatus">
-            </div>
-            <div class="control">
-                <label class="label">List Name</label>
-                <input class="input" type="text" name="name" :listFields="listFields.name" v-model="fields.name">
+                <input class="checkbox" type="checkbox" name="targetStatus"  @change="populateTarget" v-model="targetStatus">
             </div>
             <div class="control">
                 <label class="label">List Title</label>
                 <input class="input" type="text" name="title" :listFields="listFields.title" v-model="fields.title">
+            </div>
+            <div class="control">
+                <label class="label">List Name</label>
+                <input class="input" type="text" name="name" :listFields="listFields.name" v-model="fields.name">
+                <label class="label">Choose slices from title to generate name ( ex. 0,1,2 - start from 0)</label>
+                <input class="input" type="text"  v-model="slices">
             </div>
             <div class="control">
                 <label class="label">List Iterator/Uri Key</label>
@@ -20,6 +24,10 @@
             <div class="control">
                 <label class="label">List Target</label>
                 <input class="input" type="text" name="target" :listFields="listFields.target" v-model="fields.target">
+            </div>
+            <div class="control">
+                <label class="label">List Uri</label>
+                <input class="input" type="text" name="uri" :listFields="listFields.uri" v-model="fields.uri">
             </div>
             <div class="control" v-if="!transform">
                     <ListComponent ref="form" v-for="(field, index) in buildFields" :listFields="field" v-model="fields.template"
@@ -73,7 +81,9 @@
         },
         data () {
             return {
+                slices: '',
                 targetStatus: false,
+                keepIteratorKey: false,
                 buildFields: [],
                 currentListFields: [],
                 translatedInputList: {},
@@ -90,6 +100,7 @@
                     title: '',
                     iteratorKey: '',
                     target: '',
+                    uri: '',
                     template: []
                 }
             }
@@ -121,13 +132,13 @@
             addField() {
                 const fields = {
                     type: 'inputlist',
-                    name: this.fields.name === "" ? this.fields.name =  this.nameGenerator(this.fields.title) : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name =  this.nameGenerator(this.fields.title,this.slices.length > 0 ? this.slices.split(',') : []) : this.fields.name,
                     title: this.fields.title,
                     iteratorKey: this.fields.iteratorKey,
                     target: this.fields.target,
                     template: this.currentListFields
                 };
-                if(this.targetStatus) {
+                if(this.targetStatus && !this.keepIteratorKey) {
                     delete Object.assign(fields, {['uri']:fields['iteratorKey']})['iteratorKey'];
                     //const newObject = {}; - for a new object
                     //delete Object.assign(newObject, o, {[newKey]: o[oldKey] })[oldKey];
@@ -136,9 +147,19 @@
                 return fields;
             },
             populateTarget() {
-                if (this.targetStatus) {
+                console.log(this.keepIteratorKey, this.targetStatus)
+                if (this.targetStatus && !this.keepIteratorKey) {
                     this.fields.target = '-1';
                     this.fields.iteratorKey = '/v1/api/' + this.fields.iteratorKey;
+                    this.fields.uri = this.fields.uri.replace(this.fields.uri, '')
+                } else if (this.targetStatus && this.keepIteratorKey) {
+                    this.fields.target = '-1';
+                    this.fields.uri = '/v1/api/' + this.fields.uri;
+                    this.fields.iteratorKey = this.fields.iteratorKey.replace(this.fields.iteratorKey, '')
+                } else {
+                    this.fields.target = this.fields.target.replace(this.fields.target, '');
+                    this.fields.iteratorKey = this.fields.iteratorKey.replace(this.fields.iteratorKey, '')
+                    this.fields.uri = this.fields.uri.replace(this.fields.uri, '')
                 }
                 return !this.targetStatus === this.targetStatus
             },

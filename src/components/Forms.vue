@@ -60,6 +60,7 @@
     import AliasSelect from "./AliasSelect"
     import AliasImage from "./AliasImage";
     import Duration from "./Duration";
+    import BarCodes from "./BarCodes";
     export default {
         name: "Forms",
         props: {
@@ -100,13 +101,14 @@
             TestListComponent,
             NumberComponent,
             AliasSelect,
-            Duration
+            Duration,
+            BarCodes
 
         },
         data() {
             return {
                 selected: {},
-                types: ['inputlookup', 'inputtext', 'inputlookupalias', 'inputlookupaliasselect', 'inputrepeat', 'inputnumber', 'inputradio', 'inputselect', 'inputlist', 'inputcheckbox', 'inputimage', 'inputsignature', 'inputformula','inputdate', 'inputlocation','text','inputlookupaliasimage','inputduration'],
+                types: ['inputlookup', 'inputtext', 'inputlookupalias', 'inputlookupaliasselect', 'inputrepeat', 'inputnumber', 'inputradio', 'inputselect', 'inputlist', 'inputcheckbox', 'inputimage', 'inputsignature', 'inputformula','inputdate', 'inputlocation','text','inputlookupaliasimage','inputduration','inputscan'],
                 currentFieldType: null,
                 currentType: null,
                 currentProps: {},
@@ -218,6 +220,10 @@
                         break;
                     case 'inputduration':
                         this.currentFieldType = Duration;
+                        this.changedRules = true;
+                        break;
+                    case 'inputscan':
+                        this.currentFieldType = BarCodes;
                         this.changedRules = true;
                         break;
                 }

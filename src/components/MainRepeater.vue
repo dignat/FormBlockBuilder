@@ -2,12 +2,14 @@
     <div class="section">
         <div class="field">
             <div class="control">
-                <label class="label">Repeater Name</label>
-                <input class="input" type="text" name="name" :listFields="listFields.name" v-model="fields.name">
-            </div>
-            <div class="control">
                 <label class="label">Repeater Title</label>
                 <input class="input" type="text" name="title" :listFields="listFields.title" v-model="fields.title">
+                <label class="label">Choose slices from title to generate name ( ex. 0,1,2 - start from 0)</label>
+                <input class="input" type="text"  v-model="slices">
+            </div>
+            <div class="control">
+                <label class="label">Repeater Name</label>
+                <input class="input" type="text" name="name" :listFields="listFields.name" v-model="fields.name">
             </div>
             <div class="control">
                 <label class="label">Repeater Item Title</label>
@@ -67,6 +69,7 @@
         },
         data () {
             return {
+                slices: '',
                 buildFields: [],
                 translateRepeater: {},
                 currentRepeater: [],
@@ -112,9 +115,9 @@
             addField() {
                 const fields = {
                     type: 'inputrepeat',
-                    name: this.fields.name === "" ? this.fields.name =  this.nameGenerator(this.fields.title) : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name =  this.nameGenerator(this.fields.title,this.slices.length > 0 ? this.slices.split(',') : []) : this.fields.name,
                     title: this.fields.title,
-                    item_title: this.item_title,
+                    item_title: this.fields.item_title,
                     min: this.fields.min,
                     max: this.fields.max,
                     items: this.currentRepeater
@@ -127,7 +130,7 @@
                     type: 'inputrepeat',
                     name: this.fields.name === "" ? this.fields.name =  this.nameGenerator(this.fields.title) : this.fields.name,
                     title: this.fields.title,
-                    item_title: this.item_title,
+                    item_title: this.fields.item_title,
                     min: this.fields.min,
                     max: this.fields.max,
                     items: this.currentRepeater

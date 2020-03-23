@@ -2,7 +2,6 @@
     <div>
         <label class="label" v-html="title" v-if="!['inputsignature','inputimage','inputlookupaliasimage'].includes(type)"></label>
         <input class="input is-medium" :type="type.replace('input','')" v-bind:style="{width: width}" v-if="!['inputselect','inputmultiselect','inputlookup','inputrepeat', 'inputlist', 'inputradio','inputsignature','inputformula','text','inputlookupaliasselect','inputcheckbox','inputimage','inputlocation','inputlookupaliasimage'].includes(type)"/>
-
         <div class="select is-primary is-fullwidth"   v-if="type === 'inputselect'  || type === 'inputlookupaliasselect'">
             <select v-bind:items="items" class="select">
                 <option v-html="item.title" v-for="item in items"></option>
@@ -21,7 +20,6 @@
                 <input type="checkbox" class="checkbox is-fullwidth"/>
                 <span  v-html="item.title"></span>
             </div>
-
 
         <div v-bind:items="items" v-if="type === 'inputrepeat'" style="border: solid lightgrey;">
             <div v-for="item in items">
@@ -58,8 +56,46 @@
                         <input class="checkbox" type="checkbox" v-bind:style="{width:item.width}"/>
                     </label>
                 </div>
+                <div v-if="item.type==='inputrepeat'" style="border: solid lightgrey;">
+                    <div v-for="repeaterItem in item">
+                        <label class="label" v-html="repeaterItem.title"></label>
+                        <input class="input is-medium" :type="repeaterItem.type.replace('input','')"  v-if="!['inputselect','inputmultiselect','inputlookup','inputrepeat', 'inputlist', 'inputradio','inputsignature', 'inputformula','text','inputlookupaliasselect','inputimage','inputlocation','inputlookupaliasimage'].includes(repeaterItem.type)">
+                        <div class="select is-primary is-fullwidth"   v-if="repeaterItem.type === 'inputselect' || repeaterItem.type === 'inputmultiselect'">
+                            <select v-bind:items="repeaterItem.items" class="select">
+                                <option v-html="item.title" v-for="deepItem in repeaterItem.items"></option>
+                            </select>
+                        </div>
+                        <div class="select is-primary is-fullwidth" v-if="repeaterItem.type === 'inputlookup'">
+                            <select>
+                                <option v-html="repeaterItem.title"></option>
+                            </select>
+                        </div>
+                        <div v-if="repeaterItem.type === 'inputsignature'" class="control">
+                            <button class="button is-info" style="margin: 0 auto; display: block; width: 100%;"><font-awesome-icon icon="pen" />
+                                <span>{{repeaterItem.title}}</span></button>
+                        </div>
+                        <div v-if="repeaterItem.type === 'inputimage' || repeaterItem.type === 'inputlookupaliasimage'">
+                            <button class="button is-info" style=" display: block; width: 50%;"><font-awesome-icon icon="camera" />
+                                <span>{{repeaterItem.item_title !== ''? repeaterItem.item_title : repeaterItem.title}}</span></button>
+                        </div>
+                        <div v-if="repeaterItem.type === 'text'">
+                            <h3 style="text-align: center;"><strong><span v-html="repeaterItem.body"></span></strong></h3>
+                        </div>
+                        <div v-if="item.type==='inputradio'">
+                            <label class="radio" v-bind:items="repeaterItem.items" v-if="repeaterItem.type === 'inputradio'" v-for="itemRadio in repeaterItem.items">{{itemRadio.title}}
+                                <input class="radio" type="radio" v-bind:style="{width:width}"/>
+                            </label>
+                        </div>
+                        <div v-if="repeaterItem.type==='inputcheckbox'">
+                            <label class="checkbox" v-if="repeaterItem.type ==='inputcheckbox'">
+                                <input class="checkbox" type="checkbox" v-bind:style="{width:repeaterItem.width}"/>
+                            </label>
+                        </div>
+                    </div>
+                    <button class="button is-info is-left" style="margin-top: 5px; width: 45%; ">Copy</button> <button class="button is-info is-right" style="margin-top: 5px; width:45%;">Add {{title}}</button>
+                </div>
             </div>
-            <button class="button is-info is-left" style="margin-top: 5px; width: 45%; ">Copy</button> <button class="button is-info is-right" style="margin-top: 5px; width:45%;">Add {{title}}</button>
+            <button class="button is-info is-left" style="margin-top: 5px; width: 45%; ">Copy</button> <button class="button is-info is-right" style="margin-top: 5px; width:45%;">Add {{item_title !== '' ? item_title: title}}</button>
         </div>
         <div v-bind:template="template" v-if="type === 'inputlist'" style="border: solid lightgrey;">
             <div v-for="item in template">
@@ -132,7 +168,8 @@
             items: Array,
             template: Array,
             body: String,
-            multi: Number
+            multi: Number,
+            item_title: String
         },
         data() {
             return {

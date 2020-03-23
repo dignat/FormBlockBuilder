@@ -2,14 +2,14 @@
     <div class="section">
         <div class="field">
             <div class="control">
-                <label class="label"> Name For Text</label>
-                <input class="input" type="text" :listFields="listFields.name" v-model="fields.name">
+                <label class="label"> Body/Text For Text</label>
+                <input class="input" type="text" :listFields="listFields.body" v-model="fields.body">
             </div>
         </div>
         <div class="field">
             <div class="control">
-                <label class="label"> Body/Text For Text</label>
-                <input class="input" type="text" :listFields="listFields.body" v-model="fields.body">
+                <label class="label"> Name For Text</label>
+                <input class="input" type="text" :listFields="listFields.name" v-model="fields.name">
             </div>
         </div>
         <div class="field">

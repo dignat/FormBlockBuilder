@@ -2,10 +2,12 @@
     <div class="section">
         <div class="control">
             <Radios :types="types" :radio="customType" @change="handleChange"/>
-            <label class="label">Radio Field Name</label>
-            <input class="input" type="text" name="name" :listFields="listFields.name" v-model="fields.name">
             <label class="label">Radio Field Title</label>
             <input class="input" type="text" name="title" :listFields="listFields.title" v-model="fields.title">
+            <label class="label">Choose slices from title to generate name ( ex. 0,1,2 - start from 0)</label>
+            <input class="input" type="text"  v-model="slices">
+            <label class="label">Radio Field Name</label>
+            <input class="input" type="text" name="name" :listFields="listFields.name" v-model="fields.name">
             <label class="label">Radio Hidden ?</label>
             <input class="checkbox" type="checkbox" name="hidden" :listFields="listFields.hidden" v-model="fields.hidden">
             <div v-if="customTitles" v-for="(item, index) in customFields" :listFields="listFields.items">
@@ -45,6 +47,7 @@
         },
         data () {
             return {
+                slices:'',
                 customTitles: false,
                 types: ['default', 'custom'],
                 transformed: false,
@@ -79,7 +82,7 @@
                 const fields = {
                     type: "inputradio",
                     title: this.fields.title,
-                    name:  this.fields.name === "" ? this.fields.name = this.nameGenerator(this.fields.title) : this.fields.name,
+                    name:  this.fields.name === "" ? this.fields.name = this.nameGenerator(this.fields.title,this.slices.length > 0 ? this.slices.split(',') : []) : this.fields.name,
                     hidden: this.fields.hidden,
                     items: this.customTitles ? this.fields.items = this.customFields : this.fields.items = [{title: 'Yes'},{title: 'No'}]
 

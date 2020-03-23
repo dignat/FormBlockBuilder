@@ -4,6 +4,8 @@
             <div class="control">
                 <label class="label">Title for Signature</label>
                 <input type="text" name="title" class="input" :listFields="listFields.title" v-model="fields.title">
+                <label class="label">Choose slices from title to generate name ( ex. 0,1,2 - start from 0)</label>
+                <input class="input" type="text"  v-model="slices">
                 <label class="label">Name for Signature</label>
                 <input class="input" name="name" type="text" :listFields="listFields.name" v-model="fields.name">
                 <label class="label">Statement</label>
@@ -43,6 +45,7 @@
         },
         data () {
             return {
+                slices: '',
                 addUri: false,
                 fields: {
                     type: "inputsignature",
@@ -68,12 +71,17 @@
                 const fields = {
                     type: "inputsignature",
                     title: this.fields.title,
-                    name: this.fields.name === "" ? this.fields.name = this.nameGenerator(this.fields.title): this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name = this.nameGenerator(this.fields.title,this.slices.length > 0 ? this.slices.split(',') : []): this.fields.name,
                     min: this.fields.min,
                     max: this.fields.max,
                     hidden: this.fields.hidden,
                     statement: this.fields.statement
                 };
+                if (this.addUri) {
+                    fields.uri = this.fields.uri;
+                    fields.idKey = this.fields.idKey;
+                    fields.labelKey = this.fields.labelKey;
+                }
                 this.toAddField(fields);
                 return fields;
             },
@@ -81,7 +89,7 @@
                 const editFields = {
                     type: "inputsignature",
                     title: this.fields.title,
-                    name: this.fields.name === "" ? this.fields.name = this.nameGenerator(this.fields.title) : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name = this.nameGenerator(this.fields.title,this.slices.length > 0 ? this.slices.split(',') : []) : this.fields.name,
                     min: this.fields.min,
                     max: this.fields.max,
                     hidden: this.fields.hidden,
