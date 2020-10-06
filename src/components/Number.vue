@@ -41,6 +41,8 @@
             ...mapActions({
                 toAddField: 'addField',
                 toEditField: 'editField',
+                sendTheEditFields: 'checkedField',
+                toDeleteField: 'deleteField'
             }),
             ...mapGetters(['getTransform','getRules']),
             addField () {
@@ -57,13 +59,18 @@
             editField() {
                 const editedFields = {
                     type: this.fields.type,
-                    name: this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name =  this.nameGenerator(this.fields.title,this.slices.length > 0 ? this.slices.split(',') : []) : this.fields.name,
                     title: this.fields.title,
                     decimals: this.fields.decimals
                 };
                 this.toEditField(editedFields);
+                this.sendTheEditFields(editedFields.name);
                 return this.fields;
             },
+            deleteField() {
+                this.toDeleteField(this.fields);
+                return this.fields;
+            }
         },
         beforeMount() {
             if (this.getTransform() && !this.getRules()) {

@@ -98,7 +98,7 @@
                     default: this.fields.default,
                     required: this.fields.required,
                     mode: this.fields.mode,
-                    width: this.field.width
+                    width: this.fields.width
                 };
                 this.toAddField(fields);
                 return fields;
@@ -113,7 +113,7 @@
                     default: this.fields.default,
                     required: this.fields.required,
                     mode: this.fields.mode,
-                    width: this.field.width
+                    width: this.fields.width
                 };
 
                 this.toEditField(editedFields);

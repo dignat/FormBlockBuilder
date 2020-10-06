@@ -8,6 +8,8 @@
                 <input class="input" type="text"  v-model="slices">
                 <label class="label">Name for Photo</label>
                 <input class="input" name="name" type="text" :listFields="listFields.name" v-model="fields.name">
+                <label class="label">Source for Photo</label>
+                <input class="input" name="source" type="number" :listFields="listFields.source" v-model="fields.source">
                 <label class="label">Photo Required?</label>
                 <input class="checkbox" type="checkbox" name="required" :listFields="listFields.required" v-model="fields.required">
                 <label class="label">Photo Hidden?</label>
@@ -40,7 +42,7 @@
                     name: '',
                     hidden: 0,
                     required: 0,
-                    source: 1,
+                    source: 0,
                     width: 50
                 }
             }

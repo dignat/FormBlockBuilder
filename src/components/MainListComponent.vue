@@ -116,9 +116,14 @@
                 this.currentListFields.push(value);
             },
             edit(value) {
+                if (!transform) {
+                    this.currentListFields.pop();
+                    this.currentListFields.push(value);
+                }
 
             },
             addMoreListFields() {
+                console.log(this.translatedInputList);
                 if (this.currentListFields.length > 1) {
                     if (this.uniqueFieldName(this.currentListFields)) {
                         alert('The field that you just added has a duplicate name!!!');

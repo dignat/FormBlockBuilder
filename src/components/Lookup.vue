@@ -31,6 +31,10 @@
             <div class="control">
                 <input class="input" type="text" :listFields="listFields.iconKey" v-model="fields.iconKey">
             </div>
+            <label class="label">Separator</label>
+            <div class="control">
+                <input class="input" type="text" :listFields="listFields.separator" v-model="fields.separator">
+            </div>
             <label class="label">Multi ?</label>
             <div class="control">
                 <input class="checkbox" type="checkbox" :listFields="listFields.multi" name="multi" v-model="fields.multi">
@@ -80,6 +84,8 @@
                     multi: 0,
                     custom: 0,
                     iconKey: '',
+                    separator: '',
+                    label_separator: '',
                     filter: [
                         {
                             key: '',

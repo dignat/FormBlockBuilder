@@ -1,14 +1,14 @@
 <template>
         <div class="field">
             <div class="control">
-            <Radios :types="types" :radio="transform ? translatedRepeaterType: currentType" @change="handleChange"/>
+            <Radios :types="types" :radio="transform ? translatedRepeaterType: changedRules ? currentType : translatedRepeaterType" @change="handleChange"/>
         </div>
             <div class="control" v-if="!transform">
                 <component ref="form" :type="currentType" :is="currentFieldType" :props="currentProps" :listFields="currentRepeaterFields"></component>
             </div>
             <div v-if="transform" class="control">
                 <component ref="form"
-                           :is="changeRules ? currentFieldType: translatedFieldType" :props="currentProps" :changeRules="changeRules"
+                           :is="changedRules ? currentFieldType: translatedFieldType" :props="currentProps" :changeRules="changeRules"
                            :listFields="changeRules ? currentRepeaterFields : transformedFields"></component>
             </div>
             <div class="field is-grouped">
@@ -17,6 +17,9 @@
                 </div>
                 <div class="control">
                     <button class="button is-primary" @click="editField">Edit Repeater Fields</button>
+                </div>
+                <div class="control">
+                    <button class="button is-primary" @click="deleteField">Delete Repeater Fields</button>
                 </div>
             </div>
         </div>
@@ -37,6 +40,7 @@
     import DateComponent from './DateComponent'
     import MainRepeater from './MainRepeater'
     import Duration from "./Duration"
+    import Header from "./HeaderComponent"
     export default {
         name: "Repeater",
         props: {
@@ -59,11 +63,12 @@
             Signature,
             Formula,
             MainRepeater,
-            Duration
+            Duration,
+            Header
         },
         data () {
             return {
-                types: ['inputlookup', 'inputtext', 'inputlookupalias','inputnumber', 'inputselect', 'inputradio', 'inputcheckbox', 'inputimage', 'inputsignature', 'inputformula','inputdate', 'inputrepeat','inputduration'],
+                types: ['inputlookup', 'inputtext', 'inputlookupalias','inputnumber', 'inputselect', 'inputradio', 'inputcheckbox', 'inputimage', 'inputsignature', 'inputformula','inputdate', 'inputrepeat','inputduration','text'],
                 currentFieldType: null,
                 currentType: null,
                 currentProps: {},
@@ -82,10 +87,22 @@
             },
             editField () {
               this.currentRepeaterFields = this.$refs.form.editField();
-              this.$emit('editRepeater', this.currentRepeaterFields);
+              if (this.transform) {
+                  console.log(this.transformedFields);
+                  this.$emit('editRepeater', this.transformedFields);
+              } else {
+                  console.log(this.currentRepeaterFields)
+                  this.$emit('editRepeater', this.currentRepeaterFields);
+              }
             },
+            deleteField() {
+                this.currentRepeaterFields = this.$refs.form.deleteField();
+                this.$emit('deleteRepeater', this.currentRepeaterFields);
+            },
+
             handleChange(type) {
-                console.log(type);
+              this.changedRules = true;
+              console.log(this.changedRules, type);
                 switch(type) {
                     case 'inputlookup':
                         this.currentFieldType = Lookup;
@@ -154,6 +171,11 @@
                         break;
                     case 'inputduration':
                         this.currentFieldType = Duration;
+                        this.currentType = type;
+                        this.currentRepeaterFields = {};
+                        break;
+                      case 'text':
+                        this.currentFieldType = Header;
                         this.currentType = type;
                         this.currentRepeaterFields = {};
                         break;

@@ -26,13 +26,13 @@
             <div v-if="!transform" class="control">
                 <Repeater ref="form" v-for="(field, index) in buildFields" :listFields="field"
                           :id="index" :type=field.type :key="index" v-model="fields.items"
-                          @addRepeater="sync" @editRepeater="edit"></Repeater>
+                          @addRepeater="sync" @editRepeater="edit" @deleteRepeater="deleteField(index)"></Repeater>
             </div>
             <div v-if="transform" class="control">
                 <Repeater ref="form" v-for="(field, index) in translateRepeater.items" :listFields="field" v-model="fields.items"
                           :radio="field.type" :repeaterType="field.type" :transformList="transform" :type="field.type"
-                          :changeRules="changeRules" :repeaterFieldType="translateTypes[index]"
-                          :id="index" :key="index" @addRepeater="sync" @editRepeater="edit"></Repeater>
+                          :changeRules="changedRules" :repeaterFieldType="translateTypes[index]"
+                          :id="index" :key="index" @addRepeater="sync" @editRepeater="edit(field, index)"></Repeater>
             </div>
         </div>
         <div class="field is-grouped">
@@ -41,6 +41,9 @@
         </div>
         <div class="control">
             <button class="button is-info" @click="addMoreRepeaterFields">Add More Repeater Fields</button>
+        </div>
+        <div class="control">
+            <button class="button is-info" @click="removeRepeaterFields" :disabled="buildFields.length===0">Remove Fields From Repeater</button>
         </div>
         </div>
 
@@ -75,6 +78,7 @@
                 currentRepeater: [],
                 translateTypes: [],
                 transform: false,
+                changedRules: false,
                 count: 0,
                 fields: {
                     type: 'inputrepeat',
@@ -92,14 +96,43 @@
                 toAddField: 'addField',
                 toEditField: 'editField'
             }),
-            ...mapGetters(['getTransform','getRules']),
+            ...mapGetters(['getTransform','getRules','editedName']),
             sync (value) {
                 console.log(value)
                 this.currentRepeater.push(value);
             },
-            edit(value) {
-                this.translateRepeater.items.pop();
-                this.translateRepeater.items.push(value);
+            edit(value, id) {
+                if (this.transform) {
+                    for(let i = 0; i < this.translateRepeater.items.length; i++) {
+                        if (this.translateRepeater.items[i] === id) {
+                            Object.assign(this.translateRepeater.items[i], value);
+                        }
+                    }
+                } else {
+                    for(let i = 0; i < this.currentRepeater.length; i++) {
+                        if (this.currentRepeater[i].name === value.name) {
+                            Object.assign(this.currentRepeater[i], value);
+                        }else if (value.name ===this.editedName()) {
+                            value.name = this.editedName();
+                            Object.assign(this.currentRepeater[i], value);
+                        }
+                    }
+                }
+
+
+            },
+            deleteField(value) {
+                console.log(value)
+                this.buildFields[0].items.splice(value,1);
+                let buildIndex = this.buildFields.map((item) => item.id).indexOf(value);
+                let listToDelete = [value];
+                this.buildFields = this.buildFields.filter((item) => listToDelete.indexOf(item.id) === -1);
+
+
+                console.log(this.buildFields)
+            },
+            removeRepeaterFields() {
+                this.buildFields.pop();
             },
             addMoreRepeaterFields() {
                 if (this.currentRepeater.length > 1) {
@@ -107,6 +140,7 @@
                         alert('The field that you just added has a duplicate name!!!');
                     }
                 }
+
                 this.buildFields.push({
                     id: this.count++,
                     items: this.currentRepeater
@@ -146,6 +180,7 @@
             this.translateRepeater = this.translatedList;
             this.translateTypes = this.repeaterTypes;
             this.transform = this.transformList;
+            this.changedRules = this.changeRules;
         }
     }
 </script>

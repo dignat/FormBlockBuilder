@@ -4,7 +4,7 @@
             <div class="control">
                 <label class="label">Duration Field Title</label>
                 <input class="input" type="text" name="title" :listFields="listFields.title" v-model="fields.title">
-                <label class="label">Choose slices from title to generate name ( ex. 0,1,2 - start from 0)</label>
+                <label class="label">Choose slices from title to generate name ( ex. 0,1,2 - start from 0)s</label>
                 <input class="input" type="text"  v-model="slices">
                 <label class="label">Duration Field Name</label>
                 <input class="input" type="text" name="name" :listFields="listFields.name" v-model="fields.name">
@@ -28,7 +28,7 @@
         data() {
             return {
                 slices: '',
-                field: {
+                fields: {
                     type: 'inputduration',
                     name: '',
                     title: '',

@@ -30,6 +30,11 @@
                 <button class="button is-primary" @click="changedRules ? editField(currentProps) : editField(transformedFields)">Edit all Fields</button>
             </div>
         </div>
+        <div class="field">
+            <div class="control">
+                <button class="button is-primary" @click="changedRules ? deleteField(currentProps) : deleteField(transformedFields)">Delete Field</button>
+            </div>
+        </div>
 
 
     </div>
@@ -137,7 +142,12 @@
             editField () {
                 this.currentProps = this.$refs.form.editField();
                 this.$emit('editFields', this.currentProps);
-                console.log(this.currentProps)
+                console.log(this.currentProps, 'edit Fields')
+            },
+            deleteField() {
+                this.currentProps = this.$refs.form.deleteField();
+                this.$emit('deleteFields', this.currentProps);
+                console.log(this.currentProps, 'delete Fields')
             },
             handleChange(type) {
                 console.log('type',type);

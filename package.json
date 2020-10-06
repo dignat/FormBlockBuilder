@@ -10,6 +10,8 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^18.0.0",
+    "@ckeditor/ckeditor5-vue": "^1.0.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.25",
     "@fortawesome/free-brands-svg-icons": "^5.11.2",
     "@fortawesome/free-regular-svg-icons": "^5.11.2",
@@ -18,10 +20,13 @@
     "axios": "^0.19.0",
     "bulma": "^0.7.4",
     "bulma-extensions": "^6.2.4",
+    "ckeditor4-vue": "^0.2.0",
     "firebase": "^7.3.0",
     "mocha": "^7.1.0",
     "sass-loader": "^7.1.0",
+    "twing": "^4.0.3",
     "vue": "^2.6.10",
+    "vue-froala-wysiwyg": "^3.1.0",
     "vue-router": "^3.1.5",
     "vuefire": "^2.2.0",
     "vuex": "^3.1.1"

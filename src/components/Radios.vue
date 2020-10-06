@@ -4,7 +4,7 @@
             <label class="radio" for="fieldType">
                 <input type="radio" :radio="radio" ref="form"
                        :id="fieldType" :value="fieldType"
-                       :types="fieldType.types" v-model="radioModel" @change="updateChange">
+                       :types="types" v-model="radioModel" @change="updateChange">
                 <strong><i>{{ fieldType }}</i></strong></label>
 </div>
     </div>
@@ -19,11 +19,11 @@
         },
     props: {
         types: Array,
-        radio: String
+        radio: String,
         },
         data() {
             return {
-                radioModel: ''
+                radioModel: '',
             }
         },
         methods: {

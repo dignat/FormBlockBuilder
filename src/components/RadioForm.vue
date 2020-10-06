@@ -49,7 +49,8 @@
             return {
                 slices:'',
                 customTitles: false,
-                types: ['default', 'custom'],
+                defaultOtherTitles: false,
+                types: ['default', 'custom', 'default other'],
                 transformed: false,
                 customType: '',
                 customFields: [
@@ -84,7 +85,7 @@
                     title: this.fields.title,
                     name:  this.fields.name === "" ? this.fields.name = this.nameGenerator(this.fields.title,this.slices.length > 0 ? this.slices.split(',') : []) : this.fields.name,
                     hidden: this.fields.hidden,
-                    items: this.customTitles ? this.fields.items = this.customFields : this.fields.items = [{title: 'Yes'},{title: 'No'}]
+                    items: this.customTitles ? this.fields.items = this.customFields : this.customType === 'default other' ? this.fields.items = [{title: 'Yes'},{title: 'No'},{title: 'N/A'}] : this.fields.items = [{title: 'Yes'},{title: 'No'}]
 
                 };
                 this.toAddField(fields);
@@ -97,8 +98,7 @@
                     title: this.fields.title,
                     name:  this.fields.name === "" ? this.fields.name = this.nameGenerator(this.fields.title) : this.fields.name,
                     hidden: this.fields.hidden,
-                    items: this.customTitles ? this.fields.items = this.customFields : this.fields.items = [{title: 'Yes'},{title: 'No'}]
-
+                    items: this.customTitles ? this.fields.items = this.customFields : this.customType === 'default other' ? this.fields.items = [{title: 'Yes'},{title: 'No'},{title: 'N/A'}] : this.fields.items = [{title: 'Yes'},{title: 'No'}]
                 };
                 this.toEditField(editFields);
                 return editFields;
@@ -113,6 +113,10 @@
                         break;
                     case 'default':
                         // do nothing
+                        this.customTitles = false;
+                        this.customType = type;
+                        break;
+                    case 'default other':
                         this.customTitles = false;
                         this.customType = type;
                         break;

@@ -15,7 +15,8 @@ const state = {
     checkedField: false,
     editFieldName: '',
     transform: false,
-    changeRules: false
+    changeRules: false,
+
 };
 
 const mutations = {
@@ -37,7 +38,7 @@ const mutations = {
         },
     'EDIT_FIELD' (state, fields) {
        for (let i = 0; i < state.form.length; i++) {
-           console.log('in the store file',state.form[i].fields.name, fields.name, state.fields.name);
+           //console.log('in the store file',state.form[i].fields.name, fields.name, state.fields.name);
            if (state.form[i].fields.name === state.fields.name) {
                state.editFields = fields;
               state.form[i].fields = state.editFields;
@@ -50,17 +51,20 @@ const mutations = {
         console.log('checked stats',fieldName);
     },
     'DELETE_FIELD' (state, fields) {
+        return state.fields;
     },
     'TRANSLATE_FORM' (state, translatedForm) {
         state.translatedForm = translatedForm;
     },
     'SET_TRANSFORM' (state, transform) {
         state.transform = transform;
-    }
+    },
+
 
 };
 
 const actions = {
+
     updateType: ({commit}, type) => {
         commit('UPDATE_TYPE', type);
     },
@@ -89,6 +93,7 @@ const actions = {
 };
 
 const getters = {
+
     editedName: state => {
         return state.editFieldName
     },

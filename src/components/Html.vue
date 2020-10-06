@@ -1,14 +1,14 @@
 <template>
     <div>
         <label class="label" v-html="title" v-if="!['inputsignature','inputimage','inputlookupaliasimage'].includes(type)"></label>
-        <input class="input is-medium" :type="type.replace('input','')" v-bind:style="{width: width}" v-if="!['inputselect','inputmultiselect','inputlookup','inputrepeat', 'inputlist', 'inputradio','inputsignature','inputformula','text','inputlookupaliasselect','inputcheckbox','inputimage','inputlocation','inputlookupaliasimage'].includes(type)"/>
+        <input :placeholder="title" class="input is-medium" :type="type.replace('input','')" v-bind:style="{width: width}" v-if="!['inputselect','inputmultiselect','inputlookup','inputrepeat', 'inputlist', 'inputradio','inputsignature','inputformula','text','inputlookupaliasselect','inputcheckbox','inputimage','inputlocation','inputlookupaliasimage'].includes(type)"/>
         <div class="select is-primary is-fullwidth"   v-if="type === 'inputselect'  || type === 'inputlookupaliasselect'">
             <select v-bind:items="items" class="select">
                 <option v-html="item.title" v-for="item in items"></option>
             </select>
         </div>
         <div class="select is-primary is-fullwidth" v-if="type === 'inputlookup'">
-            <select >
+            <select class="select" @click="ApiCall">
                 <option v-html="title"></option>
             </select>
         </div>
@@ -47,7 +47,8 @@
                     <h3 style="text-align: center;"><strong><span v-html="item.body"></span></strong></h3>
                 </div>
                 <div v-if="item.type==='inputradio'">
-                    <label class="radio" v-bind:items="item.items" v-if="item.type === 'inputradio'" v-for="itemRadio in item.items">{{itemRadio.title}}
+                    <label class="radio" v-bind:items="item.items" v-if="item.type === 'inputradio'"
+                           v-for="itemRadio in item.items">{{itemRadio.title}}
                         <input class="radio" type="radio" v-bind:style="{width:width}"/>
                     </label>
                 </div>
@@ -134,8 +135,9 @@
         <label class="checkbox" v-bind:items="items" v-if="type ==='inputcheckbox'">
             <input type="checkbox" :type="type.replace('input','')" v-bind:style="{width:width}"/>
         </label>
-            <label class="radio" v-bind:items="items" v-if="type === 'inputradio'" v-for="item in items">{{item.title}}
-                <input class="radio" :type="type.replace('input','')" v-bind:style="{width:width}"/>
+            <label class="radio" :name="name" v-bind:items="items" v-if="type === 'inputradio'" v-for="item in items"
+                   @change="readValue(item.title,name)" >{{item.title}}
+                <input class="radio" v-model="picked" :value="item.title" :type="type.replace('input','')" v-bind:style="{width:width}"/>
             </label>
         <div v-if="type === 'inputsignature'" class="control">
             <button class="button is-info" style="margin: 0 auto; display: block; width: 100%;"><font-awesome-icon icon="pen" />
@@ -153,11 +155,13 @@
             <input type="text" class="input is-medium" v-model="now"/>
         </div>
     </div>
+
 </template>
 
 <script>
     import Select from "./Select";
     import ListComponent from "./ListComponent";
+    import axios from 'axios';
     export default {
         name: "Html",
         components: {ListComponent, Select},
@@ -169,15 +173,29 @@
             template: Array,
             body: String,
             multi: Number,
-            item_title: String
+            item_title: String,
+            uri: String,
+            script: String,
+            name: String,
         },
         data() {
             return {
                 now: new Date(),
                 isDropdownActive: false,
-                Show: false
+                Show: false,
+                information:"",
+                picked: null
             }
         },
+      methods: {
+          ApiCall() {
+
+          },
+        readValue(value,name) {
+         console.log(value, name)
+        }
+      },
+
     }
 </script>
 
