@@ -30,7 +30,8 @@
                 <input class="input" type="text" name="uri" :listFields="listFields.uri" v-model="fields.uri">
             </div>
             <div class="control" v-if="!transform">
-                    <ListComponent ref="form" v-for="(field, index) in buildFields" :listFields="field" v-model="fields.template"
+                    <ListComponent ref="form" v-for="(field, index) in buildFields" :listFields="field" :list="buildFields[index]"
+                                   v-model="fields.template"
                                :id="index" :key="index" @addList="sync" @editList="edit">
 
                     </ListComponent>
@@ -67,6 +68,7 @@
         name: "MainListComponent",
         mixins: [appMixin],
         props: {
+          list : Object,
             listFields: Object,
             deepDependantListTypes: Array,
             transformList: Boolean,

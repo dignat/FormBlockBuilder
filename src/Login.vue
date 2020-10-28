@@ -53,6 +53,7 @@ name: "Login",
     .auth()
     .signInWithEmailAndPassword(this.form.email, this.form.password)
     .then(data => {
+      console.log(data.user.uid);
       this.$router.replace({name: "Dashboard"})
     })
     .catch( err => {

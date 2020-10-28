@@ -9,7 +9,7 @@
             <div class="control" v-if="!transform">
                 <component ref="form"
                            :is="currentFieldType" :props="currentProps" :mainListFields="mainListFields"
-                           :listFields="currentListFields"
+                           :listFields="currentListFields" :list="list"
                            >
 
                 </component>
@@ -56,6 +56,7 @@
     export default {
         name: "ListComponent",
         props: {
+            list: Object,
             listFields: Object,
             transformList: Boolean,
             changeRules: Boolean,

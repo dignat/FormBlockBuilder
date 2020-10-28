@@ -4,7 +4,7 @@
             <Radios :types="types" :radio="transform ? translatedRepeaterType: changedRules ? currentType : translatedRepeaterType" @change="handleChange"/>
         </div>
             <div class="control" v-if="!transform">
-                <component ref="form" :type="currentType" :is="currentFieldType" :props="currentProps" :listFields="currentRepeaterFields"></component>
+                <component ref="form" :type="currentType" :is="currentFieldType" :props="currentProps" :listFields="currentRepeaterFields" :list="list"></component>
             </div>
             <div v-if="transform" class="control">
                 <component ref="form"
@@ -44,6 +44,7 @@
     export default {
         name: "Repeater",
         props: {
+          list: Object,
             listFields: Object,
             transformList: Boolean,
             changeRules: Boolean,

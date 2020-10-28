@@ -24,7 +24,7 @@
                 <input class="input" type="number" name="max" :listFields="listFields.max" v-model="fields.max">
             </div>
             <div v-if="!transform" class="control">
-                <Repeater ref="form" v-for="(field, index) in buildFields" :listFields="field"
+                <Repeater ref="form" v-for="(field, index) in buildFields" :listFields="field" :list="buildFields[index]"
                           :id="index" :type=field.type :key="index" v-model="fields.items"
                           @addRepeater="sync" @editRepeater="edit" @deleteRepeater="deleteField(index)"></Repeater>
             </div>
@@ -60,6 +60,7 @@
         name: "MainRepeater",
         mixins: [appMixin],
         props: {
+          list: Object,
             listFields: Object,
             transformList: Boolean,
             changeRules: Boolean,

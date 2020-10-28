@@ -14,7 +14,9 @@
         <div class="field" v-if="!transform">
           <Forms ref="form" v-for="(field, index) in buildFields" :id="index"
                  :transformList="transform" :list="formFields"
-                 :key="index" :type="field.type" @addFields="sync" @editFields="edit" @deleteFields="deleteField(index)">
+                 :key="field.id"  @addFields="sync(index, $event)"
+                 @editFields="edit(index, field.id, $event)" @deleteFields="deleteField(index)"
+          @addBeforeFields="addBefore(index)" @addAfterFields="addAfter(index)">
           </Forms>
         </div>
         <div class="field">
@@ -28,33 +30,34 @@
         <div class="field" v-if="transform">
           <Forms :fieldsType="fieldTypes[index]" ref="form"
                  v-for="(field, index) in buildFields" :radio="field.type" :type="field.type" :fieldListType="dependantType" :repeaterType="dependantRepeaterType" :repeaterTypes="dependantRepeaterTypes"
-                 :transformList="transform" :list="formFields" :key="index" :changeRules="changingRules" :dependantTypes="dependantListTypes"
+                 :transformList="transform" :list="formFields" :key="field.id" :changeRules="changingRules" :dependantTypes="dependantListTypes"
                  :deepDependantType="deepDependantType" :deepDependantListTypes="deepDependantListFieldTypes"
                  :hasList="dependantList"
-                 :translatedList="field.items[index]"   @addFields="sync" @editFields="editTranslated">
+                 :translatedList="field.items[index]"   @addFields="sync(index, $event)"
+                 @editFields="editTranslated(index, field.id, $event)" @deleteFields="deleteField(index)">
           </Forms>
         </div>
 
 
         <div class="field is-grouped">
           <div class="control">
-            <button class="button is-primary" @click="addTypeFields">Add Fields To Form</button>
+            <button class="button is-primary" @click="addTypeFields" :disabled="buildFields.length > formFields.items.length">Show Fields To Add</button>
           </div>
           <div class="control">
-            <button class="button is-primary" @click="removeTypeFields">Take Out Added Fields To Form</button>
+            <button class="button is-primary" @click="removeTypeFields">Remove Shown Fields</button>
           </div>
-          <div class="control ">
+          <!--<div class="control ">
             <button class="button is-primary" @click="removeFields">Remove Fields From Form</button>
-          </div>
+          </div>-->
           <div class="control">
             <button class="button is-danger" @click="generateForm">Generate</button>
           </div>
           <div class="control">
             <button class="button is-danger" @click="translateForm">Translate Form</button>
           </div>
-          <div class="control">
+          <!--<div class="control">
             <button class="button is-danger" @click="translateOldForm">Translate Old Form</button>
-          </div>
+          </div>-->
           <div class="control">
             <button class="button is-danger" @click="loadForm">Load Form</button>
           </div>
@@ -142,6 +145,7 @@ export default {
   mixins: [appMixin],
   data () {
     return {
+      isReplaced: false,
       tableToDisplay: '',
       forms: [],
       selectedName: '',
@@ -196,7 +200,19 @@ export default {
       return this.toTransform(JSON.parse(this.existingForm), this.formFields);
     },
     formsFromFirebase() {
-      axios.get('https://formbuilder-f0c5e.firebaseio.com/forms.json')
+      firebase.database().ref('forms').once('value')
+      .then((res) => {
+        const data = res.val();
+        const dbFormName = [];
+        for (let key in data) {
+          const formName = data[key].title;
+          dbFormName.push(formName);
+        }
+        this.formNames = dbFormName;
+      }).catch((error) => {
+        console.log(error)
+      })
+     /* axios.get('https://formbuilder-f0c5e.firebaseio.com/forms.json?')
           .then(res => {
             const data = res.data;
             const dbFormName = [];
@@ -206,40 +222,39 @@ export default {
             }
             this.formNames = dbFormName;
           })
-          .catch(error => console.log(error))
+          .catch(error => console.log(error))*/
     },
-    sync (value) {
+    sync (index,value) {
       console.log(value, this.formFields.items);
-      this.formFields.items.push(value)
+      if (this.isReplaced) {
+        this.formFields.items.splice(index,0,value)
+      } else {
+        this.formFields.items.push(value)
+      }
+
     },
     deleteField(value) {
-
-      this.buildFields[0].items.splice(value,1);
+      this.buildFields[value].items.splice(value,1);
       console.log('There are the build fields',this.buildFields, this.buildFields[value])
 
 
     },
-    edit (value) {
-      console.log(value, 'again try to  edit')
-      for(let j = 0; j < this.buildFields[0].items.length; j++) {
-        if (this.buildFields[0].items[j].name === value.name) {
-          console.log(j, value, 'should edit field in the first condition');
-          console.log(value, 'again try to  edit first condition')
-          Object.assign(this.buildFields[0].items[j],{},value);
-        } else if (value.name === this.editedName()) {
-          console.log(value, 'again try to  edit second condition')
-          value.name = this.editedName();
-          console.log(value, 'second condition change to edited name');
-          this.deleteField(this.buildFields[0].items[j])
-          this.buildFields[0].items[j] = {...value}
-          console.log(this.buildFields[0].items[j])
-        } else if(this.buildFields[0].items[j].name !== value.name) {
-          console.log(value, 'again try to  edit third condition')
-          console.log(this.buildFields[0].items[j], value,j, 'the name does not match')
-          // we want to change the name of the field
-          //Object.assign(this.buildFields[0].items[j],value);
-        }
+    edit (index, id, value) {
+      if (this.buildFields[index].id === index && this.buildFields[index].items[index].name === value.name) {
+        Object.assign(this.buildFields[index].items[index], value);
+      } else if(this.buildFields[index].id === id) {
+        Object.assign(this.buildFields[index].items[index], value);
       }
+
+    },
+    addBefore(index) {
+      console.log(index, this.count)
+      this.buildFields.splice(index, 0, {id: this.count++, items: this.formFields.items})
+      this.isReplaced = true;
+    },
+    addAfter(index) {
+      this.buildFields.splice(index+1, 0, {id: this.count++, items: this.formFields.items})
+      this.isReplaced = true;
     },
     editTranslated(value) {
       for(let j = 0; j < this.buildFields[0].items.length; j++) {
@@ -268,7 +283,6 @@ export default {
       this.buildTypeFields(this.formFields);
       this.buildFields.push({
         id: this.count++,
-        type: this.currentType,
         items: this.formFields.items
       });
       console.log(this.buildFields)
@@ -282,12 +296,33 @@ export default {
       this.formFields.name = this.formFields.title.replace(/[\s,&,-\/_?():.]/g, "");
       this.formFields.uri = '/reflow/data/update/form/' + this.formFields.name;
       console.log(JSON.stringify('before save',this.formFields));
-      axios.post('https://formbuilder-f0c5e.firebaseio.com/forms.json',this.formFields)
-          .then(res => console.log(res))
-          .catch(error => console.log(error))
+      firebase.database().ref('forms').push(this.formFields)
+      .then((data) => {
+        console.log(data)
+      }).catch((error) => {
+        console.log(error)
+      })
+     // axios.post('https://formbuilder-f0c5e.firebaseio.com/forms.json?',this.formFields)
+      //    .then(res => console.log(res))
+       //   .catch(error => console.log(error))
     },
     loadForm() {
-      axios.get('https://formbuilder-f0c5e.firebaseio.com/forms.json')
+      firebase.database().ref('forms').once('value')
+          .then((res) => {
+            const data = res.val();
+            const dbForm = [];
+            for (let key in data) {
+              const form = data[key];
+              form.id = key;
+              if (this.selectedName === data[key].title) {
+                dbForm.push(form);
+              }
+            }
+            Object.assign(this.existingForm, dbForm[0]);
+          }).catch((error) => {
+        console.log(error)
+      })
+     /* axios.get('https://formbuilder-f0c5e.firebaseio.com/forms.json?')
           .then(res =>  {
             const data = res.data;
             const dbForm = [];
@@ -300,15 +335,19 @@ export default {
             }
             Object.assign(this.existingForm, dbForm[0]);
           })
-          .catch(error => console.log(error));
+          .catch(error => console.log(error));*/
     },
     updateForm(formId) {
       var config = {
         headers: {'Access-Control-Allow-Origin': '*'}
       };
-      axios.put('https://formbuilder-f0c5e.firebaseio.com/forms/'+formId+".json",this.formFields,config)
+      firebase.database().ref('forms/'+formId).update(this.formFields)
+      .then((data) => {
+        console.log(data)
+      }).catch((error) => console.log(error))
+     /* axios.put('https://formbuilder-f0c5e.firebaseio.com/forms/'+formId+".json",this.formFields,config)
           .then(res => console.log(res.data))
-          .catch(error => console.log(error))
+          .catch(error => console.log(error))*/
     },
     signOut() {
       firebase

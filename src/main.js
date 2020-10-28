@@ -10,6 +10,7 @@ import {routes} from "./routes/routes";
 import VueRouter from "vue-router";
 import CKEditor from 'ckeditor4-vue';
 import firebase from "firebase";
+import admin from "firebase/auth"
 import store from "./store/store";
 
 Vue.use(VueRouter);

@@ -31,13 +31,13 @@
             <label class="label">Field Names</label>
             <div class="select is-fullwidth">
                 <select class="select" v-model="selectedName">
-                    <option v-for="(element, index) in list.items" :key="index" :value="element.name" :fieldName="element.name">{{ element.name }}</option>
+                    <option v-for="(element, index) in list.items !== undefined ? list.items : list.template" :key="index" :value="element.name" :fieldName="element.name">{{ element.name }} </option>
                 </select>
             </div>
             <div class="select is-primary is-fullwidth" style="background: white;" @click="Show=!Show" >
                 <label class="label">To Hide Field</label>
             </div>
-            <div  style="background: white; padding: 5px;" v-for="element in list.items"  :fieldName="element.name" v-if="Show">
+            <div  style="background: white; padding: 5px;" v-for="element in list.items !== undefined ? list.items : list.template"  :fieldName=" element.name" v-if="Show">
                 <input type="checkbox" class="checkbox is-fullwidth" :value="element.name" v-model="checked" :disabled="element.name === selectedName"/>
                 <span>{{ element.name }}</span>
             </div>
@@ -98,6 +98,7 @@
             }),
             ...mapGetters(['getTransform','getRules']),
             generateHide(type, typeOfControllerField, controllerField, fieldToHide) {
+              console.log(this.listFields)
                 switch(typeOfControllerField) {
                     case 'string':
                         this.fields.script = `form=GetForm();result=form.GetStringValue('${controllerField}');if (result == 'Yes'){form.SetDisplay('${fieldToHide}',1);}else{form.SetDisplay('${fieldToHide}',0);}`;

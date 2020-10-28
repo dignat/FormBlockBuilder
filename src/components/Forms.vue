@@ -20,23 +20,23 @@
                 </component>
             </div>
         </div>
-       <div class="field">
+       <div class="field is-grouped">
            <div class="control">
                <button class="button is-primary" @click="addField" :disabled="currentType === undefined">Add all Fields</button>
            </div>
+            <div class="control">
+                <button class="button is-primary" @click="changedRules ? editField(currentProps) : editField(transformedFields)" :disabled="currentType === undefined">Edit all Fields</button>
+            </div>
+            <div class="control">
+                <button class="button is-primary" @click="changedRules ? deleteField(currentProps) : deleteField(transformedFields)" :disabled="currentType === undefined">Delete Field</button>
+            </div>
+         <div class="control">
+           <button class="button is-primary" @click="addBeforeField" :disabled="currentType === undefined">Add Before Field</button>
+         </div>
+         <div class="control">
+           <button class="button is-primary" @click="addAfterField" :disabled="currentType === undefined">Add After Field</button>
+         </div>
        </div>
-        <div class="field">
-            <div class="control">
-                <button class="button is-primary" @click="changedRules ? editField(currentProps) : editField(transformedFields)">Edit all Fields</button>
-            </div>
-        </div>
-        <div class="field">
-            <div class="control">
-                <button class="button is-primary" @click="changedRules ? deleteField(currentProps) : deleteField(transformedFields)">Delete Field</button>
-            </div>
-        </div>
-
-
     </div>
 
 </template>
@@ -149,6 +149,12 @@
                 this.$emit('deleteFields', this.currentProps);
                 console.log(this.currentProps, 'delete Fields')
             },
+          addBeforeField() {
+            this.$emit('addBeforeFields', this.currentProps);
+          },
+          addAfterField() {
+            this.$emit('addAfterFields', this.currentProps);
+          },
             handleChange(type) {
                 console.log('type',type);
                 this.currentType = type;
@@ -161,7 +167,8 @@
                     case 'inputlookup':
                         this.currentFieldType = Lookup;
                         this.changedRules = true;
-                        break;
+                      this.transform ? this.transformedFields !== undefined ? this.sendTheEditFields(this.transformedFields.name) : '' : this.currentProps !== undefined ? this.sendTheEditFields(this.currentProps.name) : '';
+                      break;
                     case 'inputtext':
                         this.currentFieldType = TextComponent;
                         this.changedRules = true;
@@ -170,11 +177,13 @@
                     case 'inputrepeat':
                         this.currentFieldType = MainRepeater;
                         this.changedRules = true;
-                        break;
+                      this.transform ? this.transformedFields !== undefined ? this.sendTheEditFields(this.transformedFields.name) : '' : this.currentProps !== undefined ? this.sendTheEditFields(this.currentProps.name) : '';
+                      break;
                     case 'inputlookupalias':
                         this.currentFieldType = Alias;
                         this.changedRules = true;
-                        break;
+                      this.transform ? this.transformedFields !== undefined ? this.sendTheEditFields(this.transformedFields.name) : '' : this.currentProps !== undefined ? this.sendTheEditFields(this.currentProps.name) : '';
+                      break;
                     case 'inputnumber':
                         this.currentFieldType = NumberComponent;
                         this.changedRules = true;
@@ -183,27 +192,33 @@
                     case 'inputradio':
                         this.currentFieldType = RadioForm;
                         this.changedRules = true;
-                        break;
+                      this.transform ? this.transformedFields !== undefined ? this.sendTheEditFields(this.transformedFields.name) : '' : this.currentProps !== undefined ? this.sendTheEditFields(this.currentProps.name) : '';
+                      break;
                     case 'inputselect':
                         this.currentFieldType = SelectComponent;
                         this.changedRules = true;
-                        break;
+                      this.transform ? this.transformedFields !== undefined ? this.sendTheEditFields(this.transformedFields.name) : '' : this.currentProps !== undefined ? this.sendTheEditFields(this.currentProps.name) : '';
+                      break;
                     case 'inputlist':
                         this.currentFieldType = MainListComponent;
                         this.changedRules = true;
-                        break;
+                      this.transform ? this.transformedFields !== undefined ? this.sendTheEditFields(this.transformedFields.name) : '' : this.currentProps !== undefined ? this.sendTheEditFields(this.currentProps.name) : '';
+                      break;
                     case 'inputcheckbox':
                         this.currentFieldType = Checkbox;
                         this.changedRules = true;
-                        break;
+                      this.transform ? this.transformedFields !== undefined ? this.sendTheEditFields(this.transformedFields.name) : '' : this.currentProps !== undefined ? this.sendTheEditFields(this.currentProps.name) : '';
+                      break;
                     case 'inputimage':
                         this.currentFieldType = Photo;
                         this.changedRules = true;
-                        break;
+                      this.transform ? this.transformedFields !== undefined ? this.sendTheEditFields(this.transformedFields.name) : '' : this.currentProps !== undefined ? this.sendTheEditFields(this.currentProps.name) : '';
+                      break;
                     case 'inputsignature':
                         this.currentFieldType = Signature;
                         this.changedRules = true;
-                        break;
+                      this.transform ? this.transformedFields !== undefined ? this.sendTheEditFields(this.transformedFields.name) : '' : this.currentProps !== undefined ? this.sendTheEditFields(this.currentProps.name) : '';
+                      break;
                     case 'inputformula':
                         this.currentFieldType = Formula;
                         this.changedRules = true;
@@ -211,31 +226,38 @@
                     case 'inputdate':
                         this.currentFieldType = DateComponent;
                         this.changedRules = true;
-                        break;
+                      this.transform ? this.transformedFields !== undefined ? this.sendTheEditFields(this.transformedFields.name) : '' : this.currentProps !== undefined ? this.sendTheEditFields(this.currentProps.name) : '';
+                      break;
                     case 'inputlocation':
                         this.currentFieldType = Location;
                         this.changedRules = true;
-                        break;
+                      this.transform ? this.transformedFields !== undefined ? this.sendTheEditFields(this.transformedFields.name) : '' : this.currentProps !== undefined ? this.sendTheEditFields(this.currentProps.name) : '';
+                      break;
                     case 'text':
                         this.currentFieldType = HeaderComponent;
                         this.changedRules = true;
-                        break;
+                      this.transform ? this.transformedFields !== undefined ? this.sendTheEditFields(this.transformedFields.name) : '' : this.currentProps !== undefined ? this.sendTheEditFields(this.currentProps.name) : '';
+                      break;
                     case 'inputlookupaliasselect':
                         this.currentFieldType = AliasSelect;
                         this.changedRules = true;
-                        break;
+                      this.transform ? this.transformedFields !== undefined ? this.sendTheEditFields(this.transformedFields.name) : '' : this.currentProps !== undefined ? this.sendTheEditFields(this.currentProps.name) : '';
+                      break;
                     case 'inputlookupaliasimage':
                         this.currentFieldType = AliasImage;
                         this.changedRules = true;
-                        break;
+                      this.transform ? this.transformedFields !== undefined ? this.sendTheEditFields(this.transformedFields.name) : '' : this.currentProps !== undefined ? this.sendTheEditFields(this.currentProps.name) : '';
+                      break;
                     case 'inputduration':
                         this.currentFieldType = Duration;
                         this.changedRules = true;
-                        break;
+                      this.transform ? this.transformedFields !== undefined ? this.sendTheEditFields(this.transformedFields.name) : '' : this.currentProps !== undefined ? this.sendTheEditFields(this.currentProps.name) : '';
+                      break;
                     case 'inputscan':
                         this.currentFieldType = BarCodes;
                         this.changedRules = true;
-                        break;
+                      this.transform ? this.transformedFields !== undefined ? this.sendTheEditFields(this.transformedFields.name) : '' : this.currentProps !== undefined ? this.sendTheEditFields(this.currentProps.name) : '';
+                      break;
                 }
             }
         },

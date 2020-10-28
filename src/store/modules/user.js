@@ -1,7 +1,8 @@
 const state = {
     user: {
         loggedId: false,
-        data:null
+        data:null,
+        token: null
     }
 }
 const mutations = {
@@ -19,7 +20,7 @@ const actions = {
         if (user) {
             commit("SET_USER", {
                 displayName: user.displayName,
-                email: user.email
+                email: user.email,
             });
         } else {
             commit("SET_USER", null);
