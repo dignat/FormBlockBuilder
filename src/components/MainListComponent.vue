@@ -30,9 +30,9 @@
                 <input class="input" type="text" name="uri" :listFields="listFields.uri" v-model="fields.uri">
             </div>
             <div class="control" v-if="!transform">
-                    <ListComponent ref="form" v-for="(field, index) in buildFields" :listFields="field" :list="buildFields[index]"
-                                   v-model="fields.template"
-                               :id="index" :key="index" @addList="sync" @editList="edit">
+                    <ListComponent ref="form" v-for="(field, index) in buildFields" :listFields="field"
+                                   :list="buildFields[index]" v-model="fields.template"
+                               :id="index" :key="field.id" @addList="sync" @editList="edit(index, $event)" @deleteList="deleteListField(index)">
 
                     </ListComponent>
             </div>
@@ -52,7 +52,7 @@
             <button class="button is-primary" @click="addField">Add List</button>
         </div>
         <div class="control">
-            <button class="button is-info" @click="addMoreListFields">Add More List Fields</button>
+            <button class="button is-info" @click="addMoreListFields">Show More List Fields</button>
         </div>
     </div>
     </div>
@@ -110,20 +110,27 @@
         methods: {
             ...mapActions({
                 toAddField: 'addField',
-                toEditField: 'editField'
+                toEditField: 'editField',
+              toDeleteField: 'deleteField'
             }),
             ...mapGetters(['getTransform','getRules']),
 
             sync (value) {
                 this.currentListFields.push(value);
             },
-            edit(value) {
-                if (!transform) {
-                    this.currentListFields.pop();
-                    this.currentListFields.push(value);
-                }
+            edit(index,value) {
+               if (this.buildFields[index].id === index && this.buildFields[index].template[index].name === value.name) {
+                 Object.assign(this.buildFields[index].template[index], value);
+               } else if(this.buildFields[index].id === index) {
+                 Object.assign(this.buildFields[index].template[index], value);
+               }
 
             },
+          deleteListField(index) {
+              this.buildFields[index].template.splice(index,1);
+              this.buildFields.splice(index,1);
+              console.log(index, this.buildFields[index]);
+          },
             addMoreListFields() {
                 console.log(this.translatedInputList);
                 if (this.currentListFields.length > 1) {
@@ -181,7 +188,11 @@
                 };
                 this.toEditField(editFields);
                 return editFields;
-            }
+            },
+          deleteField() {
+            this.toDeleteField(this.fields);
+            return this.fields;
+          }
         },
         beforeMount() {
             if (this.getTransform() && !this.getRules()) {

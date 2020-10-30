@@ -50,7 +50,8 @@
         methods: {
             ...mapActions({
                 toAddField: 'addField',
-                toEditField: 'editField'
+                toEditField: 'editField',
+              toDeleteField: 'deleteField'
             }),
             ...mapGetters(['getTransform','getRules']),
             addField() {
@@ -76,7 +77,11 @@
                 };
                 this.toEditField(fields);
                 return this.fields;
-            }
+            },
+          deleteField() {
+            this.toDeleteField(this.fields);
+            return this.fields;
+          }
         },
         beforeMount() {
             if (this.getTransform() && !this.getRules()) {

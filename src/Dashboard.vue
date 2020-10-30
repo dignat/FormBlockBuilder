@@ -234,7 +234,9 @@ export default {
 
     },
     deleteField(value) {
+      console.log(value, 'main delete button')
       this.buildFields[value].items.splice(value,1);
+      this.buildFields.splice(value,1)
       console.log('There are the build fields',this.buildFields, this.buildFields[value])
 
 

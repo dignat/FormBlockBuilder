@@ -24,9 +24,9 @@
                 <input class="input" type="number" name="max" :listFields="listFields.max" v-model="fields.max">
             </div>
             <div v-if="!transform" class="control">
-                <Repeater ref="form" v-for="(field, index) in buildFields" :listFields="field" :list="buildFields[index]"
-                          :id="index" :type=field.type :key="index" v-model="fields.items"
-                          @addRepeater="sync" @editRepeater="edit" @deleteRepeater="deleteField(index)"></Repeater>
+                <Repeater ref="form" v-for="(field, index) in buildFields" :listFields="field"
+                          :list="buildFields[index]" :id="index" :type=field.type :key="index" v-model="fields.items"
+                          @addRepeater="sync" @editRepeater="edit(index, $event)" @deleteRepeater="deleteRepeaterField(index)"></Repeater>
             </div>
             <div v-if="transform" class="control">
                 <Repeater ref="form" v-for="(field, index) in translateRepeater.items" :listFields="field" v-model="fields.items"
@@ -40,10 +40,10 @@
             <button class="button is-primary" @click="addField">Add Repeater</button>
         </div>
         <div class="control">
-            <button class="button is-info" @click="addMoreRepeaterFields">Add More Repeater Fields</button>
+            <button class="button is-info" @click="addMoreRepeaterFields">Show More Repeater Fields</button>
         </div>
         <div class="control">
-            <button class="button is-info" @click="removeRepeaterFields" :disabled="buildFields.length===0">Remove Fields From Repeater</button>
+            <button class="button is-info" @click="removeRepeaterFields" :disabled="buildFields.length===0">Remove Shown Fields From Repeater</button>
         </div>
         </div>
 
@@ -95,42 +95,34 @@
         methods: {
             ...mapActions({
                 toAddField: 'addField',
-                toEditField: 'editField'
+                toEditField: 'editField',
+              toDeleteField: 'deleteField'
             }),
             ...mapGetters(['getTransform','getRules','editedName']),
             sync (value) {
-                console.log(value)
                 this.currentRepeater.push(value);
             },
-            edit(value, id) {
+            edit(index,value) {
                 if (this.transform) {
-                    for(let i = 0; i < this.translateRepeater.items.length; i++) {
-                        if (this.translateRepeater.items[i] === id) {
-                            Object.assign(this.translateRepeater.items[i], value);
-                        }
+                    if (this.translateRepeater[index].id === id) {
+                        Object.assign(this.translateRepeater.items[index], value);
                     }
                 } else {
-                    for(let i = 0; i < this.currentRepeater.length; i++) {
-                        if (this.currentRepeater[i].name === value.name) {
-                            Object.assign(this.currentRepeater[i], value);
-                        }else if (value.name ===this.editedName()) {
-                            value.name = this.editedName();
-                            Object.assign(this.currentRepeater[i], value);
-                        }
-                    }
+                  if (this.buildFields[index].id === index && this.buildFields[index].items[index].name === value.name) {
+                    Object.assign(this.buildFields[index].items[index], value)
+                  } else if(this.buildFields[index].id === index) {
+                    Object.assign(this.buildFields[index].items[index], value)
+                  }
+                    console.log(index, 'index', value, 'value', this.buildFields[index], 'repeater fields')
                 }
 
 
             },
-            deleteField(value) {
-                console.log(value)
-                this.buildFields[0].items.splice(value,1);
+            deleteRepeaterField(value) {
+                this.buildFields[value].items.splice(value,1);
                 let buildIndex = this.buildFields.map((item) => item.id).indexOf(value);
                 let listToDelete = [value];
                 this.buildFields = this.buildFields.filter((item) => listToDelete.indexOf(item.id) === -1);
-
-
-                console.log(this.buildFields)
             },
             removeRepeaterFields() {
                 this.buildFields.pop();
@@ -172,7 +164,11 @@
                 };
                 this.toEditField(editFields);
                 return editFields;
-            }
+            },
+          deleteField() {
+            this.toDeleteField(this.fields);
+            return this.fields;
+          }
         },
         beforeMount() {
             if (this.getTransform() && !this.getRules()) {

@@ -30,6 +30,9 @@
                 <div class="control">
                     <button class="button is-info" @click="editField">Edit List Fields</button>
                 </div>
+              <div class="control">
+                <button class="button is-info" @click="deleteField">Delete List Fields</button>
+              </div>
             </div>
     </div>
 
@@ -135,6 +138,10 @@
                 this.currentListFields = this.$refs.form.editField();
                 this.$emit('editList', this.currentListFields);
             },
+          deleteField() {
+            this.currentListFields = this.$refs.form.deleteField();
+            this.$emit('deleteList', this.currentListFields);
+          },
             handleChange(type) {
                 console.log('type list',type);
                 this.currentType = type;

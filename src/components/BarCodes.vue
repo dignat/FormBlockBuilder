@@ -85,7 +85,8 @@
             ...mapActions({
                 toAddField: 'addField',
                 toEditField: 'editField',
-                sendTheEditFields: 'checkedField'
+                sendTheEditFields: 'checkedField',
+              toDeleteField: 'deleteField'
             }),
             ...mapGetters(['getTransform','getRules']),
             addField() {
@@ -119,6 +120,10 @@
                 this.toEditField(editedFields);
                 return this.fields;
             },
+          deleteField() {
+            this.toDeleteField(this.fields);
+            return this.fields;
+          }
         },
         beforeMount() {
             if (this.getTransform() && !this.getRules()) {

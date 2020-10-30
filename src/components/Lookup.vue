@@ -1,10 +1,7 @@
 <template>
     <div class="section">
         <div class="field">
-            <label class="label">Routes ?</label>
-            <div class="control">
-                <input class="checkbox" type="checkbox" v-model="routes" @change="clearField">
-            </div>
+           
             <label class="label"> Title For Lookup</label>
             <div class="control">
                 <input class="input" type="text" :listFields="listFields.title"  v-model="fields.title">
@@ -98,7 +95,8 @@
         methods: {
             ...mapActions({
                 toAddField: 'addField',
-                toEditField: 'editField'
+                toEditField: 'editField',
+              toDeleteField: 'deleteField'
             }),
             ...mapGetters(['getTransform','getRules']),
             addField() {
@@ -106,7 +104,7 @@
                     type: "inputlookup",
                     title: this.fields.title,
                     name: this.fields.name === "" ? this.fields.name = this.lookupNameGenerator(this.fields.title, this.fields.idKey) : this.fields.name,
-                    uri: this.fields.uri = this.routes ? '/v1/api/' + this.fields.uri : '/reflow/data/sync/lookup/' + this.fields.uri,
+                    uri: this.fields.uri =  '/v1/api/' + this.fields.uri,
                     labelKey: this.fields.labelKey,
                     idKey: this.fields.idKey,
                     iconKey: this.fields.iconKey,
@@ -128,7 +126,7 @@
                     type: "inputlookup",
                     title: this.fields.title,
                     name: this.fields.name === "" ? this.fields.name = this.lookupNameGenerator(this.fields.title, this.fields.idKey) : this.fields.name,
-                    uri: this.fields.uri = this.routes ? '/v1/api/' + this.fields.uri : '/reflow/data/sync/lookup/' + this.fields.uri,
+                    uri: this.fields.uri = '/v1/api/' + this.fields.uri,
                     labelKey: this.fields.labelKey,
                     idKey: this.fields.idKey,
                     iconKey: this.fields.iconKey,
@@ -140,7 +138,11 @@
                 }
                     this.toEditField(editFields);
                 return editFields;
-            }
+            },
+          deleteField() {
+            this.toDeleteField(this.fields);
+            return this.fields;
+          }
         },
         beforeMount() {
             if (this.getTransform() && !this.getRules()) {
