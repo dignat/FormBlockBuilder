@@ -44,6 +44,7 @@ name: "Login",
       email: "",
       password: ""
     },
+
     error: null
   }
   },

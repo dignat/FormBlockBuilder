@@ -1,5 +1,7 @@
 <template>
-    <div class="section">
+  <div class="panel">
+    <p class="panel-heading"> <span class="is-clickable" @click="toggle= !toggle">Text Field -> {{ fields.title}} - Collapse/Expand   <font-awesome-icon :icon="['fas','angle-double-down']"/></span></p>
+    <div class="section"  v-show="toggle">
         <div class="field">
             <div class="control">
                 <label class="label"> Title For Text</label>
@@ -51,6 +53,7 @@
             </div>
         </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -65,6 +68,7 @@
         mixins: [appMixin],
         data () {
             return {
+              toggle: true,
                 slices: '',
                 fields: {
                     type: 'inputtext',
@@ -131,5 +135,7 @@
 </script>
 
 <style scoped>
-
+.is-clickable {
+  cursor: pointer;
+}
 </style>

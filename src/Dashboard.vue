@@ -16,7 +16,7 @@
                  :transformList="transform" :list="formFields"
                  :key="field.id"  @addFields="sync(index, $event)"
                  @editFields="edit(index, field.id, $event)" @deleteFields="deleteField(index)"
-          @addBeforeFields="addBefore(index)" @addAfterFields="addAfter(index)">
+          @addBeforeFields="addBefore(index)" @addAfterFields="addAfter(index)" @removeShownFields="removeShown(index)">
           </Forms>
         </div>
         <div class="field">
@@ -24,6 +24,14 @@
           <div class="select is-primary is-fullwidth">
             <select class="select" @click="formsFromFirebase" v-model="selectedName">
               <option v-for="name in formNames" v-bind:value="name">{{name}}</option>
+            </select>
+          </div>
+        </div>
+        <div class="field">
+          <p><strong>Pick A Client</strong></p>
+          <div class="select is-primary is-fullwidth">
+            <select class="select" @click="clientFromDB" v-model="selectedClientName">
+              <option v-for="name in clientNames" v-bind:value="name">{{name}}</option>
             </select>
           </div>
         </div>
@@ -50,7 +58,7 @@
             <button class="button is-primary" @click="removeFields">Remove Fields From Form</button>
           </div>-->
           <div class="control">
-            <button class="button is-danger" @click="generateForm">Generate</button>
+            <button class="button is-danger" @click="generateForm">Generate {{clients.id}}</button>
           </div>
           <div class="control">
             <button class="button is-danger" @click="translateForm">Translate Form</button>
@@ -133,6 +141,7 @@ import generatePdf from "./generatePdf";
 import Editor from "./components/Editor";
 import TemplateEditor from "./components/TemplateEditor";
 import firebase from "firebase";
+import user from "./store/modules/user";
 export default {
   name: 'App',
   components: {
@@ -149,6 +158,7 @@ export default {
       tableToDisplay: '',
       forms: [],
       selectedName: '',
+      selectedClientName: '',
       transform: false,
       buildFields: [],
       tempFields: {},
@@ -169,6 +179,9 @@ export default {
       dependantList: false,
       message: '',
       formNames:[],
+      clientNames: [
+
+      ],
       existingForm: {
         title: '',
         type: 'form',
@@ -183,7 +196,12 @@ export default {
         name: '',
         uri: '',
         items: []
-      }
+      },
+      clients: {
+        clientName: '',
+        clientUri: '',
+        forms:[]
+      },
     }
   },
   methods: {
@@ -199,7 +217,24 @@ export default {
     translateOldForm() {
       return this.toTransform(JSON.parse(this.existingForm), this.formFields);
     },
+    clientFromDB() {
+      firebase.database().ref('clients').once('value')
+      .then((res) => {
+        const data = res.val();
+        const dbClientName = [];
+        for(let key in data) {
+          const clientName = data[key].clientName;
+          dbClientName.push(clientName)
+        }
+        this.clientNames = dbClientName
+        return this.clientNames;
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+    },
     formsFromFirebase() {
+      console.log(user.state.user.data.token)
       firebase.database().ref('forms').once('value')
       .then((res) => {
         const data = res.val();
@@ -209,6 +244,7 @@ export default {
           dbFormName.push(formName);
         }
         this.formNames = dbFormName;
+        return this.formNames
       }).catch((error) => {
         console.log(error)
       })
@@ -258,6 +294,9 @@ export default {
       this.buildFields.splice(index+1, 0, {id: this.count++, items: this.formFields.items})
       this.isReplaced = true;
     },
+    removeShown(index) {
+      this.buildFields.splice(index,1);
+    },
     editTranslated(value) {
       for(let j = 0; j < this.buildFields[0].items.length; j++) {
         if (value.name === this.buildFields[0].items[j].name) {
@@ -290,23 +329,61 @@ export default {
       console.log(this.buildFields)
     },
     removeTypeFields () {
-      this.buildFields.pop();
+      if (this.buildFields.length > this.formFields.items.length) {
+        this.buildFields.pop();
+      }
+    },
+    updateClient(clientId) {
+      console.log(clientId, 'in the update')
+      firebase.database().ref('clients/'+clientId).update(this.clients)
+          .then((result) => {
+            console.log(result)
+          })
+          .catch((error) => {
+            console.log(error)
+          })
     },
 
+    formsFromDbForClient(clientName) {
+
+    },
     generateForm() {
       Object.assign({}, {title: '', name: '', type: 'form'});
       this.formFields.name = this.formFields.title.replace(/[\s,&,-\/_?():.]/g, "");
       this.formFields.uri = '/reflow/data/update/form/' + this.formFields.name;
-      console.log(JSON.stringify('before save',this.formFields));
+      this.loadClient();
       firebase.database().ref('forms').push(this.formFields)
       .then((data) => {
-        console.log(data)
+          console.log(data)
+          if (this.clients.clientName === this.selectedClientName) {
+            this.clients.forms.push(data.getKey());
+            console.log(this.clients.id)
+          }
+        console.log(this.clients.id)
+       this.updateClient(this.clients.id)
       }).catch((error) => {
         console.log(error)
       })
      // axios.post('https://formbuilder-f0c5e.firebaseio.com/forms.json?',this.formFields)
       //    .then(res => console.log(res))
        //   .catch(error => console.log(error))
+    },
+    loadClient() {
+      firebase.database().ref('clients').once('value')
+      .then((res) => {
+        const data = res.val();
+        const dbClient = [];
+        for(let key in data) {
+          const client = data[key];
+          client.id = key;
+          if (this.selectedClientName === data[key].clientName) {
+            dbClient.push(client)
+          }
+        }
+        Object.assign(this.clients, dbClient[0])
+      }).catch((error) => {
+        console.log(error)
+      })
     },
     loadForm() {
       firebase.database().ref('forms').once('value')

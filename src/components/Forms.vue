@@ -22,7 +22,7 @@
         </div>
        <div class="field is-grouped">
            <div class="control">
-               <button class="button is-primary" @click="addField" :disabled="currentType === undefined">Add all Fields</button>
+               <button class="button is-primary" @click.once="addField" :disabled="currentType === undefined">Add all Fields</button>
            </div>
             <div class="control">
                 <button class="button is-primary" @click="changedRules ? editField(currentProps) : editField(transformedFields)" :disabled="currentType === undefined">Edit all Fields</button>
@@ -32,6 +32,9 @@
             </div>
          <div class="control">
            <button class="button is-primary" @click="addBeforeField" :disabled="currentType === undefined">Add Before Field</button>
+         </div>
+         <div class="control">
+           <button class="button is-primary" @click="removeShownField">Remove Shown Field</button>
          </div>
          <div class="control">
            <button class="button is-primary" @click="addAfterField" :disabled="currentType === undefined">Add After Field</button>
@@ -113,7 +116,26 @@
         data() {
             return {
                 selected: {},
-                types: ['inputlookup', 'inputtext', 'inputlookupalias', 'inputlookupaliasselect', 'inputrepeat', 'inputnumber', 'inputradio', 'inputselect', 'inputlist', 'inputcheckbox', 'inputimage', 'inputsignature', 'inputformula','inputdate', 'inputlocation','text','inputlookupaliasimage','inputduration','inputscan'],
+                types: [
+                    {name:'inputlookup', label: 'Lookup List', icon: 'table'},
+                  {name:'inputtext', label: 'Text', icon: 'font'},
+                  {name:'inputlookupalias', label: 'Auto Populate', icon: 'align-center'},
+                  {name:'inputlookupaliasselect', label: 'Lookup Select', icon: 'th-list'},
+                  {name:'inputrepeat', label: 'Repeater', icon: 'th-large'},
+                  {name:'inputnumber', label: 'Number', icon: 'calculator'},
+                  {name:'inputradio', label: 'Radio', icon: 'check-circle'},
+                  {name:'inputselect', label: 'Drop Down', icon: 'list'},
+                  {name:'inputlist', label: 'Record Item\'s List', icon: 'th-large'},
+                  {name:'inputcheckbox', label: 'Checkbox', icon: 'check-square'},
+                  {name:'inputimage', label: 'Image', icon: 'camera'},
+                  {name:'inputsignature',label: 'Signature', icon: 'signature'},
+                  {name:'inputformula', label: 'Formula', icon: 'subscript'},
+                  {name: 'inputdate',label: 'Date', icon: 'clock'},
+                  {name: 'inputlocation', label: 'GPS', icon: 'map-marker'},
+                  {name: 'text', label: 'Decoration Text', icon:'paragraph'},
+                  {name:'inputlookupaliasimage', label: 'Image From Record', icon: 'camera'},
+                  {name:'inputduration',label: 'Time Duration',icon: 'stopwatch'},
+                  {name:'inputscan', label: 'Scanner', icon: 'qrcode'}],
                 currentFieldType: null,
                 currentType: null,
                 currentProps: {},
@@ -154,6 +176,9 @@
           },
           addAfterField() {
             this.$emit('addAfterFields', this.currentProps);
+          },
+          removeShownField() {
+            this.$emit('removeShownFields', this.currentProps);
           },
             handleChange(type) {
                 console.log('type',type);

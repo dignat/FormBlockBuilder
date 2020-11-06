@@ -1,6 +1,5 @@
 <template>
     <div>
-
         <div class="field">
             <div class="control">
                 <label class="label">List Name</label>
@@ -17,9 +16,7 @@
                 <div class="control" v-if="!transform">
                     <component ref="form"
                                v-for="(field, index) in buildFields" :listFields="fields.template" v-model="fields.template"
-                               :id="index" :key="index" @addList="sync"
-
-                    ></component>
+                               :id="index" :key="index" @addList="sync"></component>
                 </div>
                 <div class="control" v-if="transform">
                     <component ref="form" v-for="(field, index) in translateList.template" :listFields="field"
@@ -37,11 +34,8 @@
             <div class="control">
                 <button class="button is-info" @click="addMoreListFields">Add More List Fields</button>
             </div>
-
         </div>
     </div>
-
-
 </template>
 
 <script>

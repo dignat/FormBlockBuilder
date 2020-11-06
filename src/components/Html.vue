@@ -12,7 +12,7 @@
                 <option v-html="title"></option>
             </select>
         </div>
-        <div class="select is-primary is-fullwidth" style="background: white;" @click="Show=!Show" v-if="type === 'inputmultiselect' || type === 'inputlookup' && multi">
+        <div class="select is-primary is-fullwidth" style="background: white;" @click="Show=!Show" v-if="type === 'inputmultiselect' || type === 'inputlookup' && multi === 1">
             <p style="margin-left: 5px;">Select Item</p>
         </div>
 

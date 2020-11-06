@@ -2,7 +2,11 @@ const state = {
     user: {
         loggedId: false,
         data:null,
-        token: null
+        token: null,
+        role: {
+            admin: false,
+            guest: false
+        }
     }
 }
 const mutations = {
@@ -21,6 +25,8 @@ const actions = {
             commit("SET_USER", {
                 displayName: user.displayName,
                 email: user.email,
+                token: user.uid,
+                role: user.role
             });
         } else {
             commit("SET_USER", null);

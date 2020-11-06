@@ -14,9 +14,11 @@
       <p class="help is-danger" v-if="error !== null">{{ error }}</p>
     </div>
     <div class="field">
-      <label class="label">Password</label>
+      <label class="label">Role</label>
       <div class="control has-icon-right has-icons-left">
-        <input class="input is-danger" type="password" v-model="form.password"/>
+        <select class="input is-danger" type="select" v-model="selectedRole">
+          <option v-for="currentRole in roles">{{ currentRole }}</option>
+        </select>
         <span class="icon is-small is-right">
           <i class="fas fa-key"></i>
         </span>
@@ -33,14 +35,29 @@
 
 <script>
 import firebase from "firebase";
+import Select from "./components/Select";
 export default {
   name: "Register",
+  components: {Select},
   data() {
     return {
       form: {
         email: "",
         password: ""
     },
+      userToDb: {
+        email: "",
+        uid: "",
+        role:{
+          admin: false,
+          guest: false
+        }
+      },
+      roles :[
+        'admin',
+        'guest'
+      ],
+      selectedRole: '',
       error: null
     }
   },
@@ -53,6 +70,11 @@ export default {
             data.user.updateProfile({
               displayName: this.form.name
             })
+            this.userToDb.email = data.user.email;
+            this.userToDb.uid = data.user.uid
+            this.userToDb.role.admin = this.selectedRole === 'admin';
+            this.userToDb.role.guest = this.selectedRole === 'guest';
+            firebase.database().ref('users').push(this.userToDb)
             .then(() => {
               this.$router.replace({name: "Login"})
             });

@@ -1,7 +1,7 @@
 <template>
     <div class="section">
         <div class="field">
-           
+
             <label class="label"> Title For Lookup</label>
             <div class="control">
                 <input class="input" type="text" :listFields="listFields.title"  v-model="fields.title">
@@ -34,11 +34,11 @@
             </div>
             <label class="label">Multi ?</label>
             <div class="control">
-                <input class="checkbox" type="checkbox" :listFields="listFields.multi" name="multi" v-model="fields.multi">
+                <input class="checkbox" type="checkbox" :listFields="listFields.multi"  v-model="fields.multi">
             </div>
             <label class="label">Custom ?</label>
             <div class="control">
-                <input class="checkbox" type="checkbox" :listFields="listFields.custom" name="custom" v-model="fields.custom">
+                <input class="checkbox" type="checkbox" :listFields="listFields.custom"  v-model="fields.custom">
             </div>
             <label class="label">Filter ?</label>
             <div class="control">
@@ -126,14 +126,14 @@
                     type: "inputlookup",
                     title: this.fields.title,
                     name: this.fields.name === "" ? this.fields.name = this.lookupNameGenerator(this.fields.title, this.fields.idKey) : this.fields.name,
-                    uri: this.fields.uri = '/v1/api/' + this.fields.uri,
+                    uri: this.fields.uri = this.fields.uri === '' ?  '/v1/api/' + this.fields.uri : this.fields.uri,
                     labelKey: this.fields.labelKey,
                     idKey: this.fields.idKey,
                     iconKey: this.fields.iconKey,
                     multi: this.fields.multi,
                     custom: this.fields.custom
                 };
-                if (this.fields.filter !== undefined) {
+                if (this.fields.filter !== '') {
                     editFields.filter = this.fields.filter
                 }
                     this.toEditField(editFields);
