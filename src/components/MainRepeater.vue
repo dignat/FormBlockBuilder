@@ -1,5 +1,7 @@
 <template>
-    <div class="section">
+  <div class="panel" :id="id">
+    <p class="panel-heading"> <span class="is-clickable" @click="toggle= !toggle">Repeater Field -> {{ fields.title}} - Collapse/Expand   <font-awesome-icon :icon="['fas','angle-double-down']"/></span></p>
+    <div class="section" v-show="toggle">
         <div class="field">
             <div class="control">
                 <label class="label">Repeater Title</label>
@@ -23,9 +25,11 @@
                 <label class="label">Max</label>
                 <input class="input" type="number" name="max" :listFields="listFields.max" v-model="fields.max">
             </div>
+        </div>
+      <div class="field">
             <div v-if="!transform" class="control">
                 <Repeater ref="form" v-for="(field, index) in buildFields" :listFields="field"
-                          :list="buildFields[index]" :id="index" :type=field.type :key="index" v-model="fields.items"
+                          :list="buildFields[index]" :id="index+''+index" :type=field.type :key="field.id" v-model="fields.items"
                           @addRepeater="sync" @editRepeater="edit(index, $event)" @deleteRepeater="deleteRepeaterField(index)"></Repeater>
             </div>
             <div v-if="transform" class="control">
@@ -42,12 +46,13 @@
         <div class="control">
             <button class="button is-info" @click="addMoreRepeaterFields">Show More Repeater Fields</button>
         </div>
-        <div class="control">
+<!--        <div class="control">
             <button class="button is-info" @click="removeRepeaterFields" :disabled="buildFields.length===0">Remove Shown Fields From Repeater</button>
-        </div>
+        </div>-->
         </div>
 
     </div>
+  </div>
 </template>
 
 <script>
@@ -67,12 +72,14 @@
             translatedList: Object,
             repeaterTypes: Array,
             repeaterType: String,
+          id: Number
         },
         components: {
             Repeater
         },
         data () {
             return {
+              toggle: true,
                 slices: '',
                 buildFields: [],
                 translateRepeater: {},

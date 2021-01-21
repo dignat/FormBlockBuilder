@@ -11,14 +11,6 @@
           <label class="label">Form Name</label>
           <input class="input" type="text" name="name" v-model="formFields.name">
         </div>
-        <div class="field" v-if="!transform">
-          <Forms ref="form" v-for="(field, index) in buildFields" :id="index"
-                 :transformList="transform" :list="formFields"
-                 :key="field.id"  @addFields="sync(index, $event)"
-                 @editFields="edit(index, field.id, $event)" @deleteFields="deleteField(index)"
-          @addBeforeFields="addBefore(index)" @addAfterFields="addAfter(index)" @removeShownFields="removeShown(index)">
-          </Forms>
-        </div>
         <div class="field">
           <p><strong>Pick Forms From DB</strong></p>
           <div class="select is-primary is-fullwidth">
@@ -30,23 +22,29 @@
         <div class="field">
           <p><strong>Pick A Client</strong></p>
           <div class="select is-primary is-fullwidth">
-            <select class="select" @click="clientFromDB" v-model="selectedClientName">
+            <select class="select" @change="loadClient" v-model="selectedClientName">
               <option v-for="name in clientNames" v-bind:value="name">{{name}}</option>
             </select>
           </div>
+        </div>
+        <div class="field" v-if="!transform">
+          <Forms ref="form" v-for="(field, index) in buildFields" :id="index"
+                 :transformList="transform" :list="formFields"
+                 :key="field.id"  @addFields="sync(index, $event)"
+                 @editFields="edit(index, field.id, $event)" @deleteFields="deleteField(index)"
+                 @addBeforeFields="addBefore(index)" @addAfterFields="addAfter(index)" @removeShownFields="removeShown(index)">
+          </Forms>
         </div>
         <div class="field" v-if="transform">
           <Forms :fieldsType="fieldTypes[index]" ref="form"
                  v-for="(field, index) in buildFields" :radio="field.type" :type="field.type" :fieldListType="dependantType" :repeaterType="dependantRepeaterType" :repeaterTypes="dependantRepeaterTypes"
                  :transformList="transform" :list="formFields" :key="field.id" :changeRules="changingRules" :dependantTypes="dependantListTypes"
                  :deepDependantType="deepDependantType" :deepDependantListTypes="deepDependantListFieldTypes"
-                 :hasList="dependantList"
+                 :hasList="dependantList" :id="index"
                  :translatedList="field.items[index]"   @addFields="sync(index, $event)"
                  @editFields="editTranslated(index, field.id, $event)" @deleteFields="deleteField(index)">
           </Forms>
         </div>
-
-
         <div class="field is-grouped">
           <div class="control">
             <button class="button is-primary" @click="addTypeFields" :disabled="buildFields.length > formFields.items.length">Show Fields To Add</button>
@@ -58,7 +56,7 @@
             <button class="button is-primary" @click="removeFields">Remove Fields From Form</button>
           </div>-->
           <div class="control">
-            <button class="button is-danger" @click="generateForm">Generate {{clients.id}}</button>
+            <button class="button is-danger" @click="generateForm(clients.id)" :disabled="clients.clientName === ''">Generate</button>
           </div>
           <div class="control">
             <button class="button is-danger" @click="translateForm">Translate Form</button>
@@ -70,13 +68,12 @@
             <button class="button is-danger" @click="loadForm">Load Form</button>
           </div>
           <div class="control">
-            <button class="button is-danger" @click="updateForm(formFields.id)">Update Form {{formFields.id}}</button>
+            <button class="button is-danger" :disabled="selectedClientName === ''" @click="updateForm(formFields.id, clients.id)">Update Form {{formFields.id}} Client Id{{ clients.id}}</button>
           </div>
           <div class="control">
             <button class="button is-success" @click="signOut">Log Out</button>
           </div>
         </div>
-
         <div class="section">
           <div class="field">
             <div class="control">
@@ -180,7 +177,6 @@ export default {
       message: '',
       formNames:[],
       clientNames: [
-
       ],
       existingForm: {
         title: '',
@@ -190,6 +186,19 @@ export default {
         items: []
       },
       count: 0,
+      clientForms: {
+        client: {
+          clientName: '',
+          clientId: ''
+        },
+        formFields: {
+          title: '',
+          type: 'form',
+          name: '',
+          uri: '',
+          items: []
+        },
+      },
       formFields: {
         title: '',
         type: 'form',
@@ -202,6 +211,7 @@ export default {
         clientUri: '',
         forms:[]
       },
+
     }
   },
   methods: {
@@ -227,20 +237,19 @@ export default {
           dbClientName.push(clientName)
         }
         this.clientNames = dbClientName
-        return this.clientNames;
       })
       .catch((error) => {
         console.log(error)
       })
     },
     formsFromFirebase() {
-      console.log(user.state.user.data.token)
       firebase.database().ref('forms').once('value')
       .then((res) => {
         const data = res.val();
         const dbFormName = [];
         for (let key in data) {
-          const formName = data[key].title;
+          const formName = data[key].formFields !== undefined ? data[key].formFields.title : data[key].title;
+          console.log(data[key].formFields)
           dbFormName.push(formName);
         }
         this.formNames = dbFormName;
@@ -274,8 +283,6 @@ export default {
       this.buildFields[value].items.splice(value,1);
       this.buildFields.splice(value,1)
       console.log('There are the build fields',this.buildFields, this.buildFields[value])
-
-
     },
     edit (index, id, value) {
       if (this.buildFields[index].id === index && this.buildFields[index].items[index].name === value.name) {
@@ -283,7 +290,6 @@ export default {
       } else if(this.buildFields[index].id === id) {
         Object.assign(this.buildFields[index].items[index], value);
       }
-
     },
     addBefore(index) {
       console.log(index, this.count)
@@ -315,6 +321,7 @@ export default {
       this.formFields.items.pop();
     },
     addTypeFields() {
+      console.log(this.clients)
       if (this.formFields.items.length > 1) {
         if (this.uniqueFieldName(this.formFields.items)) {
           alert('The field that you just added has a duplicate name!!!');
@@ -334,7 +341,6 @@ export default {
       }
     },
     updateClient(clientId) {
-      console.log(clientId, 'in the update')
       firebase.database().ref('clients/'+clientId).update(this.clients)
           .then((result) => {
             console.log(result)
@@ -343,24 +349,23 @@ export default {
             console.log(error)
           })
     },
-
-    formsFromDbForClient(clientName) {
+    formsFromDbForClient(clientId) {
 
     },
-    generateForm() {
+    generateForm(clientId) {
       Object.assign({}, {title: '', name: '', type: 'form'});
       this.formFields.name = this.formFields.title.replace(/[\s,&,-\/_?():.]/g, "");
       this.formFields.uri = '/reflow/data/update/form/' + this.formFields.name;
-      this.loadClient();
-      firebase.database().ref('forms').push(this.formFields)
+      this.clientForms.client.clientName = this.selectedClientName;
+      this.clientForms.client.clientId = clientId;
+      Object.assign(this.clientForms.formFields, this.formFields)
+      firebase.database().ref('forms').push(this.clientForms)
       .then((data) => {
-          console.log(data)
           if (this.clients.clientName === this.selectedClientName) {
             this.clients.forms.push(data.getKey());
-            console.log(this.clients.id)
           }
-        console.log(this.clients.id)
-       this.updateClient(this.clients.id)
+          console.log(clientId)
+       this.updateClient(clientId)
       }).catch((error) => {
         console.log(error)
       })
@@ -381,6 +386,7 @@ export default {
           }
         }
         Object.assign(this.clients, dbClient[0])
+        console.log(this.clients)
       }).catch((error) => {
         console.log(error)
       })
@@ -389,14 +395,21 @@ export default {
       firebase.database().ref('forms').once('value')
           .then((res) => {
             const data = res.val();
+            console.log(data);
             const dbForm = [];
             for (let key in data) {
-              const form = data[key];
+              const form = data[key].formFields !== undefined ? data[key].formFields : data[key];
               form.id = key;
               if (this.selectedName === data[key].title) {
                 dbForm.push(form);
+              } else if (data[key].formFields !== undefined) {
+                if (this.selectedName === data[key].formFields.title) {
+                  dbForm.push(form)
+                  this.selectedClientName = data[key].client.clientName;
+                }
               }
             }
+            console.log(this.selectedName, this.selectedClientName);
             Object.assign(this.existingForm, dbForm[0]);
           }).catch((error) => {
         console.log(error)
@@ -416,13 +429,20 @@ export default {
           })
           .catch(error => console.log(error));*/
     },
-    updateForm(formId) {
+    updateForm(formId, clientId) {
       var config = {
         headers: {'Access-Control-Allow-Origin': '*'}
       };
-      firebase.database().ref('forms/'+formId).update(this.formFields)
+      this.clientForms.client.clientName = this.selectedClientName;
+      this.clientForms.client.clientId = clientId;
+      Object.assign(this.clientForms.formFields, this.formFields)
+      console.log(this.clientForms.formFields)
+      firebase.database().ref('forms/'+formId).update(this.clientForms)
       .then((data) => {
-        console.log(data)
+        console.log(data, 'data')
+        if (this.clients.clientName === this.selectedClientName) {
+          this.clients.forms.push(formId);
+        }
       }).catch((error) => console.log(error))
      /* axios.put('https://formbuilder-f0c5e.firebaseio.com/forms/'+formId+".json",this.formFields,config)
           .then(res => console.log(res.data))
@@ -440,6 +460,7 @@ export default {
       this.transform = true;
       this.setTransform(this.transform);
       Object.assign(this.formFields,this.existingForm);
+      console.log(this.formFields)
       for (let i = 0; i < this.formFields.items.length; i++) {
         this.currentType = this.formFields.items[i].type;
         this.fieldTypes.push(Forms.components);
@@ -660,6 +681,10 @@ export default {
     ...mapGetters({
       user: "user"
     })
+  },
+  mounted() {
+    this.clientFromDB()
+    this.formsFromFirebase()
   }
 }
 </script>

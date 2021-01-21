@@ -1,8 +1,39 @@
 <template>
-        <div class="field">
-            <div class="control">
-            <Radios :types="types" :radio="transform ? translatedRepeaterType: changedRules ? currentType : translatedRepeaterType" @change="handleChange"/>
+  <div>
+    <div class="columns is-grouped">
+      <div class="column is-2">
+        <Radios  v-myscroll:id="id" :types="types" :radio="transform ? translatedRepeaterType: changedRules ? currentType : translatedRepeaterType" @click="handleChange"/>
+      </div>
+      <div class="column">
+        <div v-if="!transform">
+          <component ref="form" :type="currentType"
+                     :is="currentFieldType" :props="currentProps"
+                     :listFields="currentRepeaterFields" :list="list" :id="id"></component>
         </div>
+        <div v-if="transform">
+          <component ref="form"
+                     :is="changedRules ? currentFieldType: translatedFieldType" :props="currentProps" :changeRules="changeRules"
+                     :listFields="changeRules ? currentRepeaterFields : transformedFields"></component>
+        </div>
+        <div class="field is-grouped" v-if="currentType !== undefined">
+          <div class="control">
+            <button class="button is-info" @click="addField">Add Repeater Fields</button>
+          </div>
+          <div class="control">
+            <button class="button is-primary" @click="editField">Edit Repeater Fields</button>
+          </div>
+          <div class="control">
+            <button class="button is-primary" @click="deleteField">Delete Repeater Fields</button>
+          </div>
+        </div>
+      </div>
+    </div>
+<!--        <div class="field">
+            <div class="control">
+            <Radios :types="types" :radio="transform ? translatedRepeaterType: changedRules ? currentType : translatedRepeaterType" @click="handleChange"/>
+        </div>
+        </div>
+    <div class="field">
             <div class="control" v-if="!transform">
                 <component ref="form" :type="currentType" :is="currentFieldType" :props="currentProps" :listFields="currentRepeaterFields" :list="list"></component>
             </div>
@@ -11,6 +42,7 @@
                            :is="changedRules ? currentFieldType: translatedFieldType" :props="currentProps" :changeRules="changeRules"
                            :listFields="changeRules ? currentRepeaterFields : transformedFields"></component>
             </div>
+      <div>
             <div class="field is-grouped">
                 <div class="control">
                     <button class="button is-info" @click="addField">Add Repeater Fields</button>
@@ -23,6 +55,8 @@
                 </div>
             </div>
         </div>
+    </div>-->
+  </div>
 </template>
 
 <script>
@@ -50,7 +84,8 @@
             changeRules: Boolean,
             radio: String,
             repeaterType: String,
-            repeaterFieldType: Object
+            repeaterFieldType: Object,
+            id: String
         },
         components: {
             Radios,
@@ -69,7 +104,24 @@
         },
         data () {
             return {
-                types: ['inputlookup', 'inputtext', 'inputlookupalias','inputnumber', 'inputselect', 'inputradio', 'inputcheckbox', 'inputimage', 'inputsignature', 'inputformula','inputdate', 'inputrepeat','inputduration','text'],
+                types: [ {name:'inputlookup', label: 'Lookup List', icon: 'table'},
+                  {name:'inputtext', label: 'Text', icon: 'font'},
+                  {name:'inputlookupalias', label: 'Auto Populate', icon: 'align-center'},
+                  {name:'inputlookupaliasselect', label: 'Lookup Select', icon: 'th-list'},
+                  {name:'inputrepeat', label: 'Repeater', icon: 'th-large'},
+                  {name:'inputnumber', label: 'Number', icon: 'calculator'},
+                  {name:'inputradio', label: 'Radio', icon: 'check-circle'},
+                  {name:'inputselect', label: 'Drop Down', icon: 'list'},
+                  {name:'inputcheckbox', label: 'Checkbox', icon: 'check-square'},
+                  {name:'inputimage', label: 'Image', icon: 'camera'},
+                  {name:'inputsignature',label: 'Signature', icon: 'signature'},
+                  {name:'inputformula', label: 'Formula', icon: 'subscript'},
+                  {name: 'inputdate',label: 'Date', icon: 'clock'},
+                  {name: 'inputlocation', label: 'GPS', icon: 'map-marker'},
+                  {name: 'text', label: 'Decoration Text', icon:'paragraph'},
+                  {name:'inputlookupaliasimage', label: 'Image From Record', icon: 'camera'},
+                  {name:'inputduration',label: 'Time Duration',icon: 'stopwatch'},
+                  {name:'inputscan', label: 'Scanner', icon: 'qrcode'}],
                 currentFieldType: null,
                 currentType: null,
                 currentProps: {},

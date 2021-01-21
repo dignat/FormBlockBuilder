@@ -1,5 +1,7 @@
 <template>
-    <div class="section">
+  <div class="panel" :id="id">
+    <p class="panel-heading"> <span class="is-clickable" @click="toggle= !toggle">List Field -> {{ fields.title}} - Collapse/Expand   <font-awesome-icon :icon="['fas','angle-double-down']"/></span></p>
+    <div class="section" v-show="toggle">
         <div class="field">
             <div class="control">
                 <label class="label">Keep Iterator With Target</label>
@@ -7,32 +9,65 @@
                 <label class="label">Target -1</label>
                 <input class="checkbox" type="checkbox" name="targetStatus"  @change="populateTarget" v-model="targetStatus">
             </div>
+        </div>
+      <div class="field">
             <div class="control">
                 <label class="label">List Title</label>
                 <input class="input" type="text" name="title" :listFields="listFields.title" v-model="fields.title">
             </div>
+      </div>
+      <div class="field">
             <div class="control">
                 <label class="label">List Name</label>
                 <input class="input" type="text" name="name" :listFields="listFields.name" v-model="fields.name">
                 <label class="label">Choose slices from title to generate name ( ex. 0,1,2 - start from 0)</label>
                 <input class="input" type="text"  v-model="slices">
             </div>
+      </div>
+      <div class="field">
             <div class="control">
                 <label class="label">List Iterator/Uri Key</label>
                 <input class="input" type="text" name="iteratorKey" :listFields="listFields.iteratorKey" v-model="fields.iteratorKey">
             </div>
+      </div>
+      <div class="field">
             <div class="control">
                 <label class="label">List Target</label>
                 <input class="input" type="text" name="target" :listFields="listFields.target" v-model="fields.target">
             </div>
+      </div>
+      <div class="field">
             <div class="control">
                 <label class="label">List Uri</label>
                 <input class="input" type="text" name="uri" :listFields="listFields.uri" v-model="fields.uri">
             </div>
+      </div>
+      <div class="field">
+          <div class="control">
+            <label class="label">Add items list</label>
+            <input class="checkbox" type="checkbox" name="" v-model="toAddItems">
+          </div>
+      </div>
+          <div class="field" v-if="toAddItems">
+            <div class="control">
+              <label class="label">Write items in this manner {title:'a title'} and comma separate more than one item {title:'a title'},{qty:7}</label>
+              <input type="number" v-model="arrayLength" class="input">
+              <div v-for="(field, index) in Number(arrayLength)" :key="index">
+                <label class="label">Key</label>
+                <input type="text" ref="itemKey" class="input">
+                <label class="label">Value</label>
+                <input type="text" ref="itemValue" class="input">
+
+                <button class="button is-primary" @click="addItemsFields(index)">Add Items</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      <div class="field">
             <div class="control" v-if="!transform">
                     <ListComponent ref="form" v-for="(field, index) in buildFields" :listFields="field"
                                    :list="buildFields[index]" v-model="fields.template"
-                               :id="index" :key="field.id" @addList="sync" @editList="edit(index, $event)" @deleteList="deleteListField(index)">
+                               :id="index+''+index" :key="field.id" @addList="sync" @editList="edit(index, $event)" @deleteList="deleteListField(index)">
 
                     </ListComponent>
             </div>
@@ -56,7 +91,7 @@
         </div>
     </div>
     </div>
-    
+  </div>
 </template>
 
 <script>
@@ -77,12 +112,18 @@
             listFieldType: Object,
             dependantTypes: Array,
             hasList: Boolean,
+            id: Number
         },
         components: {
             ListComponent
         },
         data () {
             return {
+              toggle: true,
+              toAddItems: false,
+              itemsLength: 0,
+              arrayLength: 0,
+              listChoices: [],
                 slices: '',
                 targetStatus: false,
                 keepIteratorKey: false,
@@ -95,6 +136,8 @@
                 dependantList: false,
                 transformedArray: [],
                 deepDependantFieldTypes: [],
+                itemsString: "",
+              title: '',
                 count: 0,
                 fields: {
                     type: 'inputlist',
@@ -103,6 +146,7 @@
                     iteratorKey: '',
                     target: '',
                     uri: '',
+                    items: [],
                     template: []
                 }
             }
@@ -114,7 +158,13 @@
               toDeleteField: 'deleteField'
             }),
             ...mapGetters(['getTransform','getRules']),
-
+          addItemsFields(index) {
+              let itemKey = this.$refs.itemKey[index].value;
+            let itemValue = this.$refs.itemValue[index].value;
+            let objectItems = {};
+            objectItems[itemKey] = itemValue;
+            this.fields.items.push(objectItems);
+          },
             sync (value) {
                 this.currentListFields.push(value);
             },
@@ -133,6 +183,7 @@
           },
             addMoreListFields() {
                 console.log(this.translatedInputList);
+                console.log(this.buildFields.length, 'build fields in the lists')
                 if (this.currentListFields.length > 1) {
                     if (this.uniqueFieldName(this.currentListFields)) {
                         alert('The field that you just added has a duplicate name!!!');
@@ -150,6 +201,7 @@
                     title: this.fields.title,
                     iteratorKey: this.fields.iteratorKey,
                     target: this.fields.target,
+                    items: this.fields.items,
                     template: this.currentListFields
                 };
                 if(this.targetStatus && !this.keepIteratorKey) {

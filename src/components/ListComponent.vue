@@ -1,27 +1,60 @@
 <template>
     <div>
+      <div class="columns is-grouped">
+        <div class="column is-3">
+          <Radios v-myscroll:id="id" :types="types" :radio="transform ? listTypeField: currentType" @click="handleChange" />
+        </div>
+        <div class="column">
+          <div v-if="!transform">
+            <component ref="form"
+                       :is="currentFieldType" :props="currentProps" :mainListFields="mainListFields"
+                       :listFields="currentListFields" :list="list" :id="id">
+            </component>
+          </div>
+          <div v-if="transform">
+            <component :is="changedRules ?  currentFieldType  : transformedListType" ref="form"
+                       :transformList="transformList" :changeRules="changeRules" :hasList="dependantList" :translatedList="transformedFields"
+                       :dependantTypes="[transformedListType]" :deepDependantListFieldTypes="[deepDependantFieldType]"
+                       :listFields="changedRules ? currentListFields : transformedFields">
 
-        <div class="field">
-
+            </component>
+          </div>
+          <div class="field is-grouped" v-if="currentType !== undefined">
             <div class="control">
-                <Radios :types="types" :radio="transform ? listTypeField: currentType" @change="handleChange"/>
+              <button class="button is-info" @click="addField">Add List Fields</button>
             </div>
+            <div class="control">
+              <button class="button is-info" @click="editField">Edit List Fields</button>
+            </div>
+            <div class="control">
+              <button class="button is-info" @click="deleteField">Delete List Fields</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+     <!-- <div class="field">
+        <Radios :types="types" :radio="transform ? listTypeField: currentType" @change="handleChange"/>
+      </div>
+          <div class="field">
             <div class="control" v-if="!transform">
-                <component ref="form"
-                           :is="currentFieldType" :props="currentProps" :mainListFields="mainListFields"
-                           :listFields="currentListFields" :list="list"
-                           >
-
-                </component>
+              <component ref="form"
+                         :is="currentFieldType" :props="currentProps" :mainListFields="mainListFields"
+                         :listFields="currentListFields" :list="list">
+              </component>
             </div>
-            <div class="control" v-if="transform">
-                <component :is="changedRules ?  currentFieldType  : transformedListType" ref="form"
-                           :transformList="transformList" :changeRules="changeRules" :hasList="dependantList" :translatedList="transformedFields"
-                           :dependantTypes="[transformedListType]" :deepDependantListFieldTypes="[deepDependantFieldType]"
-                           :listFields="changedRules ? currentListFields : transformedFields">
 
-                </component>
-            </div>
+      <div class="field">
+        <div class="control" v-if="transform">
+          <component :is="changedRules ?  currentFieldType  : transformedListType" ref="form"
+                     :transformList="transformList" :changeRules="changeRules" :hasList="dependantList" :translatedList="transformedFields"
+                     :dependantTypes="[transformedListType]" :deepDependantListFieldTypes="[deepDependantFieldType]"
+                     :listFields="changedRules ? currentListFields : transformedFields">
+
+          </component>
+        </div>
+      </div>
+
         </div>
             <div class="field is-grouped">
                 <div class="control">
@@ -33,10 +66,9 @@
               <div class="control">
                 <button class="button is-info" @click="deleteField">Delete List Fields</button>
               </div>
-            </div>
+            </div>-->
     </div>
 
-    
 </template>
 
 <script>
@@ -56,6 +88,10 @@
     import DateComponent from "./DateComponent"
     import HeaderComponent from "./HeaderComponent";
     import AliasImage from "./AliasImage";
+    import Duration from "./Duration";
+    import Location from "./Location";
+    import BarCodes from "./BarCodes";
+    import {myscroll} from "../directives/myscroll";
     export default {
         name: "ListComponent",
         props: {
@@ -65,6 +101,7 @@
             changeRules: Boolean,
             mainListFields: Object,
             radio: String,
+            count: Number,
             fieldListType: String,
             listFieldType: Object,
             dependantTypes: Array,
@@ -74,6 +111,7 @@
             deepDependantType: String,
             deepDependantListFieldType: Object,
             deepDependantListTypes: Array,
+            id: String
         },
         components: {
             Lookup,
@@ -88,25 +126,32 @@
             Formula,
             MainListComponent,
             DateComponent,
-            HeaderComponent
+            HeaderComponent,
+          Duration,
+          BarCodes,
+          Location
 
         },
         data () {
             return {
-                types: ['inputlookup',
-                    'inputtext',
-                    'inputlookupalias',
-                    'inputnumber',
-                    'inputselect',
-                    'inputradio',
-                    'inputcheckbox',
-                    'inputimage',
-                    'inputsignature',
-                    'inputformula',
-                    'inputlist',
-                    'inputdate',
-                    'text',
-                'inputlookupaliasimage'],
+              toggle: true,
+              isSecondList: false,
+                types: [ {name:'inputlookup', label: 'Lookup List', icon: 'table'},
+                  {name:'inputtext', label: 'Text', icon: 'font'},
+                  {name:'inputlookupalias', label: 'Auto Populate', icon: 'align-center'},
+                  {name:'inputnumber', label: 'Number', icon: 'calculator'},
+                  {name:'inputradio', label: 'Radio', icon: 'check-circle'},
+                  {name:'inputselect', label: 'Drop Down', icon: 'list'},
+                  {name:'inputlist', label: 'Record Item\'s List', icon: 'th-large'},
+                  {name:'inputcheckbox', label: 'Checkbox', icon: 'check-square'},
+                  {name:'inputimage', label: 'Image', icon: 'camera'},
+                  {name:'inputformula', label: 'Formula', icon: 'subscript'},
+                  {name: 'inputdate',label: 'Date', icon: 'clock'},
+                  {name: 'inputlocation', label: 'GPS', icon: 'map-marker'},
+                  {name: 'text', label: 'Decoration Text', icon:'paragraph'},
+                  {name:'inputlookupaliasimage', label: 'Image From Record', icon: 'camera'},
+                  {name:'inputduration',label: 'Time Duration',icon: 'stopwatch'},
+                  {name:'inputscan', label: 'Scanner', icon: 'qrcode'}],
                 currentFieldType: null,
                 currentType: null,
                 listTypeField: '',
@@ -195,7 +240,8 @@
                     case 'inputlist':
                         this.currentFieldType = MainListComponent;
                         this.currentListFields = {};
-                        console.log('in the list and I should see you once');
+                        this.isSecondList = true;
+                        console.log('in the list and I should see you once', this.isSecondList, 'is second list');
                         break;
                     case 'inputdate':
                         this.currentFieldType = DateComponent;
@@ -208,6 +254,19 @@
                     case 'inputlookupaliasimage':
                         this.currentFieldType = AliasImage;
                             this.currentListFields = {}
+                            break;
+                    case 'inputduration':
+                      this.currentFieldType = Duration;
+                      this.currentListFields = {}
+                      break;
+                  case 'inputlocation':
+                    this.currentFieldType = Location;
+                    this.currentListFields = {}
+                      break;
+                    case 'inputscan':
+                      this.currentFieldType = BarCodes;
+                      this.currentListFields = {}
+                      break;
 
                 }
             }
@@ -225,7 +284,7 @@
             this.transformedFields = this.listFields;
             this.translatedListTypes = this.dependantTypes;
             this.deepDependantFieldTypes = this.deepDependantTypes
-        }
+        },
     }
 </script>
 

@@ -1,5 +1,7 @@
 <template>
-    <div class="section">
+  <div class="panel">
+    <p class="panel-heading"> <span class="is-clickable" @click="toggle= !toggle">Decoration Text Field -> {{ fields.title}} - Collapse/Expand   <font-awesome-icon :icon="['fas','angle-double-down']"/></span></p>
+    <div class="section" v-show="toggle">
         <div class="field">
             <div class="control">
                 <label class="label"> Body/Text For Text</label>
@@ -25,6 +27,7 @@
             </div>
         </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -38,6 +41,7 @@
         },
         data () {
             return {
+              toggle: true,
                 isParagraph: false,
                 fields: {
                     type: 'text',

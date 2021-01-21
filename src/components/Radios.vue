@@ -1,8 +1,8 @@
 <template>
     <div class="control" >
 <div v-for="fieldType in types">
-  <button class="customButton" :radio="radio" ref="form"
-          :id="fieldType.name" :value="fieldType.name"
+  <button class="customButton" :radio="radio" ref="form" :count="count"
+          :id="fieldType.name" :value="fieldType.name" :types="types"
           @click="updateChange(fieldType.name)"><font-awesome-icon :icon="['fas',fieldType.icon]"></font-awesome-icon>  {{fieldType.label}}</button>
 
 
@@ -17,6 +17,7 @@
 
 <script>
     import Radios from './Radios'
+    import Number from "./Number";
     export default {
         name: "Radios",
         components: {
@@ -25,6 +26,7 @@
     props: {
         types: Array,
         radio: String,
+        count: Number,
         },
         data() {
             return {
@@ -33,9 +35,9 @@
         },
         methods: {
             updateChange (fieldType) {
-              this.$emit('click', fieldType);
-                this.$emit('change', fieldType);
-            }
+                this.$emit('click', fieldType);
+              // this.$emit('change', fieldType);
+            },
         },
 
         beforeMount() {
@@ -49,12 +51,12 @@
   border: 1px solid #b5b5b5;
   color: #0a0a0a;
   background-color: white;
-  padding: 25px 35px;
-  margin: 0 10px;
-  text-align: center;
-  font-size: 16px;
+  padding: 10px 10px;
+  margin: 0 0px;
+  text-align: left;
+  font-size: 14px;
   cursor: pointer;
-  width: 180px;
+  width: 115px;
 
 }
 .glyph {

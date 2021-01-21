@@ -1,7 +1,9 @@
 <template>
-    <div class="section">
+  <div class="panel">
+    <p class="panel-heading"> <span class="is-clickable" @click="toggle= !toggle">Radio Field -> {{ fields.title}} - Collapse/Expand   <font-awesome-icon :icon="['fas','angle-double-down']"/></span></p>
+    <div class="section" v-show="toggle">
         <div class="control">
-            <Radios :types="types" :radio="customType" @change="handleChange"/>
+            <Radios :types="types" :radio="customType" @click="handleChange"/>
             <label class="label">Radio Field Title</label>
             <input class="input" type="text" name="title" :listFields="listFields.title" v-model="fields.title">
             <label class="label">Choose slices from title to generate name ( ex. 0,1,2 - start from 0)</label>
@@ -25,6 +27,7 @@
                 </div>
             </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -47,12 +50,13 @@
         },
         data () {
             return {
+              toggle: true,
                 slices:'',
                 customTitles: false,
                 defaultOtherTitles: false,
-                types: ['default', 'custom', 'default other'],
+                types: [{name:'default', label: 'Default (Yes/No)', icon: 'check-circle'}, {name:'custom', label:'Custom', icon: 'check-circle'}, {name: 'default other', label: 'Default (Yes/No/N/A)',icon:'check-circle'}],
                 transformed: false,
-                customType: '',
+                customType: null,
                 customFields: [
                     {title: ''}
                 ],
@@ -89,6 +93,7 @@
                     items: this.customTitles ? this.fields.items = this.customFields : this.customType === 'default other' ? this.fields.items = [{title: 'Yes'},{title: 'No'},{title: 'N/A'}] : this.fields.items = [{title: 'Yes'},{title: 'No'}]
 
                 };
+                console.log(this.types)
                 this.toAddField(fields);
                 return fields
 
@@ -97,7 +102,7 @@
                 const editFields = {
                     type: "inputradio",
                     title: this.fields.title,
-                    name:  this.fields.name === "" ? this.fields.name = this.nameGenerator(this.fields.title) : this.fields.name,
+                    name:  this.fields.name === "" ? this.fields.name = this.nameGenerator(this.fields.title,this.slices.length > 0 ? this.slices.split(',') : []) : this.fields.name,
                     hidden: this.fields.hidden,
                     items: this.customTitles ? this.fields.items = this.customFields : this.customType === 'default other' ? this.fields.items = [{title: 'Yes'},{title: 'No'},{title: 'N/A'}] : this.fields.items = [{title: 'Yes'},{title: 'No'}]
                 };
@@ -109,7 +114,7 @@
             return this.fields;
           },
             handleChange(type) {
-                console.log(type);
+                console.log(type, 'should show the type');
                 switch(type) {
                     case 'custom':
                         this.customTitles = true;

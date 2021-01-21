@@ -1,5 +1,7 @@
 <template>
-    <div class="section">
+  <div class="panel">
+    <p class="panel-heading"> <span class="is-clickable" @click="toggle= !toggle">Checkbox Field -> {{ fields.title}} - Collapse/Expand   <font-awesome-icon :icon="['fas','angle-double-down']"/></span></p>
+    <div class="section" v-show="toggle">
         <div class="control">
             <label class="label">Title for Checkbox</label>
             <input class="input" type="text" name="title" :listFields="listFields.title" v-model="fields.title">
@@ -15,7 +17,7 @@
             <input class="checkbox" name="hidden" type="checkbox" :listFields="listFields.hidden" v-model="fields.hidden">
         </div>
     </div>
-    
+  </div>
 </template>
 
 <script>
@@ -30,6 +32,7 @@
         },
         data () {
             return {
+              toggle: true,
                 slices: '',
                 fields: {
                     type: "inputcheckbox",

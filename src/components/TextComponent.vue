@@ -1,7 +1,7 @@
 <template>
-  <div class="panel">
-    <p class="panel-heading"> <span class="is-clickable" @click="toggle= !toggle">Text Field -> {{ fields.title}} - Collapse/Expand   <font-awesome-icon :icon="['fas','angle-double-down']"/></span></p>
-    <div class="section"  v-show="toggle">
+  <div class="panel" :id="id">
+    <p class="panel-heading"><i>Text box , to insert a free text</i> </p>
+    <div class="section">
         <div class="field">
             <div class="control">
                 <label class="label"> Title For Text</label>
@@ -64,6 +64,7 @@
         name: "TextComponent",
         props: {
             listFields: Object,
+            id: [Number,String],
         },
         mixins: [appMixin],
         data () {
@@ -135,7 +136,5 @@
 </script>
 
 <style scoped>
-.is-clickable {
-  cursor: pointer;
-}
+
 </style>

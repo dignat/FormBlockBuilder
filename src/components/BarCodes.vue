@@ -1,5 +1,7 @@
 <template>
-    <div class="section">
+  <div class="panel" :id="id">
+    <p class="panel-heading"> <span class="is-clickable" @click="toggle= !toggle">QRCode Field -> {{ fields.title}} - Collapse/Expand   <font-awesome-icon :icon="['fas','angle-double-down']"/></span></p>
+    <div class="section" v-show="toggle">
         <div class="field">
             <div class="control">
                 <label class="label"> Title For Scan</label>
@@ -52,6 +54,7 @@
             </div>
         </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -62,10 +65,12 @@
         name: "BarCodes",
         props: {
             listFields: Object,
+          id: [Number,String]
         },
         mixins: [appMixin],
         data () {
             return {
+              toggle: true,
                 slices: '',
                 fields: {
                     type: 'inputscan',

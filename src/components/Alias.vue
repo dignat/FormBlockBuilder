@@ -63,7 +63,7 @@
         },
         data () {
             return {
-              toggle: false,
+              toggle: true,
                 slices: '',
                 fields: {
                     type: 'inputlookupalias',

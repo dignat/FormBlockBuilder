@@ -10,12 +10,17 @@ import {faTable, faFont, faAlignCenter, faThList,faList,faCheckCircle,faCheckSqu
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import {routes} from "./routes/routes";
 import VueRouter from "vue-router";
+import VueScrollTo from "vue-scrollto";
 import CKEditor from 'ckeditor4-vue';
 import firebase from "firebase";
 import admin from "firebase/auth"
 import store from "./store/store";
+import {myscroll} from "./directives/myscroll";
+
 
 Vue.use(VueRouter);
+Vue.use(VueScrollTo)
+Vue.directive('myscroll', myscroll)
 
 const router = new VueRouter({
   mode: 'history',

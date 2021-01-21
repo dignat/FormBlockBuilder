@@ -1,5 +1,7 @@
 <template>
-    <div class="section">
+  <div class="panel">
+    <p class="panel-heading"> <span class="is-clickable" @click="toggle= !toggle">Text Field -> {{ fields.title}} - Collapse/Expand   <font-awesome-icon :icon="['fas','angle-double-down']"/></span></p>
+    <div class="section" v-show="toggle">
         <div class="field">
             <div class="control">
                 <label class="label">Alias Select Title</label>
@@ -36,7 +38,7 @@
         <div class="field">
             <div class="control">
                 <label class="label">Alias Select Key</label>
-                <input class="checkbox" type="checkbox" name="selectKey" v-model="fields.selectKey">
+                <input class="input" type="text" name="selectKey" v-model="fields.selectKey">
             </div>
         </div>
         <div class="field">
@@ -47,6 +49,7 @@
         </div>
 
     </div>
+  </div>
 </template>
 
 <script>
@@ -61,6 +64,7 @@
         },
         data (){
             return {
+              toggle: true,
                 slices: '',
                 fields: {
                     type: 'inputlookupaliasselect',

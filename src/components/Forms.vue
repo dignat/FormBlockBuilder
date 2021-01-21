@@ -1,16 +1,55 @@
 <template>
-    <div>
-        <div class="field">
-                <Radios :types="types" :radio="transform ? changedRules ? currentType : translatedType : currentType" @change="handleChange"/>
+    <div class="formSection">
+      <p class="panel-heading"> <span class="is-clickable" @click="toggle= !toggle">Field  ->  Collapse/Expand   <font-awesome-icon :icon="['fas','angle-double-down']"/></span></p>
+      <div class="columns is-grouped" v-show="toggle">
+            <div class="column is-one-fifth">
+              <Radios v-myscroll:id="id" :types="types" :radio="transform ? changedRules ? currentType : translatedType : currentType" @click="handleChange"/>
+            </div>
+            <div class="column">
+              <div v-if="!transform" class="formSection">
+                <component ref="form" :is="currentFieldType" :fieldsType="fieldsType" :id="id"
+                           :list="list" :transformList="transformList" :listFields="currentProps">
+                </component>
+              </div>
+              <div  v-if="transform">
+                <component :is="changedRules ? currentFieldType : fieldsType" ref="form"
+                           :list="list" :dependantTypes="dependantFieldTypes" :repeaterTypes="repeaterTypes" :repeaterType="repeaterType"
+                           :transformList="transformList" :translatedList="transformedFields" :deepDependantListTypes="deepDependantFieldTypes"
+                           :hasList="hasList"
+                           :listFields="changedRules ? currentProps: transformedFields">
+                </component>
+              </div>
+
+              <div class="field is-grouped" v-if="currentType !== undefined">
+                <div class="control">
+                  <button class="button is-primary" @click.once="addField" :disabled="currentType === undefined">Add all Fields</button>
+                </div>
+                <div class="control">
+                  <button class="button is-primary" @click="changedRules ? editField(currentProps) : editField(transformedFields)" :disabled="currentType === undefined">Edit all Fields</button>
+                </div>
+                <div class="control">
+                  <button class="button is-primary" @click="changedRules ? deleteField(currentProps) : deleteField(transformedFields)" :disabled="currentType === undefined">Delete Field</button>
+                </div>
+                <div class="control">
+                  <button class="button is-primary" @click="addBeforeField" :disabled="currentType === undefined">Add Before Field</button>
+                </div>
+                <div class="control">
+                  <button class="button is-primary" @click="removeShownField">Remove Shown Field</button>
+                </div>
+                <div class="control">
+                  <button class="button is-primary" @click="addAfterField" :disabled="currentType === undefined">Add After Field</button>
+                </div>
+              </div>
+            </div>
         </div>
-       <div class="field" v-if="!transform">
+       <!--<div class="field" v-if="!transform">
            <div class="control">
                <component ref="form" :is="currentFieldType" :fieldsType="fieldsType"
                           :list="list" :transformList="transformList" :listFields="currentProps">
                </component>
            </div>
-       </div>
-        <div class="field" v-if="transform">
+       </div>-->
+        <!--<div class="field" v-if="transform">
             <div class="control">
                 <component :is="changedRules ? currentFieldType : fieldsType" ref="form"
                             :list="list" :dependantTypes="dependantFieldTypes" :repeaterTypes="repeaterTypes" :repeaterType="repeaterType"
@@ -19,8 +58,8 @@
                            :listFields="changedRules ? currentProps: transformedFields">
                 </component>
             </div>
-        </div>
-       <div class="field is-grouped">
+        </div>-->
+      <!-- <div class="field is-grouped">
            <div class="control">
                <button class="button is-primary" @click.once="addField" :disabled="currentType === undefined">Add all Fields</button>
            </div>
@@ -39,7 +78,7 @@
          <div class="control">
            <button class="button is-primary" @click="addAfterField" :disabled="currentType === undefined">Add After Field</button>
          </div>
-       </div>
+       </div>-->
     </div>
 
 </template>
@@ -69,9 +108,11 @@
     import AliasImage from "./AliasImage";
     import Duration from "./Duration";
     import BarCodes from "./BarCodes";
+    import {myscroll} from "../directives/myscroll";
     export default {
         name: "Forms",
         props: {
+            id: [Number, String],
             list: Object,
             radio: String,
             fieldsType: Object,
@@ -115,26 +156,27 @@
         },
         data() {
             return {
+              toggle: true,
                 selected: {},
                 types: [
-                    {name:'inputlookup', label: 'Lookup List', icon: 'table'},
+                    {name:'inputlookup', label: 'Lookup', icon: 'table'},
                   {name:'inputtext', label: 'Text', icon: 'font'},
-                  {name:'inputlookupalias', label: 'Auto Populate', icon: 'align-center'},
-                  {name:'inputlookupaliasselect', label: 'Lookup Select', icon: 'th-list'},
+                  {name:'inputlookupalias', label: 'Alias', icon: 'align-center'},
+                  {name:'inputlookupaliasselect', label: 'Alias Select', icon: 'th-list'},
                   {name:'inputrepeat', label: 'Repeater', icon: 'th-large'},
                   {name:'inputnumber', label: 'Number', icon: 'calculator'},
                   {name:'inputradio', label: 'Radio', icon: 'check-circle'},
                   {name:'inputselect', label: 'Drop Down', icon: 'list'},
-                  {name:'inputlist', label: 'Record Item\'s List', icon: 'th-large'},
+                  {name:'inputlist', label: 'List', icon: 'th-large'},
                   {name:'inputcheckbox', label: 'Checkbox', icon: 'check-square'},
                   {name:'inputimage', label: 'Image', icon: 'camera'},
                   {name:'inputsignature',label: 'Signature', icon: 'signature'},
                   {name:'inputformula', label: 'Formula', icon: 'subscript'},
                   {name: 'inputdate',label: 'Date', icon: 'clock'},
                   {name: 'inputlocation', label: 'GPS', icon: 'map-marker'},
-                  {name: 'text', label: 'Decoration Text', icon:'paragraph'},
-                  {name:'inputlookupaliasimage', label: 'Image From Record', icon: 'camera'},
-                  {name:'inputduration',label: 'Time Duration',icon: 'stopwatch'},
+                  {name: 'text', label: 'Long Text', icon:'paragraph'},
+                  {name:'inputlookupaliasimage', label: 'Alias Image', icon: 'camera'},
+                  {name:'inputduration',label: 'Duration',icon: 'stopwatch'},
                   {name:'inputscan', label: 'Scanner', icon: 'qrcode'}],
                 currentFieldType: null,
                 currentType: null,
@@ -301,5 +343,8 @@
 </script>
 
 <style scoped>
-
+.formSection {
+  border: #b5b5b5 solid 1px;
+  margin-bottom: 50px;
+}
 </style>
