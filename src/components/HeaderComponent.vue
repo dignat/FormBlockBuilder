@@ -5,7 +5,7 @@
         <div class="field">
             <div class="control">
                 <label class="label"> Body/Text For Text</label>
-                <input class="input" type="text" :listFields="listFields.body" v-model="fields.body">
+              <textarea class="textarea is-fullwidth" type="text" :listFields="listFields.body" v-model="fields.body"></textarea>
             </div>
         </div>
         <div class="field">

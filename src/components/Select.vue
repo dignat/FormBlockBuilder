@@ -14,9 +14,15 @@
                 <div class="control">
                     <input class="input" type="text" :listFields="listFields.iconKey" v-model="fields.iconKey">
                 </div>
+              <div class="control">
+                <label class="label">Add Value to Items title?</label>
+                <input class="checkbox" type="checkbox"  v-model="addValue">
+              </div>
                 <div  v-for="item in customFields">
                     <label class="label">Title Field</label>
                     <input class="input" type="text" name="title" :listFields="item.title" v-model="item.title">
+                  <label class="label" v-if="addValue">Title Value</label>
+                  <input v-if="addValue" class="input" type="number" name="title" :listFields="item.value" v-model="item.value">
                 </div>
                 <div v-if="transformed" v-for="item in fields.items">
                     <label class="label">Title Field</label>
@@ -57,6 +63,7 @@
         },
         data () {
             return {
+              addValue: false,
               toggle: true,
                 slices: '',
                 customFields: [
@@ -84,9 +91,17 @@
             ),
             ...mapGetters(['getTransform','getRules']),
             addSelectFields() {
+              if (this.addValue) {
                 this.customFields.push({
-                    title:''
+                  title:'',
+                  value: 0
                 });
+              } else {
+                this.customFields.push({
+                  title:''
+                });
+              }
+
             },
             addField() {
                 const fields = {

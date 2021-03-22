@@ -99,7 +99,7 @@
                    title: this.fields.title,
                    name: this.fields.name === "" ? this.fields.name = this.nameGenerator(this.fields.title, this.slices.length > 0 ? this.slices.split(',') : []) : this.fields.name,
                    hidden: this.fields.hidden,
-                   limit: this.fields.limit,
+                   limit: parseInt(this.fields.limit),
                    default: this.fields.default,
                    required: this.fields.required,
                    enabled: this.fields.enabled
@@ -113,7 +113,7 @@
                     title: this.fields.title,
                     name: this.fields.name === "" ? this.fields.name = this.nameGenerator(this.fields.title, this.slices.length > 0 ? this.slices.split(',') : []) : this.fields.name,
                     hidden: this.fields.hidden,
-                    limit: this.fields.limit,
+                    limit: parseInt(this.fields.limit),
                     default: this.fields.default,
                     required: this.fields.required,
                     enabled: this.fields.enabled

@@ -86,6 +86,7 @@
 <script>
     import {mapActions} from 'vuex';
     import {mapGetters} from 'vuex';
+    import {mapState} from 'vuex';
     import Lookup from './Lookup';
     import Radios from "./Radios";
     import TextComponent from "./TextComponent"
@@ -109,6 +110,9 @@
     import Duration from "./Duration";
     import BarCodes from "./BarCodes";
     import {myscroll} from "../directives/myscroll";
+    import RadiosWithVuex from "./RadiosWithVuex";
+    import TextComponentWithVuex from "./TextComponentWithVuex";
+    import FormVuex from "./FormVuex";
     export default {
         name: "Forms",
         props: {
@@ -151,7 +155,10 @@
             NumberComponent,
             AliasSelect,
             Duration,
-            BarCodes
+            BarCodes,
+          RadiosWithVuex,
+          TextComponentWithVuex,
+          FormVuex
 
         },
         data() {
@@ -195,7 +202,7 @@
         methods: {
             ...mapActions({
                 updateType: 'updateType',
-                sendTheEditFields: 'checkedField'
+                sendTheEditFields: 'checkedField',
             }),
             ...mapGetters(['getRules']),
             addField() {
@@ -338,7 +345,7 @@
             this.currentType = this.radio;
             this.transformedFields = this.translatedList;
             this.deepDependantFieldTypes = this.deepDependantListTypes
-        }
+        },
     }
 </script>
 

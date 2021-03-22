@@ -64,7 +64,7 @@
                         name: this.fields.name === "" ? this.fields.name = this.nameGenerator(this.fields.title,this.slices.length > 0 ? this.slices.split(',') : []) : this.fields.name,
                         hidden: this.fields.hidden,
                         required: this.fields.required,
-                        source: this.fields.source,
+                        source: parseInt(this.fields.source),
                         width: this.fields.width
                 };
                 this.toAddField(fields);

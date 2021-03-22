@@ -28,6 +28,7 @@
           </div>
         </div>
         <div class="field" v-if="!transform">
+<!--       <FormVuex v-for="(item, index) in builder" :key="index"/>-->
           <Forms ref="form" v-for="(field, index) in buildFields" :id="index"
                  :transformList="transform" :list="formFields"
                  :key="field.id"  @addFields="sync(index, $event)"
@@ -47,6 +48,7 @@
         </div>
         <div class="field is-grouped">
           <div class="control">
+<!--            <button class="button is-primary" @click="addBlock()" >Show Fields To Add</button>-->
             <button class="button is-primary" @click="addTypeFields" :disabled="buildFields.length > formFields.items.length">Show Fields To Add</button>
           </div>
           <div class="control">
@@ -139,6 +141,7 @@ import Editor from "./components/Editor";
 import TemplateEditor from "./components/TemplateEditor";
 import firebase from "firebase";
 import user from "./store/modules/user";
+import FormVuex from "./components/FormVuex";
 export default {
   name: 'App',
   components: {
@@ -146,7 +149,8 @@ export default {
     Forms,
     'app-html': Html,
     'app-editor': Editor,
-    'app-twig': TemplateEditor
+    'app-twig': TemplateEditor,
+    FormVuex
   },
   mixins: [appMixin],
   data () {
@@ -219,6 +223,7 @@ export default {
       toTransform: 'translateOldForm',
       buildTypeFields: 'addTypeFields',
       setTransform: 'setTransform',
+      addBlock: 'addBlock',
     }),
     ...mapGetters(['translatedForm', 'editFields', 'currentFormFields', 'currentForm','editedName','getRules']),
     Pdf() {
@@ -679,7 +684,10 @@ export default {
       return this.$store.getters.fields;
     },
     ...mapGetters({
-      user: "user"
+      user: "user",
+      formItems: 'getFormItems',
+      builder: 'getBuildingBlocks',
+      formVuex: 'getForm'
     })
   },
   mounted() {
