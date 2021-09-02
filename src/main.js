@@ -17,7 +17,6 @@ import admin from "firebase/auth"
 import store from "./store/store";
 import {myscroll} from "./directives/myscroll";
 
-
 Vue.use(VueRouter);
 Vue.use(VueScrollTo)
 Vue.directive('myscroll', myscroll)

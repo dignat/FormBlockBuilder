@@ -7,7 +7,7 @@
           <label class="label"> Title For Text</label>
           <input class="input" type="text"  v-model="fields.title" :placeholder="fields.title">
           <label class="label">Choose slices from title to generate name ( ex. 0,1,2 - start from 0)</label>
-          <input class="input" type="text"  v-model="slices">
+          <input class="input" type="text" v-model="slices">
         </div>
       </div>
       <div class="field">
@@ -52,16 +52,15 @@
           <input class="input" type="text" name="default" v-model="fields.default">
         </div>
       </div>
-      <div class="field">
-        <div class="container">
-          <button class="btn is-primary" @click.once="add(fields, slices)">Create Field</button>
+      <div class="field is-grouped">
+        <div class="control">
+          <button class="button is-primary" @click.once="add(fields)">Create Field</button>
+        </div>
+        <div class="control">
+          <button class="button is-primary" @click="edit(fields)">Edit Field</button>
         </div>
       </div>
-      <div class="field">
-        <div class="container">
-          <button class="btn is-primary" @click="edit(fields)">Edit Field</button>
-        </div>
-      </div>
+
     </div>
   </div>
 </template>
@@ -89,12 +88,17 @@ name: "TextComponentWithVuex",
   ...mapActions({
     add: 'createInputField',
     edit: 'editInputField'
-  })
+  }),
   },
   computed: {
-    ...mapGetters({
-      slices: 'getSlices',
-    }),
+    slices: {
+      get: function() {
+        return this.$store.state.slices
+      },
+      set: function (newVal) {
+        this.$store.commit('updateSlices', newVal)
+      }
+    }
   }
 }
 </script>

@@ -1,9 +1,10 @@
 import Vue from 'vue';
 import appMixin from "../../mixins";
+import nameGenerator from 'field_name_helper'
 const state = {
     buildingBlocks: [],
     slices: "",
-    id: null,
+    id: 0,
     fieldComponent: null,
     field: {
         type: "",
@@ -55,10 +56,14 @@ const mutations = {
     handleComponent(state, component) {
         state.fieldComponent = component.componentName
     },
-    createInputField (state, inputfield, slices) {
+    updateSlices (state, slices) {
+      return state.slices = slices
+    },
+    createInputField (state, inputfield) {
+        console.log(state.slices)
         state.field.type = state.type
         state.field = inputfield;
-        state.field.name = inputfield.name === "" ? appMixin.methods.nameGenerator(inputfield.title, slices !== undefined && slices.length > 0 ? slices.split(',') : [] ) : inputfield.name
+        state.field.name = inputfield.name === "" ? nameGenerator.nameGenerator(inputfield.title, state.slices !== undefined && state.slices.length > 0 ? state.slices.split(',') : [], null) : inputfield.name
         state.id++;
         state.formVuex.items.push(inputfield)
     },
@@ -71,15 +76,15 @@ const mutations = {
             items: state.formVuex.items
         })
         console.log(state.type, state.fieldComponent)
-    }
+    },
 };
 
 const actions = {
     changeType({commit}, type) {
         commit('changeType', type)
     },
-    createInputField({commit}, inputfield,  slices) {
-        commit('createInputField', inputfield, slices)
+    createInputField({commit}, inputfield) {
+        commit('createInputField', inputfield)
     },
     addBlock ({commit}, fields) {
         commit('addBlock', fields);

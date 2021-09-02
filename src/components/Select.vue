@@ -53,6 +53,7 @@
     import {mapActions} from 'vuex'
     import {mapGetters} from 'vuex'
     import appMixin from '../mixins'
+    import helper from 'field_name_helper'
     export default {
         name: "Select",
         mixins: [appMixin],
@@ -107,7 +108,7 @@
                 const fields = {
                     type: this.fields.multi ? "inputmultiselect" : "inputselect",
                     title: this.fields.title,
-                    name: this.fields.name === "" ? this.fields.name = this.nameGenerator(this.fields.title, this.slices.length > 0 ? this.slices.split(',') : []) : this.fields.name,
+                    name: this.fields.name === "" ? this.fields.name = helper.nameGenerator(this.fields.title, this.slices.length > 0 ? this.slices.split(',') : [], null) : this.fields.name,
                     multi: this.fields.multi,
                     custom: this.fields.custom,
                     items: this.customFields

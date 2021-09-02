@@ -60,6 +60,7 @@
     import {mapActions} from 'vuex'
     import {mapGetters} from 'vuex'
     import appMixin from "../mixins";
+    import fieldHelper from 'field_name_helper'
     export default {
         name: "TextComponent",
         props: {
@@ -97,7 +98,7 @@
                const fields = {
                    type: 'inputtext',
                    title: this.fields.title,
-                   name: this.fields.name === "" ? this.fields.name = this.nameGenerator(this.fields.title, this.slices.length > 0 ? this.slices.split(',') : []) : this.fields.name,
+                   name: this.fields.name === "" ? this.fields.name = fieldHelper.nameGenerator(this.fields.title, this.slices.length > 0 ? this.slices.split(',') : [], null) : this.fields.name,
                    hidden: this.fields.hidden,
                    limit: parseInt(this.fields.limit),
                    default: this.fields.default,

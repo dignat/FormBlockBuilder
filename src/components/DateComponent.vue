@@ -12,6 +12,8 @@
                 <input class="input" name="name" :listFields="listFields.name" v-model="fields.name">
                 <label class="label">Time Type</label>
                 <input class="number" name="time" :listFields="listFields.time" v-model="fields.time">
+              <label class="label">Default Value</label>
+              <input class="number" name="time" :listFields="listFields.time" v-model="fields.default">
             </div>
         </div>
     </div>
@@ -38,7 +40,8 @@
                     name: '',
                     time: '',
                     required: 0,
-                    hidden: 0
+                    hidden: 0,
+                    default: ''
                 }
             }
         },
@@ -56,7 +59,8 @@
                     name: this.fields.name === "" ? this.fields.name = this.nameGenerator(this.fields.title,this.slices.length > 0 ? this.slices.split(',') : []) : this.fields.name,
                     time: this.fields.time,
                     required: this.fields.required,
-                    hidden: this.fields.hidden
+                    hidden: this.fields.hidden,
+                  default: this.fields.default
                 };
                 this.toAddField(fields);
                 return fields;
@@ -68,7 +72,8 @@
                     name: this.fields.name === "" ? this.fields.name =  this.nameGenerator(this.fields.title) : this.fields.name,
                     time: this.fields.time,
                     required: this.fields.required,
-                    hidden: this.fields.hidden
+                    hidden: this.fields.hidden,
+                  default: this.fields.default
                 };
                 console.log(editFields.name);
                 this.toEditField(editFields);
